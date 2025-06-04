@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OOPJ Lab Experiments - Anirudh Jindal</title>
+    <style>
+        :root {
+            --primary-color: #0050b3;
+            --secondary-color: #001529;
+            --accent-color: #ff4d4f;
+            --text-color: #ffffff;
+            --bg-dark: #0a1929;
+            --bg-darker: #030a14;
+            --bg-card: #112a45;
+            --border-color: #1e4976;
+            --code-color: #ffcb6b;
+            --keyword-color: #82aaff;
+            --string-color: #c3e88d;
+            --number-color: #f78c6c;
+            --comment-color: #546e7a;
+            --type-color: #89ddff;
+            --command-color: #25f955;
+            --output-color: #eeffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: linear-gradient(to bottom right, #0a1929, #020813);
+            background-attachment: fixed;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--secondary-color);
+            padding: 15px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            background-image: linear-gradient(to right, #001529, #00172b, #001529);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .logo-img {
+            max-width: 100%;
+            height: auto;
+            max-height: 80px;
+            width: auto;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+            object-fit: contain;
+        }
+
+        .student-info {
+            text-align: center;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            flex: 1;
+            min-width: 280px;
+            padding: 10px;
+        }
+
+        .student-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .student-details {
+            font-size: 16px;
+            color: #d0d0d0;
+            line-height: 1.5;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: var(--bg-darker);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            background-image: linear-gradient(to right, #030a14, #051223, #030a14);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(0, 80, 179, 0.3);
+            border: 1px solid var(--primary-color);
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background-color: var(--primary-color);
+            color: white;
+            border: 1px solid var(--primary-color);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        .experiment-card {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .experiment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary-color);
+        }
+
+        .experiment-heading {
+            text-align: center;
+            font-weight: bold;
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .experiment-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .section-heading {
+            font-weight: bold;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: var(--keyword-color);
+            font-size: 22px;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .algorithm {
+            margin: 20px 0;
+            background-color: var(--bg-darker);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+            line-height: 1.7;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .algorithm::before {
+            content: 'Algorithm';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2px 12px;
+            font-size: 12px;
+            border-bottom-left-radius: 8px;
+            opacity: 0.9;
+        }
+
+        .code {
+            font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+            background-color: var(--bg-darker);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            white-space: pre;
+            overflow-x: auto;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        .code::before {
+            content: 'Java Code';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2px 12px;
+            font-size: 12px;
+            border-bottom-left-radius: 8px;
+            opacity: 0.9;
+        }
+
+        .code .keyword { color: var(--keyword-color); font-weight: bold; }
+        .code .string { color: var(--string-color); }
+        .code .number { color: var(--number-color); }
+        .code .comment { color: var(--comment-color); font-style: italic; }
+        .code .type { color: var(--type-color); font-weight: bold; }
+
+        .terminal {
+            background-color: #0a0a0a;
+            color: var(--output-color);
+            padding: 25px;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .terminal::before {
+            content: 'Terminal Output';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 2px 12px;
+            font-size: 12px;
+            border-bottom-left-radius: 8px;
+            opacity: 0.9;
+        }
+
+        .command {
+            color: var(--command-color);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .output {
+            color: var(--output-color);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* Questions List */
+        .questions-list {
+            background-color: var(--bg-card);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        .questions-list h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            font-size: 26px;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .questions-list h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .questions-list ol {
+            padding-left: 25px;
+            counter-reset: list-counter;
+        }
+
+        .questions-list li {
+            margin-bottom: 15px;
+            position: relative;
+            list-style-type: none;
+            padding-left: 10px;
+            transition: transform 0.2s ease;
+            color: var(--text-color);
+        }
+
+        .questions-list li::before {
+            counter-increment: list-counter;
+            content: counter(list-counter) ".";
+            position: absolute;
+            left: -25px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .questions-list li:hover {
+            transform: translateX(5px);
+        }
+
+        .questions-list a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .questions-list a:hover {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 768px) {
+            body { font-size: 14px; }
+            
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo-container {
+                margin-bottom: 20px;
+            }
+            
+            .student-info {
+                text-align: center;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .code, .terminal, .algorithm {
+                padding: 15px;
+                font-size: 14px;
+            }
+            
+            .experiment-heading {
+                font-size: 24px;
+            }
+            
+            .section-heading {
+                font-size: 20px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            body { font-size: 13px; }
+            
+            .experiment-heading {
+                font-size: 20px;
+            }
+            
+            .section-heading {
+                font-size: 18px;
+            }
+            
+            .student-name {
+                font-size: 22px;
+            }
+            
+            .student-details {
+                font-size: 14px;
+            }
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            padding: 30px 15px;
+            margin-top: 50px;
+            background-image: linear-gradient(to right, #001529, #00172b, #001529);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            margin-bottom: 20px;
+            padding: 0 15px;
+        }
+
+        .footer-logo img {
+            max-width: 100%;
+            height: auto;
+            max-height: 60px;
+            width: auto;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+            object-fit: contain;
+        }
+
+        .footer-text {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #d0d0d0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 15px;
+        }
+
+        .footer-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+            padding: 0 15px;
+        }
+
+        .footer-details-column {
+            text-align: center;
+            min-width: 250px;
+            padding: 15px;
+        }
+
+        .footer-details-column h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            display: inline-block;
+        }
+
+        .footer-details-column p {
+            color: #d0d0d0;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+
+        .footer-bottom {
+            margin-top: 30px;
+            padding: 20px 15px;
+            border-top: 1px solid var(--border-color);
+            font-size: 14px;
+            color: #888;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-size: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        /* Enhanced Mobile Responsive Styles */
+        @media screen and (max-width: 768px) {
+            header {
+                padding: 10px;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .logo-container {
+                max-width: 200px;
+            }
+            
+            .logo-img {
+                max-height: 60px;
+            }
+            
+            .student-info {
+                padding: 5px;
+            }
+            
+            .student-name {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+            
+            .student-details {
+                font-size: 14px;
+                line-height: 1.4;
+            }
+            
+            .footer-content {
+                padding: 0 10px;
+            }
+            
+            .footer-logo img {
+                max-height: 50px;
+            }
+            
+            .footer-text {
+                font-size: 14px;
+                margin-bottom: 20px;
+                padding: 0 10px;
+            }
+            
+            .footer-details {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 10px;
+            }
+            
+            .footer-details-column {
+                padding: 10px;
+            }
+            
+            .footer-details-column h3 {
+                font-size: 16px;
+            }
+            
+            .footer-details-column p {
+                font-size: 13px;
+            }
+            
+            .footer-bottom {
+                padding: 15px 10px;
+                font-size: 12px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .logo-container {
+                max-width: 160px;
+            }
+            
+            .logo-img {
+                max-height: 50px;
+            }
+            
+            .student-name {
+                font-size: 18px;
+            }
+            
+            .student-details {
+                font-size: 12px;
+            }
+            
+            .footer-logo img {
+                max-height: 40px;
+            }
+            
+            .footer-text {
+                font-size: 12px;
+            }
+            
+            .footer-details-column h3 {
+                font-size: 15px;
+            }
+            
+            .footer-details-column p {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="https://admissions.srmuniversity.ac.in/assets/img/srm-logo-white.webp" alt="SRM University Logo" class="logo-img">
+            </div>
+            <div class="student-info">
+                <div class="student-name">Anirudh Jindal</div>
+                <div class="student-details">
+                    Roll No.: 42224210080<br>
+                    Bachelor of Computer Application II-B<br>
+                    Object Oriented Programming in Java (OOPJ)
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <div class="nav-title">JAVA Lab Experiments</div>
+            <div class="nav-links">
+                <a href="#index" class="active">Index</a>
+                <a href="#exp1">Exp 1</a>
+                <a href="#exp2">Exp 2</a>
+                <a href="#exp3">Exp 3</a>
+                <a href="#exp4">Exp 4</a>
+                <a href="#exp5">Exp 5</a>
+                <a href="#exp6">Exp 6</a>
+                <a href="#exp7">Exp 7</a>
+                <a href="#exp8">Exp 8</a>
+                <a href="#exp9">Exp 9</a>
+                <a href="#exp10">Exp 10</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section id="index" class="questions-list">
+            <h2>Index of Experiments</h2>
+            <ol>
+                <li><a href="#exp1">Write a program to find the sum of a number of integers entered as command line arguments.</a></li>
+                <li><a href="#exp2">Write a program to find the factorial of a number.</a></li>
+                <li><a href="#exp3">Write a program to find the sum of a number of integers by defining the array dynamically using new operator.</a></li>
+                <li><a href="#exp4">Write a program to search for a given string in a file.</a></li>
+                <li><a href="#exp5">Write a program to read a file and display only those lines that have the first two characters as '//' (Use try with resources).</a></li>
+                <li><a href="#exp6">Write a program to check if a number is prime or not, by taking the number as input from the keyboard.</a></li>
+                <li><a href="#exp7">Write a program to find the sum of a number of integers (maximum 10), entering every number from the keyboard.</a></li>
+                <li><a href="#exp8">Write a program that uses working of different functions of String and String Buffers.</a></li>
+                <li><a href="#exp9">Write a program to create a class 'Room' which calculates the area of a room.</a></li>
+                <li><a href="#exp10">Write a program to create a class 'Distance' with methods where distance is computed in terms of feet and inches.</a></li>
+            </ol>
+        </section>
+
+        <!-- Experiment 1 -->
+        <section id="exp1" class="experiment-card">
+            <div class="experiment-heading">Experiment - 1</div>
+            
+            <div class="section-heading">Aim:</div>
+            <div>Write a program to find the sum of a number of integers entered as command line arguments.</div>
+            
+            <div class="section-heading">Algorithm:</div>
+            <div class="algorithm">
+                1. Accept command line arguments passed to the program<br>
+                2. Convert each argument from String to integer<br>
+                3. Initialize a variable 'sum' to zero<br>
+                4. Iterate through each argument:<br>
+                   a. Convert the current argument to integer<br>
+                   b. Add the integer value to the running sum<br>
+                5. Display the final sum<br>
+                6. Handle possible NumberFormatException if non-integer arguments are provided
+            </div>
+            
+            <div class="section-heading">Code:</div>
+            <div class="code"><span class="keyword">public class</span> MainCode {
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        <span class="type">int</span> sum = 0;
+        
+        <span class="keyword">if</span> (args.length == 0) {
+            System.out.println(<span class="string">"No arguments provided. Please provide integer values as command line arguments."</span>);
+            <span class="keyword">return</span>;
+        }
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">for</span> (<span class="type">String</span> arg : args) {
+                sum += Integer.parseInt(arg);
+            }
+            System.out.println(<span class="string">"Sum of the provided integers is: "</span> + sum);
+        } <span class="keyword">catch</span> (NumberFormatException e) {
+            System.out.println(<span class="string">"Error: Please provide valid integer values as command line arguments."</span>);
+        }
+    }
+}</div>
+
+            <div class="section-heading">Output:</div>
+            <div class="terminal">
+                <span class="command">C:\Users\Student> javac MainCode.java</span>
+                <span class="command">C:\Users\Student> java MainCode 10 20 30 40</span>
+                <span class="output">Sum of the provided integers is: 100</span>
+                
+                <span class="command">C:\Users\Student> java MainCode 5 15 25</span>
+                <span class="output">Sum of the provided integers is: 45</span>
+                
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">No arguments provided. Please provide integer values as command line arguments.</span>
+                
+                <span class="command">C:\Users\Student> java MainCode 10 twenty 30</span>
+                <span class="output">Error: Please provide valid integer values as command line arguments.</span>
+            </div>
+        </section>
+
+        <!-- Experiment 2 -->
+        <section id="exp2" class="experiment-card">
+            <div class="experiment-heading">Experiment - 2</div>
+            
+            <div class="section-heading">Aim:</div>
+            <div>Write a program to find the factorial of a number.</div>
+            
+            <div class="section-heading">Algorithm:</div>
+            <div class="algorithm">
+                1. Import necessary packages<br>
+                2. Define a class named MainCode<br>
+                3. Create a main method<br>
+                4. Define a method to calculate factorial:<br>
+                   a. If number is 0 or 1, return 1<br>
+                   b. Otherwise, return number * factorial(number - 1)<br>
+                5. Take input from the user<br>
+                6. Calculate factorial of the input number<br>
+                7. Display the result
+            </div>
+            
+            <div class="section-heading">Code:</div>
+            <div class="code"><span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> MainCode {
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);
+        
+        System.out.print(<span class="string">"Enter a number to calculate factorial: "</span>);
+        <span class="type">int</span> number = scanner.nextInt();
+        
+        <span class="keyword">if</span> (number < 0) {
+            System.out.println(<span class="string">"Factorial is not defined for negative numbers."</span>);
+        } <span class="keyword">else</span> {
+            <span class="type">long</span> result = factorial(number);
+            System.out.println(<span class="string">"Factorial of "</span> + number + <span class="string">" is: "</span> + result);
+        }
+        
+        scanner.close();
+    }
+    
+    <span class="comment">// Method to calculate factorial</span>
+    <span class="keyword">public static</span> <span class="type">long</span> factorial(<span class="type">int</span> n) {
+        <span class="keyword">if</span> (n == 0 || n == 1) {
+            <span class="keyword">return</span> 1;
+        } <span class="keyword">else</span> {
+            <span class="keyword">return</span> n * factorial(n - 1);
+        }
+    }
+}</div>
+
+            <div class="section-heading">Output:</div>
+            <div class="terminal">
+                <span class="command">C:\Users\Student> javac MainCode.java</span>
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">Enter a number to calculate factorial: 5</span>
+                <span class="output">Factorial of 5 is: 120</span>
+                
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">Enter a number to calculate factorial: 0</span>
+                <span class="output">Factorial of 0 is: 1</span>
+                
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">Enter a number to calculate factorial: -3</span>
+                <span class="output">Factorial is not defined for negative numbers.</span>
+            </div>
+        </section>
+
+        <!-- Experiment 3 -->
+        <section id="exp3" class="experiment-card">
+            <div class="experiment-heading">Experiment - 3</div>
+            
+            <div class="section-heading">Aim:</div>
+            <div>Write a program to find the sum of a number of integers by defining the array dynamically using new operator.</div>
+            
+            <div class="section-heading">Algorithm:</div>
+            <div class="algorithm">
+                1. Import necessary packages<br>
+                2. Define a class named MainCode<br>
+                3. Create a main method<br>
+                4. Ask the user for the number of integers they want to sum<br>
+                5. Dynamically create an array of that size using the 'new' operator<br>
+                6. Use a loop to get input for each element of the array<br>
+                7. Use another loop to calculate the sum of array elements<br>
+                8. Display the sum<br>
+                9. Close the scanner object
+            </div>
+            
+            <div class="section-heading">Code:</div>
+            <div class="code"><span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> MainCode {
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);
+        
+        System.out.print(<span class="string">"Enter the number of integers you want to add: "</span>);
+        <span class="type">int</span> n = scanner.nextInt();
+        
+        <span class="comment">// Dynamically allocate an array using the 'new' operator</span>
+        <span class="type">int</span>[] numbers = <span class="keyword">new</span> <span class="type">int</span>[n];
+        
+        <span class="comment">// Input array elements</span>
+        <span class="keyword">for</span> (<span class="type">int</span> i = 0; i < n; i++) {
+            System.out.print(<span class="string">"Enter number "</span> + (i + 1) + <span class="string">": "</span>);
+            numbers[i] = scanner.nextInt();
+        }
+        
+        <span class="comment">// Calculate sum</span>
+        <span class="type">int</span> sum = 0;
+        <span class="keyword">for</span> (<span class="type">int</span> i = 0; i < n; i++) {
+            sum += numbers[i];
+        }
+        
+        System.out.println(<span class="string">"Sum of the entered numbers is: "</span> + sum);
+        
+        scanner.close();
+    }
+}</div>
+
+            <div class="section-heading">Output:</div>
+            <div class="terminal">
+                <span class="command">C:\Users\Student> javac MainCode.java</span>
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">Enter the number of integers you want to add: 5</span>
+                <span class="output">Enter number 1: 10</span>
+                <span class="output">Enter number 2: 20</span>
+                <span class="output">Enter number 3: 30</span>
+                <span class="output">Enter number 4: 40</span>
+                <span class="output">Enter number 5: 50</span>
+                <span class="output">Sum of the entered numbers is: 150</span>
+            </div>
+        </section>
+
+        <!-- Experiment 4 -->
+        <section id="exp4" class="experiment-card">
+            <div class="experiment-heading">Experiment - 4</div>
+            
+            <div class="section-heading">Aim:</div>
+            <div>Write a program to search for a given string in a file.</div>
+            
+            <div class="section-heading">Algorithm:</div>
+            <div class="algorithm">
+                1. Import necessary packages for file handling and I/O operations<br>
+                2. Define a class named MainCode<br>
+                3. Create a main method<br>
+                4. Get the file path and the search string from the user<br>
+                5. Create a File object and check if the file exists<br>
+                6. Use BufferedReader to read the file line by line<br>
+                7. For each line, check if it contains the search string<br>
+                8. If found, print the line number and the line content<br>
+                9. Keep track of occurrences and display a summary<br>
+                10. Handle exceptions appropriately<br>
+                11. Close resources properly
+            </div>
+            
+            <div class="section-heading">Code:</div>
+            <div class="code"><span class="keyword">import</span> java.io.BufferedReader;
+<span class="keyword">import</span> java.io.File;
+<span class="keyword">import</span> java.io.FileReader;
+<span class="keyword">import</span> java.io.IOException;
+<span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> MainCode {
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);
+        
+        System.out.print(<span class="string">"Enter the file path: "</span>);
+        <span class="type">String</span> filePath = scanner.nextLine();
+        
+        System.out.print(<span class="string">"Enter the string to search for: "</span>);
+        <span class="type">String</span> searchString = scanner.nextLine();
+        
+        File file = <span class="keyword">new</span> File(filePath);
+        
+        <span class="keyword">if</span> (!file.exists()) {
+            System.out.println(<span class="string">"File does not exist at the specified path."</span>);
+            scanner.close();
+            <span class="keyword">return</span>;
+        }
+        
+        <span class="type">int</span> lineNumber = 0;
+        <span class="type">int</span> occurrences = 0;
+        
+        <span class="keyword">try</span> (BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(file))) {
+            <span class="type">String</span> line;
+            
+            System.out.println(<span class="string">"\nSearching for '"</span> + searchString + <span class="string">"' in file: "</span> + filePath);
+            System.out.println(<span class="string">"-----------------------------------------------"</span>);
+            
+            <span class="keyword">while</span> ((line = reader.readLine()) != <span class="keyword">null</span>) {
+                lineNumber++;
+                
+                <span class="keyword">if</span> (line.contains(searchString)) {
+                    occurrences++;
+                    System.out.println(<span class="string">"Line "</span> + lineNumber + <span class="string">": "</span> + line);
+                }
+            }
+            
+            System.out.println(<span class="string">"-----------------------------------------------"</span>);
+            <span class="keyword">if</span> (occurrences > 0) {
+                System.out.println(<span class="string">"Found "</span> + occurrences + <span class="string">" occurrence(s) of '"</span> + searchString + <span class="string">"' in the file."</span>);
+            } <span class="keyword">else</span> {
+                System.out.println(<span class="string">"The string '"</span> + searchString + <span class="string">"' was not found in the file."</span>);
+            }
+            
+        } <span class="keyword">catch</span> (IOException e) {
+            System.out.println(<span class="string">"Error reading the file: "</span> + e.getMessage());
+        }
+        
+        scanner.close();
+    }
+}</div>
+
+            <div class="section-heading">Output:</div>
+            <div class="terminal">
+                <span class="command">C:\Users\Student> javac MainCode.java</span>
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">Enter the file path: C:\Users\Student\sample.txt</span>
+                <span class="output">Enter the string to search for: java</span>
+                
+                <span class="output">Searching for 'java' in file: C:\Users\Student\sample.txt</span>
+                <span class="output">-----------------------------------------------</span>
+                <span class="output">Line 3: Java is a high-level, class-based, object-oriented programming language.</span>
+                <span class="output">Line 7: We are learning java programming in our OOPJ class.</span>
+                <span class="output">Line 9: Java was developed by James Gosling at Sun Microsystems.</span>
+                <span class="output">-----------------------------------------------</span>
+                <span class="output">Found 3 occurrence(s) of 'java' in the file.</span>
+            </div>
+        </section>
+
+        <!-- Experiment 5 -->
+        <section id="exp5" class="experiment-card">
+            <div class="experiment-heading">Experiment - 5</div>
+            
+            <div class="section-heading">Aim:</div>
+            <div>Write a program to read a file and display only those lines that have the first two characters as '//' (Use try with resources).</div>
+            
+            <div class="section-heading">Algorithm:</div>
+            <div class="algorithm">
+                1. Import necessary packages for file handling and I/O operations<br>
+                2. Define a class named MainCode<br>
+                3. Create a main method<br>
+                4. Get the file path from the user<br>
+                5. Create a File object and check if the file exists<br>
+                6. Use try-with-resources to automatically close resources<br>
+                7. Use BufferedReader to read the file line by line<br>
+                8. For each line, check if it starts with '//'<br>
+                9. If the condition is met, display the line<br>
+                10. Keep track of comment lines found<br>
+                11. Display a summary message at the end<br>
+                12. Handle exceptions appropriately
+            </div>
+            
+            <div class="section-heading">Code:</div>
+            <div class="code"><span class="keyword">import</span> java.io.BufferedReader;
+<span class="keyword">import</span> java.io.File;
+<span class="keyword">import</span> java.io.FileReader;
+<span class="keyword">import</span> java.io.IOException;
+<span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> MainCode {
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);
+        
+        System.out.print(<span class="string">"Enter the file path: "</span>);
+        <span class="type">String</span> filePath = scanner.nextLine();
+        
+        File file = <span class="keyword">new</span> File(filePath);
+        
+        <span class="keyword">if</span> (!file.exists()) {
+            System.out.println(<span class="string">"File does not exist at the specified path."</span>);
+            scanner.close();
+            <span class="keyword">return</span>;
+        }
+        
+        <span class="type">int</span> lineNumber = 0;
+        <span class="type">int</span> commentLines = 0;
+        
+        <span class="comment">// Using try-with-resources to automatically close resources</span>
+        <span class="keyword">try</span> (BufferedReader reader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> FileReader(file))) {
+            <span class="type">String</span> line;
+            
+            System.out.println(<span class="string">"\nLines starting with '//' in file: "</span> + filePath);
+            System.out.println(<span class="string">"-----------------------------------------------"</span>);
+            
+            <span class="keyword">while</span> ((line = reader.readLine()) != <span class="keyword">null</span>) {
+                lineNumber++;
+                
+                <span class="keyword">if</span> (line.trim().startsWith(<span class="string">"//"</span>)) {
+                    commentLines++;
+                    System.out.println(<span class="string">"Line "</span> + lineNumber + <span class="string">": "</span> + line);
+                }
+            }
+            
+            System.out.println(<span class="string">"-----------------------------------------------"</span>);
+            <span class="keyword">if</span> (commentLines > 0) {
+                System.out.println(<span class="string">"Found "</span> + commentLines + <span class="string">" comment line(s) in the file."</span>);
+            } <span class="keyword">else</span> {
+                System.out.println(<span class="string">"No comment lines found in the file."</span>);
+            }
+            
+        } <span class="keyword">catch</span> (IOException e) {
+            System.out.println(<span class="string">"Error reading the file: "</span> + e.getMessage());
+        }
+        
+        scanner.close();
+    }
+}</div>
+
+            <div class="section-heading">Output:</div>
+            <div class="terminal">
+                <span class="command">C:\Users\Student> javac MainCode.java</span>
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">Enter the file path: C:\Users\Student\JavaFile.java</span>
+                
+                <span class="output">Lines starting with '//' in file: C:\Users\Student\JavaFile.java</span>
+                <span class="output">-----------------------------------------------</span>
+                <span class="output">Line 5: // This is a sample Java program</span>
+                <span class="output">Line 8: // Main method starts here</span>
+                <span class="output">Line 15: // Calculate sum of array elements</span>
+                <span class="output">Line 22: // Display the result</span>
+                <span class="output">-----------------------------------------------</span>
+                <span class="output">Found 4 comment line(s) in the file.</span>
+            </div>
+        </section>
+
+        <!-- Experiment 6 -->
+        <section id="exp6" class="experiment-card">
+            <div class="experiment-heading">Experiment - 6</div>
+            
+            <div class="section-heading">Aim:</div>
+            <div>Write a program to check if a number is prime or not, by taking the number as input from the keyboard.</div>
+            
+            <div class="section-heading">Algorithm:</div>
+            <div class="algorithm">
+                1. Import necessary packages<br>
+                2. Define a class named MainCode<br>
+                3. Create a main method<br>
+                4. Take input from the user for the number to check<br>
+                5. If the number is less than or equal to 1, it's not prime<br>
+                6. If the number is 2, it's prime<br>
+                7. Check if the number is divisible by any number from 2 to square root of the number<br>
+                8. If divisible by any number, it's not prime<br>
+                9. Otherwise, it's prime<br>
+                10. Display the result
+            </div>
+            
+            <div class="section-heading">Code:</div>
+            <div class="code"><span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> MainCode {
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);
+        
+        System.out.print(<span class="string">"Enter a number to check if it's prime: "</span>);
+        <span class="type">int</span> number = scanner.nextInt();
+        
+        <span class="keyword">boolean</span> isPrime = checkPrime(number);
+        
+        <span class="keyword">if</span> (isPrime) {
+            System.out.println(number + <span class="string">" is a prime number."</span>);
+        } <span class="keyword">else</span> {
+            System.out.println(number + <span class="string">" is not a prime number."</span>);
+        }
+        
+        scanner.close();
+    }
+    
+    <span class="keyword">public static boolean</span> checkPrime(<span class="type">int</span> n) {
+        <span class="keyword">if</span> (n <= 1) {
+            <span class="keyword">return</span> false;
+        }
+        
+        <span class="keyword">if</span> (n == 2) {
+            <span class="keyword">return</span> true;
+        }
+        
+        <span class="keyword">for</span> (<span class="type">int</span> i = 2; i <= Math.sqrt(n); i++) {
+            <span class="keyword">if</span> (n % i == 0) {
+                <span class="keyword">return</span> false;
+            }
+        }
+        
+        <span class="keyword">return</span> true;
+    }
+}</div>
+
+            <div class="section-heading">Output:</div>
+            <div class="terminal">
+                <span class="command">C:\Users\Student> javac MainCode.java</span>
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">Enter a number to check if it's prime: 17</span>
+                <span class="output">17 is a prime number.</span>
+                
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">Enter a number to check if it's prime: 24</span>
+                <span class="output">24 is not a prime number.</span>
+            </div>
+        </section>
+
+        <!-- Experiment 7 -->
+        <section id="exp7" class="experiment-card">
+            <div class="experiment-heading">Experiment - 7</div>
+            
+            <div class="section-heading">Aim:</div>
+            <div>Write a program to find the sum of a number of integers (maximum 10), entering every number from the keyboard.</div>
+            
+            <div class="section-heading">Algorithm:</div>
+            <div class="algorithm">
+                1. Import necessary packages<br>
+                2. Define a class named MainCode<br>
+                3. Create a main method<br>
+                4. Create a Scanner object for input<br>
+                5. Ask user for the number of integers (max 10)<br>
+                6. Use a loop to input numbers<br>
+                7. Calculate sum while inputting<br>
+                8. Display the final sum<br>
+                9. Close the scanner
+            </div>
+            
+            <div class="section-heading">Code:</div>
+            <div class="code"><span class="keyword">import</span> java.util.Scanner;
+
+<span class="keyword">public class</span> MainCode {
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        Scanner scanner = <span class="keyword">new</span> Scanner(System.in);
+        <span class="type">int</span> sum = 0;
+        <span class="type">int</span> count;
+        
+        <span class="keyword">do</span> {
+            System.out.print(<span class="string">"Enter the number of integers (max 10): "</span>);
+            count = scanner.nextInt();
+            <span class="keyword">if</span> (count > 10) {
+                System.out.println(<span class="string">"Please enter a number less than or equal to 10."</span>);
+            }
+        } <span class="keyword">while</span> (count > 10);
+        
+        <span class="keyword">for</span> (<span class="type">int</span> i = 1; i <= count; i++) {
+            System.out.print(<span class="string">"Enter number "</span> + i + <span class="string">": "</span>);
+            sum += scanner.nextInt();
+        }
+        
+        System.out.println(<span class="string">"Sum of the entered numbers is: "</span> + sum);
+        scanner.close();
+    }
+}</div>
+
+            <div class="section-heading">Output:</div>
+            <div class="terminal">
+                <span class="command">C:\Users\Student> javac MainCode.java</span>
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">Enter the number of integers (max 10): 4</span>
+                <span class="output">Enter number 1: 10</span>
+                <span class="output">Enter number 2: 20</span>
+                <span class="output">Enter number 3: 30</span>
+                <span class="output">Enter number 4: 40</span>
+                <span class="output">Sum of the entered numbers is: 100</span>
+            </div>
+        </section>
+
+        <!-- Experiment 8 -->
+        <section id="exp8" class="experiment-card">
+            <div class="experiment-heading">Experiment - 8</div>
+            
+            <div class="section-heading">Aim:</div>
+            <div>Write a program that uses working of different functions of String and String Buffers.</div>
+            
+            <div class="section-heading">Algorithm:</div>
+            <div class="algorithm">
+                1. Create a String and StringBuffer object<br>
+                2. Demonstrate String methods:<br>
+                   - length(), charAt(), substring()<br>
+                   - indexOf(), lastIndexOf()<br>
+                   - toUpperCase(), toLowerCase()<br>
+                3. Demonstrate StringBuffer methods:<br>
+                   - append(), insert(), delete()<br>
+                   - reverse(), replace()<br>
+                   - capacity(), length()<br>
+                4. Display results of all operations
+            </div>
+            
+            <div class="section-heading">Code:</div>
+            <div class="code"><span class="keyword">public class</span> MainCode {
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        <span class="comment">// String operations</span>
+        <span class="type">String</span> str = <span class="string">"Hello Java Programming"</span>;
+        System.out.println(<span class="string">"Original string: "</span> + str);
+        System.out.println(<span class="string">"Length: "</span> + str.length());
+        System.out.println(<span class="string">"Character at index 4: "</span> + str.charAt(4));
+        System.out.println(<span class="string">"Substring(0,5): "</span> + str.substring(0, 5));
+        System.out.println(<span class="string">"Index of 'Java': "</span> + str.indexOf(<span class="string">"Java"</span>));
+        System.out.println(<span class="string">"Uppercase: "</span> + str.toUpperCase());
+        
+        <span class="comment">// StringBuffer operations</span>
+        StringBuffer sb = <span class="keyword">new</span> StringBuffer(<span class="string">"Hello"</span>);
+        System.out.println(<span class="string">"\nOriginal StringBuffer: "</span> + sb);
+        
+        sb.append(<span class="string">" World"</span>);
+        System.out.println(<span class="string">"After append: "</span> + sb);
+        
+        sb.insert(5, <span class="string">" Beautiful"</span>);
+        System.out.println(<span class="string">"After insert: "</span> + sb);
+        
+        sb.reverse();
+        System.out.println(<span class="string">"After reverse: "</span> + sb);
+        
+        sb.reverse(); <span class="comment">// Reverse back</span>
+        sb.replace(6, 15, <span class="string">"Amazing"</span>);
+        System.out.println(<span class="string">"After replace: "</span> + sb);
+        
+        System.out.println(<span class="string">"Capacity: "</span> + sb.capacity());
+        System.out.println(<span class="string">"Length: "</span> + sb.length());
+    }
+}</div>
+
+            <div class="section-heading">Output:</div>
+            <div class="terminal">
+                <span class="command">C:\Users\Student> javac MainCode.java</span>
+                <span class="command">C:\Users\Student> java MainCode</span>
+                <span class="output">Original string: Hello Java Programming</span>
+                <span class="output">Length: 21</span>
+                <span class="output">Character at index 4: o</span>
+                <span class="output">Substring(0,5): Hello</span>
+                <span class="output">Index of 'Java': 6</span>
+                <span class="output">Uppercase: HELLO JAVA PROGRAMMING</span>
+                
+                <span class="output">Original StringBuffer: Hello</span>
+                <span class="output">After append: Hello World</span>
+                <span class="output">After insert: Hello Beautiful World</span>
+                <span class="output">After reverse: dlroW lufituaeB olleH</span>
+                <span class="output">After replace: Hello Amazing World</span>
+                <span class="output">Capacity: 32</span>
+                <span class="output">Length: 18</span>
+            </div>
+        </section>
+        
+        <!-- Experiment 9 -->
+        <section id="exp9" class="experiment-card">
+            <div class="experiment-heading">Experiment - 9</div>
+            
+            <div class="section-heading">Aim:</div>
+            <div>Write a program to create a class 'Room' which calculates the area of a room.</div>
+            
+            <div class="section-heading">Algorithm:</div>
+            <div class="algorithm">
+                1. Create a class named Room<br>
+                2. Define instance variables for length and width<br>
+                3. Create a constructor to initialize the variables<br>
+                4. Create a method to calculate area<br>
+                5. Create a main method to test the Room class<br>
+                6. Create Room objects with different dimensions<br>
+                7. Calculate and display the areas
+            </div>
+            
+            <div class="section-heading">Code:</div>
+            <div class="code"><span class="keyword">public class</span> Room {
+    <span class="keyword">private</span> <span class="type">double</span> length;
+    <span class="keyword">private</span> <span class="type">double</span> width;
+    
+    <span class="comment">// Constructor</span>
+    <span class="keyword">public</span> Room(<span class="type">double</span> length, <span class="type">double</span> width) {
+        <span class="keyword">this</span>.length = length;
+        <span class="keyword">this</span>.width = width;
+    }
+    
+    <span class="comment">// Method to calculate area</span>
+    <span class="keyword">public</span> <span class="type">double</span> calculateArea() {
+        <span class="keyword">return</span> length * width;
+    }
+    
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        Room room1 = <span class="keyword">new</span> Room(10.5, 15.2);
+        Room room2 = <span class="keyword">new</span> Room(20.0, 12.5);
+        
+        System.out.println(<span class="string">"Area of Room 1: "</span> + room1.calculateArea() + <span class="string">" square units"</span>);
+        System.out.println(<span class="string">"Area of Room 2: "</span> + room2.calculateArea() + <span class="string">" square units"</span>);
+    }
+}</div>
+
+            <div class="section-heading">Output:</div>
+            <div class="terminal">
+                <span class="command">C:\Users\Student> javac Room.java</span>
+                <span class="command">C:\Users\Student> java Room</span>
+                <span class="output">Area of Room 1: 159.6 square units</span>
+                <span class="output">Area of Room 2: 250.0 square units</span>
+            </div>
+        </section>
+
+        <!-- Experiment 10 -->
+        <section id="exp10" class="experiment-card">
+            <div class="experiment-heading">Experiment - 10</div>
+            
+            <div class="section-heading">Aim:</div>
+            <div>Write a program to create a class 'Distance' with methods where distance is computed in terms of feet and inches.</div>
+            
+            <div class="section-heading">Algorithm:</div>
+            <div class="algorithm">
+                1. Create a class named Distance<br>
+                2. Define instance variables for feet and inches<br>
+                3. Create constructors for initialization<br>
+                4. Create methods to:<br>
+                   - Add two distances<br>
+                   - Convert to inches<br>
+                   - Display distance<br>
+                5. Create main method to test the class<br>
+                6. Create Distance objects and perform operations<br>
+                7. Display results
+            </div>
+            
+            <div class="section-heading">Code:</div>
+            <div class="code"><span class="keyword">public class</span> Distance {
+    <span class="keyword">private</span> <span class="type">int</span> feet;
+    <span class="keyword">private</span> <span class="type">double</span> inches;
+    
+    <span class="comment">// Constructor</span>
+    <span class="keyword">public</span> Distance(<span class="type">int</span> feet, <span class="type">double</span> inches) {
+        <span class="keyword">this</span>.feet = feet;
+        <span class="keyword">this</span>.inches = inches;
+        normalize();
+    }
+    
+    <span class="comment">// Normalize the distance (12 inches = 1 foot)</span>
+    <span class="keyword">private void</span> normalize() {
+        <span class="keyword">if</span> (inches >= 12.0) {
+            feet += (<span class="type">int</span>)(inches / 12);
+            inches = inches % 12;
+        }
+    }
+    
+    <span class="comment">// Add two distances</span>
+    <span class="keyword">public</span> Distance add(Distance d) {
+        <span class="type">int</span> newFeet = <span class="keyword">this</span>.feet + d.feet;
+        <span class="type">double</span> newInches = <span class="keyword">this</span>.inches + d.inches;
+        <span class="keyword">return new</span> Distance(newFeet, newInches);
+    }
+    
+    <span class="comment">// Convert to string representation</span>
+    <span class="keyword">public</span> <span class="type">String</span> toString() {
+        <span class="keyword">return</span> feet + <span class="string">" feet "</span> + inches + <span class="string">" inches"</span>;
+    }
+    
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        Distance d1 = <span class="keyword">new</span> Distance(5, 6.5);
+        Distance d2 = <span class="keyword">new</span> Distance(3, 8.5);
+        Distance sum = d1.add(d2);
+        
+        System.out.println(<span class="string">"Distance 1: "</span> + d1);
+        System.out.println(<span class="string">"Distance 2: "</span> + d2);
+        System.out.println(<span class="string">"Sum: "</span> + sum);
+    }
+}</div>
+
+            <div class="section-heading">Output:</div>
+            <div class="terminal">
+                <span class="command">C:\Users\Student> javac Distance.java</span>
+                <span class="command">C:\Users\Student> java Distance</span>
+                <span class="output">Distance 1: 5 feet 6.5 inches</span>
+                <span class="output">Distance 2: 3 feet 8.5 inches</span>
+                <span class="output">Sum: 9 feet 3.0 inches</span>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="https://admissions.srmuniversity.ac.in/assets/img/srm-logo-white.webp" alt="SRM University Logo">
+            </div>
+            <div class="footer-text">
+                SRM University Delhi-NCR, Sonepat - Empowering Future Leaders Through Quality Education
+            </div>
+            
+            <div class="footer-details">
+                <div class="footer-details-column">
+                    <h3>Quick Links</h3>
+                    <p><a href="#index">Experiments Index</a></p>
+                    <p><a href="#exp1">Latest Experiment</a></p>
+                    <p><a href="#" onclick="window.print(); return false;">Print Page</a></p>
+                </div>
+                
+                <div class="footer-details-column">
+                    <h3>Contact Information</h3>
+                    <p>📍 Plot No. 39, Rajiv Gandhi Education City</p>
+                    <p>📞 +91-8816033301 / 02 / 03</p>
+                    <p>✉️ admissions@srmuniversity.ac.in</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                © 2024 SRM University Delhi-NCR | OOPJ Lab Experiments
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="back-to-top">↑</a>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+            });
+        });
+
+        // Show/hide back to top button
+        window.onscroll = function() {
+            var backToTop = document.querySelector('.back-to-top');
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTop.style.display = "block";
+            } else {
+                backToTop.style.display = "none";
+            }
+        };
+    </script>
+</body>
+</html> 
