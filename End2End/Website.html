@@ -589,16 +589,16 @@
 
     // Provide haptic feedback
     function provideHapticFeedback() {
-      if (deviceType === 'mobile') {
-        // Vibration API for mobile devices
-        if ('vibrate' in navigator) {
-          navigator.vibrate(50);
-        }
+      try {
+        if (deviceType === 'mobile' && navigator.vibrate) {
+          navigator.vibrate([50]);
+         }
+        hapticSound.currentTime = 0;
+        hapticSound.volume = 0.3;
+        hapticSound.play().catch(err => logConnection('Audio play error: ' + err.message));
+      } catch (e) {
+        console.error('Feedback error:', e);
       }
-      
-      // Sound feedback for all devices
-      hapticSound.volume = 0.3;
-      hapticSound.play().catch(err => logConnection('Audio play error: ' + err.message));
     }
 
     // Play join sound
@@ -877,6 +877,13 @@
 
     // Render dialpad UI
     function renderDialpad() {
+      // Add focus management
+      const mainHeading = document.createElement('h1');
+      mainHeading.textContent = 'Call App';
+      mainHeading.tabIndex = -1;
+      appContent.prepend(mainHeading);
+      mainHeading.focus();
+
       appContent.innerHTML = `
         <div class="room-id-container">
           <h3>Your Code</h3>
