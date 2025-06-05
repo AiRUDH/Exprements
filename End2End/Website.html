@@ -13,9 +13,12 @@
       --background-start: #0f0f0f;
       --background-end: #1a1a1a;
       --text-color: #ffffff;
+      --text-secondary: #a0a0a0;
       --spacing-unit: 1rem;
       --phone-ui-color: #222222;
       --phone-border-color: #444444;
+      --card-bg: rgba(30, 30, 30, 0.7);
+      --card-border: rgba(80, 80, 80, 0.2);
     }
 
     * {
@@ -32,16 +35,17 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: clamp(1rem, 5vw, 2rem);
+      padding: clamp(0.5rem, 3vw, 1.5rem);
       min-height: 100vh;
       line-height: 1.5;
     }
 
     h1 {
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
-      margin-bottom: calc(var(--spacing-unit) * 1.5);
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      margin-bottom: calc(var(--spacing-unit) * 1);
       text-align: center;
       text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      font-weight: 300;
     }
 
     button {
@@ -55,8 +59,8 @@
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      transition: transform 0.2s, opacity 0.2s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: transform 0.2s, opacity 0.2s, background-color 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
     button:hover {
@@ -95,24 +99,25 @@
       justify-content: center;
       margin-top: var(--spacing-unit);
       width: 100%;
-      max-width: 600px;
     }
 
     .participants { 
-      margin-top: calc(var(--spacing-unit) * 2);
-      background: rgba(255, 255, 255, 0.1);
+      margin-top: calc(var(--spacing-unit) * 1);
+      background: var(--card-bg);
       padding: var(--spacing-unit);
       border-radius: 1rem;
       width: 100%;
-      max-width: 600px;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
     }
 
     .participants h3 {
       margin-bottom: var(--spacing-unit);
-      font-size: clamp(1.1rem, 3vw, 1.3rem);
+      font-size: clamp(1rem, 3vw, 1.2rem);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-weight: 400;
     }
 
     .connection-status {
@@ -152,7 +157,7 @@
 
     #callContainer {
       width: 100%;
-      max-width: 600px;
+      max-width: 400px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -165,8 +170,8 @@
       max-width: 360px;
       background-color: var(--phone-ui-color);
       border-radius: 2rem;
-      padding: 1rem;
-      border: 8px solid var(--phone-border-color);
+      padding: 0.8rem;
+      border: 6px solid var(--phone-border-color);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       margin: 0 auto;
     }
@@ -216,10 +221,12 @@
     }
 
     .name-input-container {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--card-bg);
       padding: 1rem;
       border-radius: 1rem;
       margin-bottom: 1rem;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
     }
 
     .name-input {
@@ -258,21 +265,24 @@
     }
 
     .room-id-container {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--card-bg);
       padding: 1rem;
       border-radius: 1rem;
       margin-bottom: 1rem;
       text-align: center;
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
     }
 
     .room-id {
       font-family: monospace;
-      font-size: 1.2rem;
+      font-size: 2rem;
       background: rgba(0, 0, 0, 0.2);
       padding: 0.5rem;
       border-radius: 0.5rem;
       margin: 0.5rem 0;
-      word-break: break-all;
+      letter-spacing: 0.5rem;
+      font-weight: bold;
     }
 
     .remote-audio {
@@ -281,14 +291,14 @@
 
     .connection-log {
       font-family: monospace;
-      font-size: 0.8rem;
+      font-size: 0.7rem;
       background: rgba(0, 0, 0, 0.3);
       padding: 0.5rem;
       border-radius: 0.5rem;
-      margin-top: 1rem;
-      max-height: 100px;
+      margin-top: 0.5rem;
+      max-height: 80px;
       overflow-y: auto;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--text-secondary);
     }
 
     .error-banner {
@@ -299,6 +309,116 @@
       margin-bottom: 1rem;
       font-size: 0.9rem;
       display: none;
+      text-align: center;
+      max-width: 360px;
+    }
+
+    /* Dialpad styling */
+    .dialpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .dialpad-btn {
+      background: rgba(80, 80, 80, 0.3);
+      border-radius: 50%;
+      width: 3.5rem;
+      height: 3.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      color: var(--text-color);
+      margin: 0 auto;
+    }
+
+    .dialpad-btn:hover {
+      background: rgba(100, 100, 100, 0.5);
+    }
+
+    .dialpad-btn:active {
+      transform: scale(0.95);
+      background: var(--primary-color);
+    }
+
+    .dialpad-btn .sub {
+      font-size: 0.6rem;
+      opacity: 0.7;
+      display: block;
+      text-align: center;
+      margin-top: -0.2rem;
+    }
+
+    .call-controls {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+    }
+
+    .call-btn {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .call-btn.green {
+      background-color: var(--primary-color);
+    }
+
+    .call-btn.red {
+      background-color: var(--danger-color);
+    }
+
+    .call-btn:active {
+      transform: scale(0.95);
+    }
+
+    .join-code {
+      letter-spacing: 0.5rem;
+      font-size: 2rem;
+      text-align: center;
+      font-family: monospace;
+      margin: 1rem 0;
+      font-weight: bold;
+    }
+
+    .join-code-input {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      font-size: 2rem;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      letter-spacing: 0.5rem;
+      width: 100%;
+      margin: 1rem 0;
+      font-family: monospace;
+    }
+
+    .join-code-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .status-message {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      text-align: center;
+      margin: 0.5rem 0;
     }
 
     @media (max-width: 480px) {
@@ -314,6 +434,12 @@
 
       .phone-container {
         border-width: 4px;
+      }
+
+      .dialpad-btn {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.2rem;
       }
     }
   </style>
@@ -346,6 +472,8 @@
   <audio id="remoteAudio" autoplay></audio>
   <audio id="notificationSound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"></audio>
   <audio id="hapticSound" src="https://assets.mixkit.co/sfx/preview/mixkit-single-key-press-in-a-mechanical-keyboard-2542.mp3"></audio>
+  <audio id="joinSound" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3"></audio>
+  <audio id="leaveSound" src="https://assets.mixkit.co/sfx/preview/mixkit-negative-guitar-tone-2324.mp3"></audio>
 
   <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
   <script>
@@ -356,6 +484,8 @@
     const remoteAudio = document.getElementById('remoteAudio');
     const notificationSound = document.getElementById('notificationSound');
     const hapticSound = document.getElementById('hapticSound');
+    const joinSound = document.getElementById('joinSound');
+    const leaveSound = document.getElementById('leaveSound');
     const connectionIndicator = document.getElementById('connectionIndicator');
     const connectionStatus = document.getElementById('connectionStatus');
     const timeDisplay = document.getElementById('timeDisplay');
@@ -395,9 +525,9 @@
       }
     };
 
-    // Generate a random room ID
-    function generateRoomId() {
-      return Math.random().toString(36).substring(2, 10);
+    // Generate a short 4-digit room code
+    function generateRoomCode() {
+      return Math.floor(1000 + Math.random() * 9000).toString();
     }
 
     // State variables
@@ -412,7 +542,9 @@
     let peer = null;
     let currentCall = null;
     let localStream = null;
-    let roomId = null;
+    let roomCode = null;
+    let peerIdToCodeMap = {};
+    let codeToPeerIdMap = {};
     let connectionLog = [];
 
     // Log connection events
@@ -422,7 +554,7 @@
       console.log(`[${timestamp}] ${message}`);
       
       // Keep log at a reasonable size
-      if (connectionLog.length > 20) {
+      if (connectionLog.length > 10) {
         connectionLog.shift();
       }
       
@@ -469,6 +601,26 @@
       hapticSound.play().catch(err => logConnection('Audio play error: ' + err.message));
     }
 
+    // Play join sound
+    function playJoinSound() {
+      joinSound.volume = 0.5;
+      joinSound.play().catch(err => logConnection('Audio play error: ' + err.message));
+      
+      if (deviceType === 'mobile' && 'vibrate' in navigator) {
+        navigator.vibrate([100, 50, 100]);
+      }
+    }
+
+    // Play leave sound
+    function playLeaveSound() {
+      leaveSound.volume = 0.5;
+      leaveSound.play().catch(err => logConnection('Audio play error: ' + err.message));
+      
+      if (deviceType === 'mobile' && 'vibrate' in navigator) {
+        navigator.vibrate([100, 50, 100, 50, 100]);
+      }
+    }
+
     // Initialize PeerJS
     function initializePeer() {
       try {
@@ -484,24 +636,26 @@
               { urls: 'stun:stun4.l.google.com:19302' },
             ]
           },
-          debug: 2
+          debug: 1
         });
 
         // When peer is open (connected to the signaling server)
         peer.on('open', (id) => {
-          logConnection('Connected to signaling server with ID: ' + id);
-          // Store our peer ID as the room ID if we're starting a new call
-          if (!roomId) {
-            roomId = id;
+          logConnection('Connected to server');
+          // Generate a short room code and map it to the peer ID
+          if (!roomCode) {
+            roomCode = generateRoomCode();
+            peerIdToCodeMap[id] = roomCode;
+            codeToPeerIdMap[roomCode] = id;
             if (storageAvailable('localStorage')) {
-              localStorage.setItem('roomId', roomId);
+              localStorage.setItem('roomCode', roomCode);
             }
           }
         });
 
         // When receiving a call
         peer.on('call', (call) => {
-          logConnection('Incoming call from: ' + call.peer);
+          logConnection('Incoming call');
           notificationSound.play().catch(err => logConnection('Audio play error: ' + err.message));
           
           // Answer the call automatically if we're expecting it
@@ -530,13 +684,13 @@
 
         // Handle errors
         peer.on('error', (err) => {
-          logConnection('PeerJS error: ' + err.type);
-          showError(`Connection error: ${err.type}. Please try again.`);
+          logConnection('Connection error: ' + err.type);
+          showError(`Connection error. Please try again.`);
           
           // Attempt to reconnect if it's a network error
           if (err.type === 'network' || err.type === 'disconnected') {
             setTimeout(() => {
-              logConnection('Attempting to reconnect...');
+              logConnection('Reconnecting...');
               peer.reconnect();
             }, 3000);
           }
@@ -544,20 +698,28 @@
 
         // Handle disconnection
         peer.on('disconnected', () => {
-          logConnection('Disconnected from signaling server');
+          logConnection('Disconnected from server');
           isConnected = false;
           updateConnectionStatus();
           
           // Attempt to reconnect
           setTimeout(() => {
-            logConnection('Attempting to reconnect...');
+            logConnection('Reconnecting...');
             peer.reconnect();
           }, 3000);
         });
         
         // Handle connection to a peer
         peer.on('connection', (conn) => {
-          logConnection('Data connection established with: ' + conn.peer);
+          logConnection('Data connection established');
+          
+          conn.on('open', () => {
+            // Send our user name to the remote peer
+            conn.send({
+              type: 'participant-info',
+              name: userName
+            });
+          });
           
           conn.on('data', (data) => {
             // Handle data messages (e.g., chat, participant info)
@@ -566,13 +728,28 @@
               const remoteName = data.name || 'Remote User';
               if (!participants.includes(remoteName)) {
                 participants.push(remoteName);
+                playJoinSound();
                 renderCallUI();
               }
+            } else if (data.type === 'leaving') {
+              // Remote participant is leaving
+              const remoteName = data.name || 'Remote User';
+              participants = participants.filter(p => p !== remoteName);
+              playLeaveSound();
+              renderCallUI();
             }
+          });
+          
+          conn.on('close', () => {
+            // Remote participant disconnected
+            logConnection('Data connection closed');
+            participants = participants.filter(p => p !== 'Remote User');
+            playLeaveSound();
+            renderCallUI();
           });
         });
       } catch (error) {
-        logConnection('Error initializing PeerJS: ' + error.message);
+        logConnection('Error initializing connection: ' + error.message);
         showError('Error initializing connection: ' + error.message);
       }
     }
@@ -600,7 +777,7 @@
     
     // Answer a call with our stream
     function answerCall(call) {
-      logConnection('Answering call from: ' + call.peer);
+      logConnection('Answering call');
       call.answer(localStream);
       handleCall(call);
       
@@ -619,7 +796,7 @@
       logConnection('Rejected incoming call');
       provideHapticFeedback();
       currentCall = null;
-      renderStartCallButton();
+      renderDialpad();
     }
 
     // Handle an active call
@@ -629,11 +806,11 @@
       
       // When we receive a stream from the remote peer
       call.on('stream', (remoteStream) => {
-        logConnection('Received remote stream');
+        logConnection('Received audio stream');
         remoteAudio.srcObject = remoteStream;
         isConnected = true;
         updateConnectionStatus();
-        notificationSound.play().catch(err => logConnection('Audio play error: ' + err.message));
+        playJoinSound();
         
         // Add remote participant if not already added
         if (!participants.includes('Remote User')) {
@@ -660,7 +837,7 @@
       // Handle call errors
       call.on('error', (err) => {
         logConnection('Call error: ' + err);
-        showError(`Call error: ${err}. Please try again.`);
+        showError(`Call error. Please try again.`);
       });
     }
 
@@ -676,8 +853,11 @@
           </div>
         `;
         document.getElementById('saveNameBtn').addEventListener('click', saveUserName);
+        document.getElementById('userNameInput').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') saveUserName();
+        });
       } else {
-        renderStartCallButton();
+        renderDialpad();
       }
     }
 
@@ -691,45 +871,66 @@
         }
         participants[0] = userName;
         provideHapticFeedback();
-        renderStartCallButton();
+        renderDialpad();
       }
     }
 
-    // Render start call button
-    function renderStartCallButton() {
+    // Render dialpad UI
+    function renderDialpad() {
       appContent.innerHTML = `
         <div class="room-id-container">
-          <h3>Start or Join a Call</h3>
-          <p>Your Peer ID: <span id="myPeerId">Connecting...</span></p>
+          <h3>Your Code</h3>
+          <div class="room-id">${roomCode || '----'}</div>
+          <p class="status-message">Share this code to receive calls</p>
         </div>
-        <button id="startCallBtn" class="green">
-          📞 Start New Call
-        </button>
-        <div style="margin-top: 1rem;">
-          <input type="text" id="joinRoomInput" class="name-input" placeholder="Enter Peer ID to join">
-          <button class="yellow" style="width: 100%; margin-top: 0.5rem;" id="joinCallBtn">🔌 Join Existing Call</button>
+        
+        <div class="name-input-container">
+          <h3>Join a Call</h3>
+          <input type="text" id="joinCodeInput" class="join-code-input" placeholder="____" maxlength="4">
+          <div class="call-controls">
+            <button class="call-btn green" id="dialBtn">📞</button>
+          </div>
         </div>
+        
+        <div class="dialpad">
+          <div class="dialpad-btn" data-value="1">1</div>
+          <div class="dialpad-btn" data-value="2">2<div class="sub">ABC</div></div>
+          <div class="dialpad-btn" data-value="3">3<div class="sub">DEF</div></div>
+          <div class="dialpad-btn" data-value="4">4<div class="sub">GHI</div></div>
+          <div class="dialpad-btn" data-value="5">5<div class="sub">JKL</div></div>
+          <div class="dialpad-btn" data-value="6">6<div class="sub">MNO</div></div>
+          <div class="dialpad-btn" data-value="7">7<div class="sub">PQRS</div></div>
+          <div class="dialpad-btn" data-value="8">8<div class="sub">TUV</div></div>
+          <div class="dialpad-btn" data-value="9">9<div class="sub">WXYZ</div></div>
+          <div class="dialpad-btn" data-value="*">*</div>
+          <div class="dialpad-btn" data-value="0">0</div>
+          <div class="dialpad-btn" data-value="#">#</div>
+        </div>
+        
         <div class="connection-log">
           <div id="connectionLogContent"></div>
         </div>
       `;
       
-      // Update the peer ID display when available
-      if (peer && peer.id) {
-        document.getElementById('myPeerId').textContent = peer.id;
-      } else {
-        // Wait for peer ID to be assigned
-        const checkPeerId = setInterval(() => {
-          if (peer && peer.id) {
-            document.getElementById('myPeerId').textContent = peer.id;
-            clearInterval(checkPeerId);
+      // Add event listeners for dialpad buttons
+      document.querySelectorAll('.dialpad-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const value = btn.getAttribute('data-value');
+          const input = document.getElementById('joinCodeInput');
+          if (input.value.length < 4) {
+            input.value += value;
+            provideHapticFeedback();
           }
-        }, 500);
-      }
+        });
+      });
       
-      // Add event listeners
-      document.getElementById('startCallBtn').addEventListener('click', startCall);
-      document.getElementById('joinCallBtn').addEventListener('click', joinRoom);
+      // Add event listener for dial button
+      document.getElementById('dialBtn').addEventListener('click', () => joinWithCode());
+      
+      // Add event listener for join code input
+      document.getElementById('joinCodeInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') joinWithCode();
+      });
       
       // Update connection log
       const logElement = document.getElementById('connectionLogContent');
@@ -739,31 +940,43 @@
       }
     }
 
-    // Join an existing room
-    async function joinRoom() {
-      const roomInput = document.getElementById('joinRoomInput');
-      const targetRoomId = roomInput.value.trim();
+    // Join with a code
+    async function joinWithCode() {
+      const codeInput = document.getElementById('joinCodeInput');
+      const code = codeInput.value.trim();
       
-      if (!targetRoomId) {
-        showError('Please enter a valid Peer ID');
+      if (code.length !== 4) {
+        showError('Please enter a valid 4-digit code');
         return;
       }
       
       try {
-        logConnection('Attempting to join call with peer: ' + targetRoomId);
+        logConnection('Joining call with code: ' + code);
         provideHapticFeedback();
+        
+        // Look up the peer ID for this code
+        let targetPeerId = codeToPeerIdMap[code];
+        
+        // If we don't have a mapping yet, use the code directly
+        // (This allows joining calls from other instances)
+        if (!targetPeerId) {
+          // In a real app, you would have a server to look up the peer ID for a code
+          // For this demo, we'll just use the code as the peer ID
+          targetPeerId = code;
+        }
+        
         inCall = true;
         
         // Get user media
         localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         localAudio.srcObject = localStream;
         
-        // Call the peer with the target room ID
-        const call = peer.call(targetRoomId, localStream);
+        // Call the peer with the target ID
+        const call = peer.call(targetPeerId, localStream);
         handleCall(call);
         
         // Establish a data connection for participant info
-        const dataConn = peer.connect(targetRoomId);
+        const dataConn = peer.connect(targetPeerId);
         dataConn.on('open', () => {
           dataConn.send({
             type: 'participant-info',
@@ -775,33 +988,7 @@
         
       } catch (error) {
         logConnection('Error joining call: ' + error.message);
-        showError('Error joining call: ' + error.message);
-        inCall = false;
-      }
-    }
-
-    // Start call function
-    async function startCall() {
-      try {
-        logConnection('Starting a new call');
-        provideHapticFeedback();
-        inCall = true;
-        
-        // Use our peer ID as the room ID
-        roomId = peer.id;
-        if (storageAvailable('localStorage')) {
-          localStorage.setItem('roomId', roomId);
-        }
-        
-        // Get user media
-        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        localAudio.srcObject = localStream;
-        
-        renderCallUI();
-        
-      } catch (error) {
-        logConnection('Error accessing microphone: ' + error.message);
-        showError('Error accessing microphone: ' + error.message);
+        showError('Error joining call. Please try again.');
         inCall = false;
       }
     }
@@ -811,31 +998,27 @@
       appContent.innerHTML = `
         <div class="room-id-container">
           <h3>Active Call</h3>
-          <p>Share this Peer ID with others to connect:</p>
-          <div class="room-id">${peer.id}</div>
+          <div class="room-id">${roomCode || '----'}</div>
         </div>
         <div class="btn-group">
           <button class="gray" id="muteBtn">${muted ? '🎙️ Unmute' : '🔇 Mute'}</button>
           <button class="gray" id="speakerBtn">${
             deviceType === 'mobile' ? 
-            (speaker ? '🔊 Loudspeaker' : '🔈 Phone') : 
-            (speaker ? '🔊 Speaker On' : '🔇 Speaker Off')
+            (speaker ? '🔊 Speaker' : '🔈 Phone') : 
+            (speaker ? '🔊 On' : '🔇 Off')
           }</button>
-          <button class="red" id="endCallBtn">📴 End Call</button>
+          <button class="red" id="endCallBtn">📴 End</button>
         </div>
         <div class="participants">
           <h3>
             Participants
             <span class="connection-status ${isConnected ? 'connected' : ''}">
-              ${isConnected ? 'Connected' : 'Waiting for connection...'}
+              ${isConnected ? 'Connected' : 'Waiting...'}
             </span>
           </h3>
           <ul id="participantsList">
             ${participants.map(p => `<li>${p}</li>`).join('')}
           </ul>
-        </div>
-        <div class="connection-log">
-          <div id="connectionLogContent"></div>
         </div>
       `;
       
@@ -843,13 +1026,6 @@
       document.getElementById('muteBtn').addEventListener('click', toggleMute);
       document.getElementById('speakerBtn').addEventListener('click', toggleSpeaker);
       document.getElementById('endCallBtn').addEventListener('click', endCall);
-      
-      // Update connection log
-      const logElement = document.getElementById('connectionLogContent');
-      if (logElement) {
-        logElement.innerHTML = connectionLog.join('<br>');
-        logElement.scrollTop = logElement.scrollHeight;
-      }
     }
 
     // Toggle mute function
@@ -869,10 +1045,10 @@
       // On mobile devices, we would use the setSinkId API to switch audio output
       if (deviceType === 'mobile' && 'setSinkId' in HTMLMediaElement.prototype) {
         try {
-          remoteAudio.setSinkId(speaker ? '' : 'earpiece').catch(e => logConnection('setSinkId error: ' + e.message));
+          remoteAudio.setSinkId(speaker ? '' : 'earpiece').catch(e => logConnection('Audio output error: ' + e.message));
           logConnection('Switching to ' + (speaker ? 'loudspeaker' : 'phone speaker'));
         } catch (e) {
-          logConnection('setSinkId error: ' + e.message);
+          logConnection('Audio output error: ' + e.message);
         }
       }
       
@@ -883,6 +1059,22 @@
     function endCall() {
       logConnection('Ending call');
       provideHapticFeedback();
+      
+      // Notify other participants that we're leaving
+      if (currentCall && peer.connections && Object.keys(peer.connections).length > 0) {
+        for (const peerId in peer.connections) {
+          const dataConns = peer.connections[peerId].filter(c => c.type === 'data');
+          for (const conn of dataConns) {
+            if (conn.open) {
+              conn.send({
+                type: 'leaving',
+                name: userName
+              });
+            }
+          }
+        }
+      }
+      
       inCall = false;
       isConnected = false;
       updateConnectionStatus();
@@ -906,7 +1098,17 @@
       // Keep the user's name but reset other participants
       participants = [userName];
       
-      renderStartCallButton();
+      // Generate a new room code for next call
+      roomCode = generateRoomCode();
+      if (peer && peer.id) {
+        peerIdToCodeMap[peer.id] = roomCode;
+        codeToPeerIdMap[roomCode] = peer.id;
+      }
+      if (storageAvailable('localStorage')) {
+        localStorage.setItem('roomCode', roomCode);
+      }
+      
+      renderDialpad();
     }
 
     // Initialize the app
