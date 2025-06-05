@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Realtime Call App</title>
-  <link href="https://cdn.jsdelivr.net/npm/lucide@latest" rel="stylesheet">
   <style>
     :root {
       --primary-color: #22c55e;
@@ -280,6 +279,18 @@
       margin-top: 1rem;
     }
 
+    .connection-log {
+      font-family: monospace;
+      font-size: 0.8rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+      max-height: 100px;
+      overflow-y: auto;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
     @media (max-width: 480px) {
       .btn-group {
         flex-direction: column;
@@ -325,8 +336,9 @@
   <audio id="notificationSound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"></audio>
   <audio id="hapticSound" src="https://assets.mixkit.co/sfx/preview/mixkit-single-key-press-in-a-mechanical-keyboard-2542.mp3"></audio>
 
-  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
   <script>
+    // DOM Elements
     const callContainer = document.getElementById('callContainer');
     const appContent = document.getElementById('appContent');
     const localAudio = document.getElementById('localAudio');
@@ -379,12 +391,26 @@
     let peer = null;
     let currentCall = null;
     let localStream = null;
-    let roomId = storageAvailable('localStorage') && localStorage.getItem('roomId') ?
-                localStorage.getItem('roomId') : generateRoomId();
+    let roomId = null;
+    let connectionLog = [];
 
-    // Save room ID to localStorage
-    if (storageAvailable('localStorage')) {
-      localStorage.setItem('roomId', roomId);
+    // Log connection events
+    function logConnection(message) {
+      const timestamp = new Date().toLocaleTimeString();
+      connectionLog.push(`[${timestamp}] ${message}`);
+      console.log(`[${timestamp}] ${message}`);
+      
+      // Keep log at a reasonable size
+      if (connectionLog.length > 20) {
+        connectionLog.shift();
+      }
+      
+      // Update log display if it exists
+      const logElement = document.getElementById('connectionLogContent');
+      if (logElement) {
+        logElement.innerHTML = connectionLog.join('<br>');
+        logElement.scrollTop = logElement.scrollHeight;
+      }
     }
 
     // Detect device type
@@ -419,60 +445,111 @@
       
       // Sound feedback for all devices
       hapticSound.volume = 0.3;
-      hapticSound.play().catch(err => console.log('Audio play error:', err));
+      hapticSound.play().catch(err => logConnection('Audio play error: ' + err.message));
     }
 
     // Initialize PeerJS
     function initializePeer() {
       // Create a new Peer with a random ID
       peer = new Peer(undefined, {
-        host: 'peerjs-server.herokuapp.com',
+        // Using a reliable public PeerJS server
+        host: 'peerjs.com',
         secure: true,
         port: 443,
-        debug: 3
+        path: '/',
+        debug: 2,
+        config: {
+          'iceServers': [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun1.l.google.com:19302' },
+            { urls: 'stun:stun2.l.google.com:19302' },
+          ]
+        }
       });
 
       // When peer is open (connected to the signaling server)
       peer.on('open', (id) => {
-        console.log('My peer ID is: ' + id);
+        logConnection('Connected to signaling server with ID: ' + id);
+        // Store our peer ID as the room ID if we're starting a new call
+        if (!roomId) {
+          roomId = id;
+          if (storageAvailable('localStorage')) {
+            localStorage.setItem('roomId', roomId);
+          }
+        }
       });
 
       // When receiving a call
       peer.on('call', (call) => {
-        notificationSound.play().catch(err => console.log('Audio play error:', err));
+        logConnection('Incoming call from: ' + call.peer);
+        notificationSound.play().catch(err => logConnection('Audio play error: ' + err.message));
         
         // Answer the call automatically if we're expecting it
         if (inCall) {
-          call.answer(localStream); // Answer with our local stream
-          handleCall(call);
+          answerCall(call);
         } else {
           // Show incoming call UI
           appContent.innerHTML = `
             <div class="room-id-container">
               <h3>Incoming Call</h3>
               <div class="btn-group">
-                <button class="green" onclick="answerIncomingCall()">📞 Answer</button>
-                <button class="red" onclick="rejectIncomingCall()">❌ Reject</button>
+                <button class="green" id="answerCallBtn">📞 Answer</button>
+                <button class="red" id="rejectCallBtn">❌ Reject</button>
               </div>
             </div>
           `;
           
           // Store the call for later
           currentCall = call;
+          
+          // Add event listeners
+          document.getElementById('answerCallBtn').addEventListener('click', () => answerIncomingCall());
+          document.getElementById('rejectCallBtn').addEventListener('click', () => rejectIncomingCall());
         }
       });
 
       // Handle errors
       peer.on('error', (err) => {
-        console.error('PeerJS error:', err);
+        logConnection('PeerJS error: ' + err.type);
         alert(`Connection error: ${err.type}. Please try again.`);
+        
+        // Attempt to reconnect if it's a network error
+        if (err.type === 'network' || err.type === 'disconnected') {
+          setTimeout(() => {
+            logConnection('Attempting to reconnect...');
+            peer.reconnect();
+          }, 3000);
+        }
       });
 
       // Handle disconnection
       peer.on('disconnected', () => {
-        console.log('Peer disconnected');
+        logConnection('Disconnected from signaling server');
         isConnected = false;
         updateConnectionStatus();
+        
+        // Attempt to reconnect
+        setTimeout(() => {
+          logConnection('Attempting to reconnect...');
+          peer.reconnect();
+        }, 3000);
+      });
+      
+      // Handle connection to a peer
+      peer.on('connection', (conn) => {
+        logConnection('Data connection established with: ' + conn.peer);
+        
+        conn.on('data', (data) => {
+          // Handle data messages (e.g., chat, participant info)
+          if (data.type === 'participant-info') {
+            // Update remote participant name
+            const remoteName = data.name || 'Remote User';
+            if (!participants.includes(remoteName)) {
+              participants.push(remoteName);
+              renderCallUI();
+            }
+          }
+        });
       });
     }
 
@@ -488,18 +565,34 @@
           localAudio.srcObject = localStream;
         }
         
-        // Answer the call with our stream
-        currentCall.answer(localStream);
-        handleCall(currentCall);
+        answerCall(currentCall);
         
       } catch (error) {
+        logConnection('Error accessing microphone: ' + error.message);
         alert('Error accessing microphone: ' + error.message);
         inCall = false;
       }
     }
+    
+    // Answer a call with our stream
+    function answerCall(call) {
+      logConnection('Answering call from: ' + call.peer);
+      call.answer(localStream);
+      handleCall(call);
+      
+      // Establish a data connection for participant info
+      const dataConn = peer.connect(call.peer);
+      dataConn.on('open', () => {
+        dataConn.send({
+          type: 'participant-info',
+          name: userName
+        });
+      });
+    }
 
     // Reject incoming call
     function rejectIncomingCall() {
+      logConnection('Rejected incoming call');
       provideHapticFeedback();
       currentCall = null;
       renderStartCallButton();
@@ -512,13 +605,13 @@
       
       // When we receive a stream from the remote peer
       call.on('stream', (remoteStream) => {
-        console.log('Received remote stream');
+        logConnection('Received remote stream');
         remoteAudio.srcObject = remoteStream;
         isConnected = true;
         updateConnectionStatus();
-        notificationSound.play().catch(err => console.log('Audio play error:', err));
+        notificationSound.play().catch(err => logConnection('Audio play error: ' + err.message));
         
-        // Add remote participant
+        // Add remote participant if not already added
         if (!participants.includes('Remote User')) {
           participants.push('Remote User');
         }
@@ -528,7 +621,7 @@
       
       // When the call ends
       call.on('close', () => {
-        console.log('Call ended');
+        logConnection('Call ended');
         isConnected = false;
         updateConnectionStatus();
         
@@ -542,7 +635,7 @@
       
       // Handle call errors
       call.on('error', (err) => {
-        console.error('Call error:', err);
+        logConnection('Call error: ' + err);
         alert(`Call error: ${err}. Please try again.`);
       });
     }
@@ -555,9 +648,10 @@
             <h3>Welcome!</h3>
             <p>Please enter your name:</p>
             <input type="text" id="userNameInput" class="name-input" placeholder="Your name">
-            <button class="green" style="width: 100%; margin-top: 1rem;" onclick="saveUserName()">Save</button>
+            <button class="green" style="width: 100%; margin-top: 1rem;" id="saveNameBtn">Save</button>
           </div>
         `;
+        document.getElementById('saveNameBtn').addEventListener('click', saveUserName);
       } else {
         renderStartCallButton();
       }
@@ -581,19 +675,44 @@
     function renderStartCallButton() {
       appContent.innerHTML = `
         <div class="room-id-container">
-          <h3>Your Room ID</h3>
-          <div class="room-id">${roomId}</div>
-          <p>Share this ID with others to connect</p>
+          <h3>Start or Join a Call</h3>
+          <p>Your Peer ID: <span id="myPeerId">Connecting...</span></p>
         </div>
         <button id="startCallBtn" class="green">
           📞 Start New Call
         </button>
         <div style="margin-top: 1rem;">
-          <input type="text" id="joinRoomInput" class="name-input" placeholder="Enter Room ID to join">
-          <button class="yellow" style="width: 100%; margin-top: 0.5rem;" onclick="joinRoom()">🔌 Join Existing Call</button>
+          <input type="text" id="joinRoomInput" class="name-input" placeholder="Enter Peer ID to join">
+          <button class="yellow" style="width: 100%; margin-top: 0.5rem;" id="joinCallBtn">🔌 Join Existing Call</button>
+        </div>
+        <div class="connection-log">
+          <div id="connectionLogContent"></div>
         </div>
       `;
+      
+      // Update the peer ID display when available
+      if (peer && peer.id) {
+        document.getElementById('myPeerId').textContent = peer.id;
+      } else {
+        // Wait for peer ID to be assigned
+        const checkPeerId = setInterval(() => {
+          if (peer && peer.id) {
+            document.getElementById('myPeerId').textContent = peer.id;
+            clearInterval(checkPeerId);
+          }
+        }, 500);
+      }
+      
+      // Add event listeners
       document.getElementById('startCallBtn').addEventListener('click', startCall);
+      document.getElementById('joinCallBtn').addEventListener('click', joinRoom);
+      
+      // Update connection log
+      const logElement = document.getElementById('connectionLogContent');
+      if (logElement) {
+        logElement.innerHTML = connectionLog.join('<br>');
+        logElement.scrollTop = logElement.scrollHeight;
+      }
     }
 
     // Join an existing room
@@ -602,11 +721,12 @@
       const targetRoomId = roomInput.value.trim();
       
       if (!targetRoomId) {
-        alert('Please enter a valid Room ID');
+        alert('Please enter a valid Peer ID');
         return;
       }
       
       try {
+        logConnection('Attempting to join call with peer: ' + targetRoomId);
         provideHapticFeedback();
         inCall = true;
         
@@ -617,10 +737,21 @@
         // Call the peer with the target room ID
         const call = peer.call(targetRoomId, localStream);
         handleCall(call);
+        
+        // Establish a data connection for participant info
+        const dataConn = peer.connect(targetRoomId);
+        dataConn.on('open', () => {
+          dataConn.send({
+            type: 'participant-info',
+            name: userName
+          });
+        });
+        
         renderCallUI();
         
       } catch (error) {
-        alert('Error joining room: ' + error.message);
+        logConnection('Error joining call: ' + error.message);
+        alert('Error joining call: ' + error.message);
         inCall = false;
       }
     }
@@ -628,11 +759,12 @@
     // Start call function
     async function startCall() {
       try {
+        logConnection('Starting a new call');
         provideHapticFeedback();
         inCall = true;
         
-        // Generate a new room ID for this call
-        roomId = generateRoomId();
+        // Use our peer ID as the room ID
+        roomId = peer.id;
         if (storageAvailable('localStorage')) {
           localStorage.setItem('roomId', roomId);
         }
@@ -644,6 +776,7 @@
         renderCallUI();
         
       } catch (error) {
+        logConnection('Error accessing microphone: ' + error.message);
         alert('Error accessing microphone: ' + error.message);
         inCall = false;
       }
@@ -654,17 +787,17 @@
       appContent.innerHTML = `
         <div class="room-id-container">
           <h3>Active Call</h3>
-          <div class="room-id">${roomId}</div>
-          <p>Share this ID with others to connect</p>
+          <p>Share this Peer ID with others to connect:</p>
+          <div class="room-id">${peer.id}</div>
         </div>
         <div class="btn-group">
-          <button class="gray" onclick="toggleMute()">${muted ? '🎙️ Unmute' : '🔇 Mute'}</button>
-          <button class="gray" onclick="toggleSpeaker()">${
+          <button class="gray" id="muteBtn">${muted ? '🎙️ Unmute' : '🔇 Mute'}</button>
+          <button class="gray" id="speakerBtn">${
             deviceType === 'mobile' ? 
             (speaker ? '🔊 Loudspeaker' : '🔈 Phone') : 
             (speaker ? '🔊 Speaker On' : '🔇 Speaker Off')
           }</button>
-          <button class="red" onclick="endCall()">📴 End Call</button>
+          <button class="red" id="endCallBtn">📴 End Call</button>
         </div>
         <div class="participants">
           <h3>
@@ -677,7 +810,22 @@
             ${participants.map(p => `<li>${p}</li>`).join('')}
           </ul>
         </div>
+        <div class="connection-log">
+          <div id="connectionLogContent"></div>
+        </div>
       `;
+      
+      // Add event listeners
+      document.getElementById('muteBtn').addEventListener('click', toggleMute);
+      document.getElementById('speakerBtn').addEventListener('click', toggleSpeaker);
+      document.getElementById('endCallBtn').addEventListener('click', endCall);
+      
+      // Update connection log
+      const logElement = document.getElementById('connectionLogContent');
+      if (logElement) {
+        logElement.innerHTML = connectionLog.join('<br>');
+        logElement.scrollTop = logElement.scrollHeight;
+      }
     }
 
     // Toggle mute function
@@ -695,13 +843,12 @@
       speaker = !speaker;
       
       // On mobile devices, we would use the setSinkId API to switch audio output
-      // This is just a simulation as the actual implementation requires HTTPS
       if (deviceType === 'mobile' && 'setSinkId' in HTMLMediaElement.prototype) {
         try {
-          remoteAudio.setSinkId(speaker ? '' : 'earpiece').catch(e => console.log('setSinkId error:', e));
-          console.log('Switching to', speaker ? 'loudspeaker' : 'phone speaker');
+          remoteAudio.setSinkId(speaker ? '' : 'earpiece').catch(e => logConnection('setSinkId error: ' + e.message));
+          logConnection('Switching to ' + (speaker ? 'loudspeaker' : 'phone speaker'));
         } catch (e) {
-          console.log('setSinkId error:', e);
+          logConnection('setSinkId error: ' + e.message);
         }
       }
       
@@ -710,6 +857,7 @@
 
     // End call function
     function endCall() {
+      logConnection('Ending call');
       provideHapticFeedback();
       inCall = false;
       isConnected = false;
@@ -733,12 +881,6 @@
       
       // Keep the user's name but reset other participants
       participants = [userName];
-      
-      // Generate a new room ID for next call
-      roomId = generateRoomId();
-      if (storageAvailable('localStorage')) {
-        localStorage.setItem('roomId', roomId);
-      }
       
       renderStartCallButton();
     }
