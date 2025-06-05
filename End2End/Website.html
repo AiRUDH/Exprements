@@ -291,6 +291,16 @@
       color: rgba(255, 255, 255, 0.7);
     }
 
+    .error-banner {
+      background-color: var(--danger-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      display: none;
+    }
+
     @media (max-width: 480px) {
       .btn-group {
         flex-direction: column;
@@ -311,6 +321,7 @@
 <body>
 
   <h1>Realtime Call App</h1>
+  <div id="errorBanner" class="error-banner"></div>
 
   <div id="callContainer" class="phone-container">
     <div class="phone-screen">
@@ -348,6 +359,16 @@
     const connectionIndicator = document.getElementById('connectionIndicator');
     const connectionStatus = document.getElementById('connectionStatus');
     const timeDisplay = document.getElementById('timeDisplay');
+    const errorBanner = document.getElementById('errorBanner');
+
+    // Show error message in banner
+    function showError(message) {
+      errorBanner.textContent = message;
+      errorBanner.style.display = 'block';
+      setTimeout(() => {
+        errorBanner.style.display = 'none';
+      }, 5000);
+    }
 
     // Update time display
     function updateTimeDisplay() {
@@ -450,107 +471,110 @@
 
     // Initialize PeerJS
     function initializePeer() {
-      // Create a new Peer with a random ID
-      peer = new Peer(undefined, {
-        // Using a reliable public PeerJS server
-        host: 'peerjs.com',
-        secure: true,
-        port: 443,
-        path: '/',
-        debug: 2,
-        config: {
-          'iceServers': [
-            { urls: 'stun:stun.l.google.com:19302' },
-            { urls: 'stun:stun1.l.google.com:19302' },
-            { urls: 'stun:stun2.l.google.com:19302' },
-          ]
-        }
-      });
+      try {
+        // Create a new Peer with a random ID
+        // Using a free public STUN server that doesn't require login
+        peer = new Peer(undefined, {
+          config: {
+            'iceServers': [
+              { urls: 'stun:stun.l.google.com:19302' },
+              { urls: 'stun:stun1.l.google.com:19302' },
+              { urls: 'stun:stun2.l.google.com:19302' },
+              { urls: 'stun:stun3.l.google.com:19302' },
+              { urls: 'stun:stun4.l.google.com:19302' },
+            ]
+          },
+          debug: 2
+        });
 
-      // When peer is open (connected to the signaling server)
-      peer.on('open', (id) => {
-        logConnection('Connected to signaling server with ID: ' + id);
-        // Store our peer ID as the room ID if we're starting a new call
-        if (!roomId) {
-          roomId = id;
-          if (storageAvailable('localStorage')) {
-            localStorage.setItem('roomId', roomId);
+        // When peer is open (connected to the signaling server)
+        peer.on('open', (id) => {
+          logConnection('Connected to signaling server with ID: ' + id);
+          // Store our peer ID as the room ID if we're starting a new call
+          if (!roomId) {
+            roomId = id;
+            if (storageAvailable('localStorage')) {
+              localStorage.setItem('roomId', roomId);
+            }
           }
-        }
-      });
+        });
 
-      // When receiving a call
-      peer.on('call', (call) => {
-        logConnection('Incoming call from: ' + call.peer);
-        notificationSound.play().catch(err => logConnection('Audio play error: ' + err.message));
-        
-        // Answer the call automatically if we're expecting it
-        if (inCall) {
-          answerCall(call);
-        } else {
-          // Show incoming call UI
-          appContent.innerHTML = `
-            <div class="room-id-container">
-              <h3>Incoming Call</h3>
-              <div class="btn-group">
-                <button class="green" id="answerCallBtn">📞 Answer</button>
-                <button class="red" id="rejectCallBtn">❌ Reject</button>
+        // When receiving a call
+        peer.on('call', (call) => {
+          logConnection('Incoming call from: ' + call.peer);
+          notificationSound.play().catch(err => logConnection('Audio play error: ' + err.message));
+          
+          // Answer the call automatically if we're expecting it
+          if (inCall) {
+            answerCall(call);
+          } else {
+            // Show incoming call UI
+            appContent.innerHTML = `
+              <div class="room-id-container">
+                <h3>Incoming Call</h3>
+                <div class="btn-group">
+                  <button class="green" id="answerCallBtn">📞 Answer</button>
+                  <button class="red" id="rejectCallBtn">❌ Reject</button>
+                </div>
               </div>
-            </div>
-          `;
-          
-          // Store the call for later
-          currentCall = call;
-          
-          // Add event listeners
-          document.getElementById('answerCallBtn').addEventListener('click', () => answerIncomingCall());
-          document.getElementById('rejectCallBtn').addEventListener('click', () => rejectIncomingCall());
-        }
-      });
+            `;
+            
+            // Store the call for later
+            currentCall = call;
+            
+            // Add event listeners
+            document.getElementById('answerCallBtn').addEventListener('click', () => answerIncomingCall());
+            document.getElementById('rejectCallBtn').addEventListener('click', () => rejectIncomingCall());
+          }
+        });
 
-      // Handle errors
-      peer.on('error', (err) => {
-        logConnection('PeerJS error: ' + err.type);
-        alert(`Connection error: ${err.type}. Please try again.`);
-        
-        // Attempt to reconnect if it's a network error
-        if (err.type === 'network' || err.type === 'disconnected') {
+        // Handle errors
+        peer.on('error', (err) => {
+          logConnection('PeerJS error: ' + err.type);
+          showError(`Connection error: ${err.type}. Please try again.`);
+          
+          // Attempt to reconnect if it's a network error
+          if (err.type === 'network' || err.type === 'disconnected') {
+            setTimeout(() => {
+              logConnection('Attempting to reconnect...');
+              peer.reconnect();
+            }, 3000);
+          }
+        });
+
+        // Handle disconnection
+        peer.on('disconnected', () => {
+          logConnection('Disconnected from signaling server');
+          isConnected = false;
+          updateConnectionStatus();
+          
+          // Attempt to reconnect
           setTimeout(() => {
             logConnection('Attempting to reconnect...');
             peer.reconnect();
           }, 3000);
-        }
-      });
-
-      // Handle disconnection
-      peer.on('disconnected', () => {
-        logConnection('Disconnected from signaling server');
-        isConnected = false;
-        updateConnectionStatus();
-        
-        // Attempt to reconnect
-        setTimeout(() => {
-          logConnection('Attempting to reconnect...');
-          peer.reconnect();
-        }, 3000);
-      });
-      
-      // Handle connection to a peer
-      peer.on('connection', (conn) => {
-        logConnection('Data connection established with: ' + conn.peer);
-        
-        conn.on('data', (data) => {
-          // Handle data messages (e.g., chat, participant info)
-          if (data.type === 'participant-info') {
-            // Update remote participant name
-            const remoteName = data.name || 'Remote User';
-            if (!participants.includes(remoteName)) {
-              participants.push(remoteName);
-              renderCallUI();
-            }
-          }
         });
-      });
+        
+        // Handle connection to a peer
+        peer.on('connection', (conn) => {
+          logConnection('Data connection established with: ' + conn.peer);
+          
+          conn.on('data', (data) => {
+            // Handle data messages (e.g., chat, participant info)
+            if (data.type === 'participant-info') {
+              // Update remote participant name
+              const remoteName = data.name || 'Remote User';
+              if (!participants.includes(remoteName)) {
+                participants.push(remoteName);
+                renderCallUI();
+              }
+            }
+          });
+        });
+      } catch (error) {
+        logConnection('Error initializing PeerJS: ' + error.message);
+        showError('Error initializing connection: ' + error.message);
+      }
     }
 
     // Answer incoming call
@@ -569,7 +593,7 @@
         
       } catch (error) {
         logConnection('Error accessing microphone: ' + error.message);
-        alert('Error accessing microphone: ' + error.message);
+        showError('Error accessing microphone: ' + error.message);
         inCall = false;
       }
     }
@@ -636,7 +660,7 @@
       // Handle call errors
       call.on('error', (err) => {
         logConnection('Call error: ' + err);
-        alert(`Call error: ${err}. Please try again.`);
+        showError(`Call error: ${err}. Please try again.`);
       });
     }
 
@@ -721,7 +745,7 @@
       const targetRoomId = roomInput.value.trim();
       
       if (!targetRoomId) {
-        alert('Please enter a valid Peer ID');
+        showError('Please enter a valid Peer ID');
         return;
       }
       
@@ -751,7 +775,7 @@
         
       } catch (error) {
         logConnection('Error joining call: ' + error.message);
-        alert('Error joining call: ' + error.message);
+        showError('Error joining call: ' + error.message);
         inCall = false;
       }
     }
@@ -777,7 +801,7 @@
         
       } catch (error) {
         logConnection('Error accessing microphone: ' + error.message);
-        alert('Error accessing microphone: ' + error.message);
+        showError('Error accessing microphone: ' + error.message);
         inCall = false;
       }
     }
