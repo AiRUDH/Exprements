@@ -1,4 +1,44 @@
-// ... existing code ...
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Realtime Call App</title>
+  <style>
+    :root {
+      --primary-color: #22c55e;
+      --secondary-color: #374151;
+      --danger-color: #ef4444;
+      --warning-color: #f59e0b;
+      --background-start: #0f0f0f;
+      --background-end: #1a1a1a;
+      --text-color: #ffffff;
+      --text-secondary: #a0a0a0;
+      --spacing-unit: 1rem;
+      --phone-ui-color: #222222;
+      --phone-border-color: #444444;
+      --card-bg: rgba(30, 30, 30, 0.7);
+      --card-border: rgba(80, 80, 80, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--background-start), var(--background-end));
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: clamp(0.5rem, 3vw, 1.5rem);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
 
     h1 {
       font-size: clamp(1.5rem, 5vw, 2rem);
@@ -6,8 +46,6 @@
       text-align: center;
       text-shadow: 0 2px 4px rgba(0,0,0,0.2);
       font-weight: 300;
-      /* Added for accessibility */
-      aria-live="polite";
     }
 
     button {
@@ -23,8 +61,6 @@
       gap: 0.5rem;
       transition: transform 0.2s, opacity 0.2s, background-color 0.2s;
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      /* Added for accessibility */
-      touch-action: manipulation; /* Improves responsiveness on touch devices */
     }
 
     button:hover {
@@ -36,17 +72,17 @@
       transform: translateY(0);
     }
 
-    .green {
+    .green { 
       background-color: var(--primary-color);
       color: var(--text-color);
     }
 
-    .gray {
+    .gray { 
       background-color: var(--secondary-color);
       color: var(--text-color);
     }
 
-    .red {
+    .red { 
       background-color: var(--danger-color);
       color: var(--text-color);
     }
@@ -56,7 +92,7 @@
       color: var(--text-color);
     }
 
-    .btn-group {
+    .btn-group { 
       display: flex;
       gap: clamp(0.5rem, 2vw, 1rem);
       flex-wrap: wrap;
@@ -65,7 +101,7 @@
       width: 100%;
     }
 
-    .participants {
+    .participants { 
       margin-top: calc(var(--spacing-unit) * 1);
       background: var(--card-bg);
       padding: var(--spacing-unit);
@@ -95,7 +131,7 @@
       background-color: var(--primary-color);
     }
 
-    .participants ul {
+    .participants ul { 
       list-style-type: none;
       padding: 0;
     }
@@ -117,7 +153,7 @@
       border-bottom: none;
     }
 
-    audio { display: none; } /* Keep audio elements hidden */
+    audio { display: none; }
 
     #callContainer {
       width: 100%;
@@ -247,8 +283,6 @@
       margin: 0.5rem 0;
       letter-spacing: 0.5rem;
       font-weight: bold;
-      /* Ensure visibility for screen readers */
-      aria-live="polite";
     }
 
     .remote-audio {
@@ -265,53 +299,42 @@
       max-height: 80px;
       overflow-y: auto;
       color: var(--text-secondary);
-      /* Added for accessibility */
-      aria-live="polite";
-      role="log";
     }
 
     .error-banner {
       background-color: var(--danger-color);
       color: white;
-      padding: 0.75rem 1.5rem; /* Increased padding */
+      padding: 0.5rem 1rem;
       border-radius: 0.5rem;
-      margin-bottom: 1.5rem; /* Increased margin */
-      font-size: 1rem; /* Increased font size */
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
       display: none;
       text-align: center;
       max-width: 360px;
-      font-weight: bold; /* Make text bold */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Added shadow */
-      /* Added for accessibility */
-      aria-live="assertive";
-      role="alert";
     }
 
     /* Dialpad styling */
     .dialpad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.75rem; /* Increased gap */
-      margin: 1.5rem 0; /* Increased margin */
+      gap: 0.5rem;
+      margin: 1rem 0;
     }
 
     .dialpad-btn {
       background: rgba(80, 80, 80, 0.3);
       border-radius: 50%;
-      width: 4rem; /* Slightly larger buttons */
-      height: 4rem; /* Slightly larger buttons */
+      width: 3.5rem;
+      height: 3.5rem;
       display: flex;
-      flex-direction: column; /* Allow text and sub-text to stack */
       align-items: center;
       justify-content: center;
-      font-size: 1.8rem; /* Larger font size */
+      font-size: 1.5rem;
       cursor: pointer;
       transition: all 0.2s;
       user-select: none;
       color: var(--text-color);
       margin: 0 auto;
-      /* Added for accessibility */
-      aria-label="Dialpad button";
     }
 
     .dialpad-btn:hover {
@@ -324,7 +347,7 @@
     }
 
     .dialpad-btn .sub {
-      font-size: 0.7rem; /* Slightly larger sub-text */
+      font-size: 0.6rem;
       opacity: 0.7;
       display: block;
       text-align: center;
@@ -334,23 +357,21 @@
     .call-controls {
       display: flex;
       justify-content: space-around;
-      margin-top: 1.5rem; /* Increased margin */
+      margin-top: 1rem;
     }
 
     .call-btn {
-      width: 4rem; /* Slightly larger buttons */
-      height: 4rem; /* Slightly larger buttons */
+      width: 3.5rem;
+      height: 3.5rem;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.8rem; /* Larger icon size */
+      font-size: 1.5rem;
       border: none;
       cursor: pointer;
       transition: all 0.2s;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      /* Added for accessibility */
-      aria-label="Call control button";
     }
 
     .call-btn.green {
@@ -367,20 +388,18 @@
 
     .join-code {
       letter-spacing: 0.5rem;
-      font-size: 2.5rem; /* Larger font for join code */
+      font-size: 2rem;
       text-align: center;
       font-family: monospace;
       margin: 1rem 0;
       font-weight: bold;
-      /* Ensure visibility for screen readers */
-      aria-live="polite";
     }
 
     .join-code-input {
       background: rgba(0, 0, 0, 0.2);
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: var(--text-color);
-      font-size: 2.5rem; /* Larger font for input */
+      font-size: 2rem;
       padding: 0.5rem;
       border-radius: 0.5rem;
       text-align: center;
@@ -388,8 +407,6 @@
       width: 100%;
       margin: 1rem 0;
       font-family: monospace;
-      /* Added for accessibility */
-      aria-label="Enter 4 digit join code";
     }
 
     .join-code-input:focus {
@@ -399,11 +416,9 @@
 
     .status-message {
       color: var(--text-secondary);
-      font-size: 1rem; /* Slightly larger font */
+      font-size: 0.9rem;
       text-align: center;
-      margin: 0.75rem 0; /* Adjusted margin */
-      /* Added for accessibility */
-      aria-live="polite";
+      margin: 0.5rem 0;
     }
 
     @media (max-width: 480px) {
@@ -422,27 +437,17 @@
       }
 
       .dialpad-btn {
-        width: 3.5rem; /* Adjusted for smaller screens */
-        height: 3.5rem; /* Adjusted for smaller screens */
-        font-size: 1.5rem; /* Adjusted for smaller screens */
-      }
-
-      .call-btn {
-        width: 3.5rem;
-        height: 3.5rem;
-        font-size: 1.5rem;
-      }
-
-      .join-code, .join-code-input {
-        font-size: 2rem; /* Adjusted for smaller screens */
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.2rem;
       }
     }
   </style>
 </head>
 <body>
 
-  <h1 id="mainHeading">Call App</h1>
-  <div id="errorBanner" class="error-banner" role="alert" aria-live="assertive"></div>
+  <h1>Call App</h1>
+  <div id="errorBanner" class="error-banner"></div>
 
   <div id="callContainer" class="phone-container">
     <div class="phone-screen">
@@ -450,12 +455,12 @@
         <div class="phone-status-bar" id="timeDisplay">12:30</div>
         <div class="device-status">
           <div id="connectionIndicator" class="device-status-indicator"></div>
-          <span id="connectionStatus" aria-live="polite">Disconnected</span>
+          <span id="connectionStatus">Disconnected</span>
         </div>
       </div>
       <div class="phone-content">
-        <div id="appContent" aria-live="polite"> <!-- Added aria-live for dynamic content -->
-          <button id="startCallBtn" class="green" aria-label="Start Call">
+        <div id="appContent">
+          <button id="startCallBtn" class="green">
             📞 Start Call
           </button>
         </div>
@@ -490,11 +495,8 @@
     function showError(message) {
       errorBanner.textContent = message;
       errorBanner.style.display = 'block';
-      // Announce error for screen readers
-      errorBanner.setAttribute('aria-live', 'assertive');
       setTimeout(() => {
         errorBanner.style.display = 'none';
-        errorBanner.removeAttribute('aria-live');
       }, 5000);
     }
 
@@ -583,22 +585,20 @@
     function updateConnectionStatus() {
       connectionIndicator.classList.toggle('connected', isConnected);
       connectionStatus.textContent = isConnected ? 'Connected' : 'Disconnected';
-      // Announce status change for screen readers
-      connectionStatus.setAttribute('aria-live', 'polite');
     }
 
     // Provide haptic feedback
     function provideHapticFeedback() {
-      if (deviceType === 'mobile') {
-        // Vibration API for mobile devices
-        if ('vibrate' in navigator) {
-          navigator.vibrate(50);
-        }
+      try {
+        if (deviceType === 'mobile' && navigator.vibrate) {
+          navigator.vibrate([50]);
+         }
+        hapticSound.currentTime = 0;
+        hapticSound.volume = 0.3;
+        hapticSound.play().catch(err => logConnection('Audio play error: ' + err.message));
+      } catch (e) {
+        console.error('Feedback error:', e);
       }
-      
-      // Sound feedback for all devices
-      hapticSound.volume = 0.3;
-      hapticSound.play().catch(err => logConnection('Audio play error: ' + err.message));
     }
 
     // Play join sound
@@ -667,8 +667,8 @@
               <div class="room-id-container">
                 <h3>Incoming Call</h3>
                 <div class="btn-group">
-                  <button class="green" id="answerCallBtn" aria-label="Answer Call">📞 Answer</button>
-                  <button class="red" id="rejectCallBtn" aria-label="Reject Call">❌ Reject</button>
+                  <button class="green" id="answerCallBtn">📞 Answer</button>
+                  <button class="red" id="rejectCallBtn">❌ Reject</button>
                 </div>
               </div>
             `;
@@ -777,4 +777,353 @@
     
     // Answer a call with our stream
     function answerCall(call) {
-      logConnection('Answering
+      logConnection('Answering call');
+      call.answer(localStream);
+      handleCall(call);
+      
+      // Establish a data connection for participant info
+      const dataConn = peer.connect(call.peer);
+      dataConn.on('open', () => {
+        dataConn.send({
+          type: 'participant-info',
+          name: userName
+        });
+      });
+    }
+
+    // Reject incoming call
+    function rejectIncomingCall() {
+      logConnection('Rejected incoming call');
+      provideHapticFeedback();
+      currentCall = null;
+      renderDialpad();
+    }
+
+    // Handle an active call
+    function handleCall(call) {
+      // Save current call reference
+      currentCall = call;
+      
+      // When we receive a stream from the remote peer
+      call.on('stream', (remoteStream) => {
+        logConnection('Received audio stream');
+        remoteAudio.srcObject = remoteStream;
+        isConnected = true;
+        updateConnectionStatus();
+        playJoinSound();
+        
+        // Add remote participant if not already added
+        if (!participants.includes('Remote User')) {
+          participants.push('Remote User');
+        }
+        
+        renderCallUI();
+      });
+      
+      // When the call ends
+      call.on('close', () => {
+        logConnection('Call ended');
+        isConnected = false;
+        updateConnectionStatus();
+        
+        // Remove remote participant
+        participants = participants.filter(p => p !== 'Remote User');
+        
+        if (inCall) {
+          renderCallUI();
+        }
+      });
+      
+      // Handle call errors
+      call.on('error', (err) => {
+        logConnection('Call error: ' + err);
+        showError(`Call error. Please try again.`);
+      });
+    }
+
+    // Ask for user name if not set
+    function askForUserName() {
+      if (!storageAvailable('localStorage') || !localStorage.getItem('userName')) {
+        appContent.innerHTML = `
+          <div class="name-input-container">
+            <h3>Welcome!</h3>
+            <p>Please enter your name:</p>
+            <input type="text" id="userNameInput" class="name-input" placeholder="Your name">
+            <button class="green" style="width: 100%; margin-top: 1rem;" id="saveNameBtn">Save</button>
+          </div>
+        `;
+        document.getElementById('saveNameBtn').addEventListener('click', saveUserName);
+        document.getElementById('userNameInput').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') saveUserName();
+        });
+      } else {
+        renderDialpad();
+      }
+    }
+
+    // Save user name
+    function saveUserName() {
+      const nameInput = document.getElementById('userNameInput');
+      if (nameInput.value.trim()) {
+        userName = nameInput.value.trim();
+        if (storageAvailable('localStorage')) {
+          localStorage.setItem('userName', userName);
+        }
+        participants[0] = userName;
+        provideHapticFeedback();
+        renderDialpad();
+      }
+    }
+
+    // Render dialpad UI
+    function renderDialpad() {
+      // Add focus management
+      const mainHeading = document.createElement('h1');
+      mainHeading.textContent = 'Call App';
+      mainHeading.tabIndex = -1;
+      appContent.prepend(mainHeading);
+      mainHeading.focus();
+
+      appContent.innerHTML = `
+        <div class="room-id-container">
+          <h3>Your Code</h3>
+          <div class="room-id">${roomCode || '----'}</div>
+          <p class="status-message">Share this code to receive calls</p>
+        </div>
+        
+        <div class="name-input-container">
+          <h3>Join a Call</h3>
+          <input type="text" id="joinCodeInput" class="join-code-input" placeholder="____" maxlength="4">
+          <div class="call-controls">
+            <button class="call-btn green" id="dialBtn">📞</button>
+          </div>
+        </div>
+        
+        <div class="dialpad">
+          <div class="dialpad-btn" data-value="1">1</div>
+          <div class="dialpad-btn" data-value="2">2<div class="sub">ABC</div></div>
+          <div class="dialpad-btn" data-value="3">3<div class="sub">DEF</div></div>
+          <div class="dialpad-btn" data-value="4">4<div class="sub">GHI</div></div>
+          <div class="dialpad-btn" data-value="5">5<div class="sub">JKL</div></div>
+          <div class="dialpad-btn" data-value="6">6<div class="sub">MNO</div></div>
+          <div class="dialpad-btn" data-value="7">7<div class="sub">PQRS</div></div>
+          <div class="dialpad-btn" data-value="8">8<div class="sub">TUV</div></div>
+          <div class="dialpad-btn" data-value="9">9<div class="sub">WXYZ</div></div>
+          <div class="dialpad-btn" data-value="*">*</div>
+          <div class="dialpad-btn" data-value="0">0</div>
+          <div class="dialpad-btn" data-value="#">#</div>
+        </div>
+        
+        <div class="connection-log">
+          <div id="connectionLogContent"></div>
+        </div>
+      `;
+      
+      // Add event listeners for dialpad buttons
+      document.querySelectorAll('.dialpad-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const value = btn.getAttribute('data-value');
+          const input = document.getElementById('joinCodeInput');
+          if (input.value.length < 4) {
+            input.value += value;
+            provideHapticFeedback();
+          }
+        });
+      });
+      
+      // Add event listener for dial button
+      document.getElementById('dialBtn').addEventListener('click', () => joinWithCode());
+      
+      // Add event listener for join code input
+      document.getElementById('joinCodeInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') joinWithCode();
+      });
+      
+      // Update connection log
+      const logElement = document.getElementById('connectionLogContent');
+      if (logElement) {
+        logElement.innerHTML = connectionLog.join('<br>');
+        logElement.scrollTop = logElement.scrollHeight;
+      }
+    }
+
+    // Join with a code
+    async function joinWithCode() {
+      const codeInput = document.getElementById('joinCodeInput');
+      const code = codeInput.value.trim();
+      
+      if (code.length !== 4) {
+        showError('Please enter a valid 4-digit code');
+        return;
+      }
+      
+      try {
+        logConnection('Joining call with code: ' + code);
+        provideHapticFeedback();
+        
+        // Look up the peer ID for this code
+        let targetPeerId = codeToPeerIdMap[code];
+        
+        // If we don't have a mapping yet, use the code directly
+        // (This allows joining calls from other instances)
+        if (!targetPeerId) {
+          // In a real app, you would have a server to look up the peer ID for a code
+          // For this demo, we'll just use the code as the peer ID
+          targetPeerId = code;
+        }
+        
+        inCall = true;
+        
+        // Get user media
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        localAudio.srcObject = localStream;
+        
+        // Call the peer with the target ID
+        const call = peer.call(targetPeerId, localStream);
+        handleCall(call);
+        
+        // Establish a data connection for participant info
+        const dataConn = peer.connect(targetPeerId);
+        dataConn.on('open', () => {
+          dataConn.send({
+            type: 'participant-info',
+            name: userName
+          });
+        });
+        
+        renderCallUI();
+        
+      } catch (error) {
+        logConnection('Error joining call: ' + error.message);
+        showError('Error joining call. Please try again.');
+        inCall = false;
+      }
+    }
+
+    // Render call UI
+    function renderCallUI() {
+      appContent.innerHTML = `
+        <div class="room-id-container">
+          <h3>Active Call</h3>
+          <div class="room-id">${roomCode || '----'}</div>
+        </div>
+        <div class="btn-group">
+          <button class="gray" id="muteBtn">${muted ? '🎙️ Unmute' : '🔇 Mute'}</button>
+          <button class="gray" id="speakerBtn">${
+            deviceType === 'mobile' ? 
+            (speaker ? '🔊 Speaker' : '🔈 Phone') : 
+            (speaker ? '🔊 On' : '🔇 Off')
+          }</button>
+          <button class="red" id="endCallBtn">📴 End</button>
+        </div>
+        <div class="participants">
+          <h3>
+            Participants
+            <span class="connection-status ${isConnected ? 'connected' : ''}">
+              ${isConnected ? 'Connected' : 'Waiting...'}
+            </span>
+          </h3>
+          <ul id="participantsList">
+            ${participants.map(p => `<li>${p}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+      
+      // Add event listeners
+      document.getElementById('muteBtn').addEventListener('click', toggleMute);
+      document.getElementById('speakerBtn').addEventListener('click', toggleSpeaker);
+      document.getElementById('endCallBtn').addEventListener('click', endCall);
+    }
+
+    // Toggle mute function
+    function toggleMute() {
+      provideHapticFeedback();
+      muted = !muted;
+      const tracks = localStream?.getAudioTracks();
+      if (tracks) tracks.forEach(t => t.enabled = !muted);
+      renderCallUI();
+    }
+
+    // Toggle speaker function
+    function toggleSpeaker() {
+      provideHapticFeedback();
+      speaker = !speaker;
+      
+      // On mobile devices, we would use the setSinkId API to switch audio output
+      if (deviceType === 'mobile' && 'setSinkId' in HTMLMediaElement.prototype) {
+        try {
+          remoteAudio.setSinkId(speaker ? '' : 'earpiece').catch(e => logConnection('Audio output error: ' + e.message));
+          logConnection('Switching to ' + (speaker ? 'loudspeaker' : 'phone speaker'));
+        } catch (e) {
+          logConnection('Audio output error: ' + e.message);
+        }
+      }
+      
+      renderCallUI();
+    }
+
+    // End call function
+    function endCall() {
+      logConnection('Ending call');
+      provideHapticFeedback();
+      
+      // Notify other participants that we're leaving
+      if (currentCall && peer.connections && Object.keys(peer.connections).length > 0) {
+        for (const peerId in peer.connections) {
+          const dataConns = peer.connections[peerId].filter(c => c.type === 'data');
+          for (const conn of dataConns) {
+            if (conn.open) {
+              conn.send({
+                type: 'leaving',
+                name: userName
+              });
+            }
+          }
+        }
+      }
+      
+      inCall = false;
+      isConnected = false;
+      updateConnectionStatus();
+      
+      // Close the current call if it exists
+      if (currentCall) {
+        currentCall.close();
+        currentCall = null;
+      }
+      
+      // Stop all tracks in the local stream
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+      }
+      
+      // Clear the audio elements
+      localAudio.srcObject = null;
+      remoteAudio.srcObject = null;
+      
+      // Keep the user's name but reset other participants
+      participants = [userName];
+      
+      // Generate a new room code for next call
+      roomCode = generateRoomCode();
+      if (peer && peer.id) {
+        peerIdToCodeMap[peer.id] = roomCode;
+        codeToPeerIdMap[roomCode] = peer.id;
+      }
+      if (storageAvailable('localStorage')) {
+        localStorage.setItem('roomCode', roomCode);
+      }
+      
+      renderDialpad();
+    }
+
+    // Initialize the app
+    window.onload = function() {
+      initializePeer();
+      updateConnectionStatus();
+      askForUserName();
+    };
+  </script>
+</body>
+</html>
