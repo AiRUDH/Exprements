@@ -10,10 +10,13 @@
       --primary-color: #22c55e;
       --secondary-color: #374151;
       --danger-color: #ef4444;
+      --warning-color: #f59e0b;
       --background-start: #0f0f0f;
       --background-end: #1a1a1a;
       --text-color: #ffffff;
       --spacing-unit: 1rem;
+      --phone-ui-color: #222222;
+      --phone-border-color: #444444;
     }
 
     * {
@@ -81,6 +84,11 @@
       color: var(--text-color);
     }
 
+    .yellow {
+      background-color: var(--warning-color);
+      color: var(--text-color);
+    }
+
     .btn-group { 
       display: flex;
       gap: clamp(0.5rem, 2vw, 1rem);
@@ -103,6 +111,20 @@
     .participants h3 {
       margin-bottom: var(--spacing-unit);
       font-size: clamp(1.1rem, 3vw, 1.3rem);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .connection-status {
+      font-size: 0.8em;
+      padding: 0.25rem 0.5rem;
+      border-radius: 1rem;
+      background-color: var(--danger-color);
+    }
+
+    .connection-status.connected {
+      background-color: var(--primary-color);
     }
 
     .participants ul { 
@@ -138,6 +160,104 @@
       gap: var(--spacing-unit);
     }
 
+    /* Phone UI styling */
+    .phone-container {
+      width: 100%;
+      max-width: 360px;
+      background-color: var(--phone-ui-color);
+      border-radius: 2rem;
+      padding: 1rem;
+      border: 8px solid var(--phone-border-color);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      margin: 0 auto;
+    }
+
+    .phone-screen {
+      background: linear-gradient(135deg, var(--background-start), var(--background-end));
+      border-radius: 1rem;
+      padding: 1rem;
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .phone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .phone-status-bar {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .phone-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .phone-footer {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone-home-button {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background-color: var(--phone-border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .name-input-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .name-input {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background-color: rgba(0, 0, 0, 0.2);
+      color: var(--text-color);
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .name-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .device-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .device-status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--danger-color);
+    }
+
+    .device-status-indicator.connected {
+      background-color: var(--primary-color);
+    }
+
     @media (max-width: 480px) {
       .btn-group {
         flex-direction: column;
@@ -148,6 +268,10 @@
         width: 100%;
         margin: calc(var(--spacing-unit) * 0.25) 0;
       }
+
+      .phone-container {
+        border-width: 4px;
+      }
     }
   </style>
 </head>
@@ -155,33 +279,188 @@
 
   <h1>Realtime Call App</h1>
 
-  <div id="callContainer">
-    <button id="startCallBtn" class="green">
-      📞 Start Call
-    </button>
+  <div id="callContainer" class="phone-container">
+    <div class="phone-screen">
+      <div class="phone-header">
+        <div class="phone-status-bar">12:30</div>
+        <div class="device-status">
+          <div id="connectionIndicator" class="device-status-indicator"></div>
+          <span id="connectionStatus">Disconnected</span>
+        </div>
+      </div>
+      <div class="phone-content">
+        <div id="appContent">
+          <button id="startCallBtn" class="green">
+            📞 Start Call
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <audio id="localAudio" autoplay></audio>
+  <audio id="notificationSound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"></audio>
+  <audio id="hapticSound" src="https://assets.mixkit.co/sfx/preview/mixkit-single-key-press-in-a-mechanical-keyboard-2542.mp3"></audio>
 
   <script>
     const callContainer = document.getElementById('callContainer');
+    const appContent = document.getElementById('appContent');
     const audio = document.getElementById('localAudio');
+    const notificationSound = document.getElementById('notificationSound');
+    const hapticSound = document.getElementById('hapticSound');
+    const connectionIndicator = document.getElementById('connectionIndicator');
+    const connectionStatus = document.getElementById('connectionStatus');
 
+    // Check if localStorage is available
+    const storageAvailable = (type) => {
+      try {
+        const storage = window[type];
+        const x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    };
+
+    // State variables
     let inCall = false;
     let muted = false;
     let speaker = true;
-    let participants = ['You'];
+    let isConnected = false;
+    let deviceType = 'unknown';
+    let userName = storageAvailable('localStorage') && localStorage.getItem('userName') ? 
+                  localStorage.getItem('userName') : 'You';
+    let participants = [userName];
+    let peerConnections = [];
 
+    // Detect device type
+    function detectDeviceType() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      if (/android/i.test(userAgent)) {
+        return 'mobile';
+      }
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return 'mobile';
+      }
+      return 'desktop';
+    }
+
+    // Initialize device type
+    deviceType = detectDeviceType();
+
+    // Simulate connection status changes
+    function simulateConnectionStatus() {
+      isConnected = !isConnected;
+      updateConnectionStatus();
+      
+      // Play notification sound
+      if (isConnected) {
+        notificationSound.play();
+      }
+    }
+
+    // Update connection status UI
+    function updateConnectionStatus() {
+      connectionIndicator.classList.toggle('connected', isConnected);
+      connectionStatus.textContent = isConnected ? 'Connected' : 'Disconnected';
+    }
+
+    // Provide haptic feedback
+    function provideHapticFeedback() {
+      if (deviceType === 'mobile') {
+        // Vibration API for mobile devices
+        if ('vibrate' in navigator) {
+          navigator.vibrate(50);
+        }
+      }
+      
+      // Sound feedback for all devices
+      hapticSound.volume = 0.3;
+      hapticSound.play();
+    }
+
+    // Ask for user name if not set
+    function askForUserName() {
+      if (!storageAvailable('localStorage') || !localStorage.getItem('userName')) {
+        appContent.innerHTML = `
+          <div class="name-input-container">
+            <h3>Welcome!</h3>
+            <p>Please enter your name:</p>
+            <input type="text" id="userNameInput" class="name-input" placeholder="Your name">
+            <button class="green" style="width: 100%; margin-top: 1rem;" onclick="saveUserName()">Save</button>
+          </div>
+        `;
+      } else {
+        renderStartCallButton();
+      }
+    }
+
+    // Save user name
+    function saveUserName() {
+      const nameInput = document.getElementById('userNameInput');
+      if (nameInput.value.trim()) {
+        userName = nameInput.value.trim();
+        if (storageAvailable('localStorage')) {
+          localStorage.setItem('userName', userName);
+        }
+        participants[0] = userName;
+        provideHapticFeedback();
+        renderStartCallButton();
+      }
+    }
+
+    // Render start call button
+    function renderStartCallButton() {
+      appContent.innerHTML = `
+        <button id="startCallBtn" class="green">
+          📞 Start Call
+        </button>
+      `;
+      document.getElementById('startCallBtn').addEventListener('click', startCall);
+    }
+
+    // Start call function
+    async function startCall() {
+      try {
+        provideHapticFeedback();
+        inCall = true;
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audio.srcObject = stream;
+        
+        // Simulate connecting to other devices
+        setTimeout(simulateConnectionStatus, 1500);
+        
+        renderCallUI();
+      } catch (error) {
+        alert('Error accessing microphone: ' + error.message);
+        inCall = false;
+      }
+    }
+
+    // Render call UI
     function renderCallUI() {
-      callContainer.innerHTML = `
+      appContent.innerHTML = `
         <div class="btn-group">
           <button class="gray" onclick="toggleMute()">${muted ? '🎙️ Unmute' : '🔇 Mute'}</button>
-          <button class="gray" onclick="toggleSpeaker()">${speaker ? '🔈 Speaker' : '🔇 Silent'}</button>
-          <button class="gray" onclick="addParticipant()">👤 Add User</button>
+          <button class="gray" onclick="toggleSpeaker()">${
+            deviceType === 'mobile' ? 
+            (speaker ? '🔊 Loudspeaker' : '🔈 Phone') : 
+            (speaker ? '🔊 Speaker On' : '🔇 Speaker Off')
+          }</button>
+          <button class="yellow" onclick="simulateConnectionStatus()">
+            ${isConnected ? '🔌 Disconnect' : '🔌 Connect'}
+          </button>
           <button class="red" onclick="endCall()">📴 End Call</button>
         </div>
         <div class="participants">
-          <h3>Participants</h3>
+          <h3>
+            Participants
+            <span class="connection-status ${isConnected ? 'connected' : ''}">
+              ${isConnected ? 'Connected' : 'Disconnected'}
+            </span>
+          </h3>
           <ul id="participantsList">
             ${participants.map(p => `<li>${p}</li>`).join('')}
           </ul>
@@ -189,58 +468,51 @@
       `;
     }
 
-    document.getElementById('startCallBtn').addEventListener('click', async () => {
-      try {
-        inCall = true;
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        audio.srcObject = stream;
-        renderCallUI();
-      } catch (error) {
-        alert('Error accessing microphone: ' + error.message);
-        inCall = false;
-      }
-    });
-
+    // Toggle mute function
     function toggleMute() {
+      provideHapticFeedback();
       muted = !muted;
       const tracks = audio.srcObject?.getAudioTracks();
       if (tracks) tracks.forEach(t => t.enabled = !muted);
       renderCallUI();
     }
 
+    // Toggle speaker function
     function toggleSpeaker() {
+      provideHapticFeedback();
       speaker = !speaker;
+      
+      // On mobile devices, we would use the setSinkId API to switch audio output
+      // This is just a simulation as the actual implementation requires HTTPS
+      if (deviceType === 'mobile' && 'setSinkId' in HTMLMediaElement.prototype) {
+        // audio.setSinkId(speaker ? 'speakerphone' : 'earpiece');
+        console.log('Switching to', speaker ? 'loudspeaker' : 'phone speaker');
+      }
+      
       renderCallUI();
     }
 
-    function addParticipant() {
-      participants.push(`User-${participants.length}`);
-      renderCallUI();
-    }
-
+    // End call function
     function endCall() {
+      provideHapticFeedback();
       inCall = false;
+      isConnected = false;
+      updateConnectionStatus();
+      
       const tracks = audio.srcObject?.getTracks();
       if (tracks) tracks.forEach(t => t.stop());
       audio.srcObject = null;
-      participants = ['You'];
-      callContainer.innerHTML = `
-        <button id="startCallBtn" class="green">
-          📞 Start Call
-        </button>
-      `;
-      document.getElementById('startCallBtn').addEventListener('click', async () => {
-        try {
-          inCall = true;
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          audio.srcObject = stream;
-          renderCallUI();
-        } catch (error) {
-          alert('Error accessing microphone: ' + error.message);
-          inCall = false;
-        }
-      });
+      
+      // Keep the user's name but reset other participants
+      participants = [userName];
+      renderStartCallButton();
     }
+
+    // Initialize the app
+    window.onload = function() {
+      updateConnectionStatus();
+      askForUserName();
+    };
   </script>
 </body>
 </html>
