@@ -258,6 +258,28 @@
       background-color: var(--primary-color);
     }
 
+    .room-id-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .room-id {
+      font-family: monospace;
+      font-size: 1.2rem;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      margin: 0.5rem 0;
+      word-break: break-all;
+    }
+
+    .remote-audio {
+      margin-top: 1rem;
+    }
+
     @media (max-width: 480px) {
       .btn-group {
         flex-direction: column;
@@ -282,7 +304,7 @@
   <div id="callContainer" class="phone-container">
     <div class="phone-screen">
       <div class="phone-header">
-        <div class="phone-status-bar">12:30</div>
+        <div class="phone-status-bar" id="timeDisplay">12:30</div>
         <div class="device-status">
           <div id="connectionIndicator" class="device-status-indicator"></div>
           <span id="connectionStatus">Disconnected</span>
@@ -298,18 +320,34 @@
     </div>
   </div>
 
-  <audio id="localAudio" autoplay></audio>
+  <audio id="localAudio" autoplay muted></audio>
+  <audio id="remoteAudio" autoplay></audio>
   <audio id="notificationSound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"></audio>
   <audio id="hapticSound" src="https://assets.mixkit.co/sfx/preview/mixkit-single-key-press-in-a-mechanical-keyboard-2542.mp3"></audio>
 
+  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
   <script>
     const callContainer = document.getElementById('callContainer');
     const appContent = document.getElementById('appContent');
-    const audio = document.getElementById('localAudio');
+    const localAudio = document.getElementById('localAudio');
+    const remoteAudio = document.getElementById('remoteAudio');
     const notificationSound = document.getElementById('notificationSound');
     const hapticSound = document.getElementById('hapticSound');
     const connectionIndicator = document.getElementById('connectionIndicator');
     const connectionStatus = document.getElementById('connectionStatus');
+    const timeDisplay = document.getElementById('timeDisplay');
+
+    // Update time display
+    function updateTimeDisplay() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      timeDisplay.textContent = `${hours}:${minutes}`;
+    }
+    
+    // Update time every minute
+    updateTimeDisplay();
+    setInterval(updateTimeDisplay, 60000);
 
     // Check if localStorage is available
     const storageAvailable = (type) => {
@@ -324,6 +362,11 @@
       }
     };
 
+    // Generate a random room ID
+    function generateRoomId() {
+      return Math.random().toString(36).substring(2, 10);
+    }
+
     // State variables
     let inCall = false;
     let muted = false;
@@ -333,7 +376,16 @@
     let userName = storageAvailable('localStorage') && localStorage.getItem('userName') ? 
                   localStorage.getItem('userName') : 'You';
     let participants = [userName];
-    let peerConnections = [];
+    let peer = null;
+    let currentCall = null;
+    let localStream = null;
+    let roomId = storageAvailable('localStorage') && localStorage.getItem('roomId') ?
+                localStorage.getItem('roomId') : generateRoomId();
+
+    // Save room ID to localStorage
+    if (storageAvailable('localStorage')) {
+      localStorage.setItem('roomId', roomId);
+    }
 
     // Detect device type
     function detectDeviceType() {
@@ -349,17 +401,6 @@
 
     // Initialize device type
     deviceType = detectDeviceType();
-
-    // Simulate connection status changes
-    function simulateConnectionStatus() {
-      isConnected = !isConnected;
-      updateConnectionStatus();
-      
-      // Play notification sound
-      if (isConnected) {
-        notificationSound.play();
-      }
-    }
 
     // Update connection status UI
     function updateConnectionStatus() {
@@ -378,7 +419,132 @@
       
       // Sound feedback for all devices
       hapticSound.volume = 0.3;
-      hapticSound.play();
+      hapticSound.play().catch(err => console.log('Audio play error:', err));
+    }
+
+    // Initialize PeerJS
+    function initializePeer() {
+      // Create a new Peer with a random ID
+      peer = new Peer(undefined, {
+        host: 'peerjs-server.herokuapp.com',
+        secure: true,
+        port: 443,
+        debug: 3
+      });
+
+      // When peer is open (connected to the signaling server)
+      peer.on('open', (id) => {
+        console.log('My peer ID is: ' + id);
+      });
+
+      // When receiving a call
+      peer.on('call', (call) => {
+        notificationSound.play().catch(err => console.log('Audio play error:', err));
+        
+        // Answer the call automatically if we're expecting it
+        if (inCall) {
+          call.answer(localStream); // Answer with our local stream
+          handleCall(call);
+        } else {
+          // Show incoming call UI
+          appContent.innerHTML = `
+            <div class="room-id-container">
+              <h3>Incoming Call</h3>
+              <div class="btn-group">
+                <button class="green" onclick="answerIncomingCall()">📞 Answer</button>
+                <button class="red" onclick="rejectIncomingCall()">❌ Reject</button>
+              </div>
+            </div>
+          `;
+          
+          // Store the call for later
+          currentCall = call;
+        }
+      });
+
+      // Handle errors
+      peer.on('error', (err) => {
+        console.error('PeerJS error:', err);
+        alert(`Connection error: ${err.type}. Please try again.`);
+      });
+
+      // Handle disconnection
+      peer.on('disconnected', () => {
+        console.log('Peer disconnected');
+        isConnected = false;
+        updateConnectionStatus();
+      });
+    }
+
+    // Answer incoming call
+    async function answerIncomingCall() {
+      try {
+        provideHapticFeedback();
+        inCall = true;
+        
+        // Get user media if we don't have it yet
+        if (!localStream) {
+          localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          localAudio.srcObject = localStream;
+        }
+        
+        // Answer the call with our stream
+        currentCall.answer(localStream);
+        handleCall(currentCall);
+        
+      } catch (error) {
+        alert('Error accessing microphone: ' + error.message);
+        inCall = false;
+      }
+    }
+
+    // Reject incoming call
+    function rejectIncomingCall() {
+      provideHapticFeedback();
+      currentCall = null;
+      renderStartCallButton();
+    }
+
+    // Handle an active call
+    function handleCall(call) {
+      // Save current call reference
+      currentCall = call;
+      
+      // When we receive a stream from the remote peer
+      call.on('stream', (remoteStream) => {
+        console.log('Received remote stream');
+        remoteAudio.srcObject = remoteStream;
+        isConnected = true;
+        updateConnectionStatus();
+        notificationSound.play().catch(err => console.log('Audio play error:', err));
+        
+        // Add remote participant
+        if (!participants.includes('Remote User')) {
+          participants.push('Remote User');
+        }
+        
+        renderCallUI();
+      });
+      
+      // When the call ends
+      call.on('close', () => {
+        console.log('Call ended');
+        isConnected = false;
+        updateConnectionStatus();
+        
+        // Remove remote participant
+        participants = participants.filter(p => p !== 'Remote User');
+        
+        if (inCall) {
+          renderCallUI();
+        }
+      });
+      
+      // Handle call errors
+      call.on('error', (err) => {
+        console.error('Call error:', err);
+        alert(`Call error: ${err}. Please try again.`);
+      });
     }
 
     // Ask for user name if not set
@@ -414,11 +580,49 @@
     // Render start call button
     function renderStartCallButton() {
       appContent.innerHTML = `
+        <div class="room-id-container">
+          <h3>Your Room ID</h3>
+          <div class="room-id">${roomId}</div>
+          <p>Share this ID with others to connect</p>
+        </div>
         <button id="startCallBtn" class="green">
-          📞 Start Call
+          📞 Start New Call
         </button>
+        <div style="margin-top: 1rem;">
+          <input type="text" id="joinRoomInput" class="name-input" placeholder="Enter Room ID to join">
+          <button class="yellow" style="width: 100%; margin-top: 0.5rem;" onclick="joinRoom()">🔌 Join Existing Call</button>
+        </div>
       `;
       document.getElementById('startCallBtn').addEventListener('click', startCall);
+    }
+
+    // Join an existing room
+    async function joinRoom() {
+      const roomInput = document.getElementById('joinRoomInput');
+      const targetRoomId = roomInput.value.trim();
+      
+      if (!targetRoomId) {
+        alert('Please enter a valid Room ID');
+        return;
+      }
+      
+      try {
+        provideHapticFeedback();
+        inCall = true;
+        
+        // Get user media
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        localAudio.srcObject = localStream;
+        
+        // Call the peer with the target room ID
+        const call = peer.call(targetRoomId, localStream);
+        handleCall(call);
+        renderCallUI();
+        
+      } catch (error) {
+        alert('Error joining room: ' + error.message);
+        inCall = false;
+      }
     }
 
     // Start call function
@@ -426,13 +630,19 @@
       try {
         provideHapticFeedback();
         inCall = true;
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        audio.srcObject = stream;
         
-        // Simulate connecting to other devices
-        setTimeout(simulateConnectionStatus, 1500);
+        // Generate a new room ID for this call
+        roomId = generateRoomId();
+        if (storageAvailable('localStorage')) {
+          localStorage.setItem('roomId', roomId);
+        }
+        
+        // Get user media
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        localAudio.srcObject = localStream;
         
         renderCallUI();
+        
       } catch (error) {
         alert('Error accessing microphone: ' + error.message);
         inCall = false;
@@ -442,6 +652,11 @@
     // Render call UI
     function renderCallUI() {
       appContent.innerHTML = `
+        <div class="room-id-container">
+          <h3>Active Call</h3>
+          <div class="room-id">${roomId}</div>
+          <p>Share this ID with others to connect</p>
+        </div>
         <div class="btn-group">
           <button class="gray" onclick="toggleMute()">${muted ? '🎙️ Unmute' : '🔇 Mute'}</button>
           <button class="gray" onclick="toggleSpeaker()">${
@@ -449,16 +664,13 @@
             (speaker ? '🔊 Loudspeaker' : '🔈 Phone') : 
             (speaker ? '🔊 Speaker On' : '🔇 Speaker Off')
           }</button>
-          <button class="yellow" onclick="simulateConnectionStatus()">
-            ${isConnected ? '🔌 Disconnect' : '🔌 Connect'}
-          </button>
           <button class="red" onclick="endCall()">📴 End Call</button>
         </div>
         <div class="participants">
           <h3>
             Participants
             <span class="connection-status ${isConnected ? 'connected' : ''}">
-              ${isConnected ? 'Connected' : 'Disconnected'}
+              ${isConnected ? 'Connected' : 'Waiting for connection...'}
             </span>
           </h3>
           <ul id="participantsList">
@@ -472,7 +684,7 @@
     function toggleMute() {
       provideHapticFeedback();
       muted = !muted;
-      const tracks = audio.srcObject?.getAudioTracks();
+      const tracks = localStream?.getAudioTracks();
       if (tracks) tracks.forEach(t => t.enabled = !muted);
       renderCallUI();
     }
@@ -485,8 +697,12 @@
       // On mobile devices, we would use the setSinkId API to switch audio output
       // This is just a simulation as the actual implementation requires HTTPS
       if (deviceType === 'mobile' && 'setSinkId' in HTMLMediaElement.prototype) {
-        // audio.setSinkId(speaker ? 'speakerphone' : 'earpiece');
-        console.log('Switching to', speaker ? 'loudspeaker' : 'phone speaker');
+        try {
+          remoteAudio.setSinkId(speaker ? '' : 'earpiece').catch(e => console.log('setSinkId error:', e));
+          console.log('Switching to', speaker ? 'loudspeaker' : 'phone speaker');
+        } catch (e) {
+          console.log('setSinkId error:', e);
+        }
       }
       
       renderCallUI();
@@ -499,17 +715,37 @@
       isConnected = false;
       updateConnectionStatus();
       
-      const tracks = audio.srcObject?.getTracks();
-      if (tracks) tracks.forEach(t => t.stop());
-      audio.srcObject = null;
+      // Close the current call if it exists
+      if (currentCall) {
+        currentCall.close();
+        currentCall = null;
+      }
+      
+      // Stop all tracks in the local stream
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+      }
+      
+      // Clear the audio elements
+      localAudio.srcObject = null;
+      remoteAudio.srcObject = null;
       
       // Keep the user's name but reset other participants
       participants = [userName];
+      
+      // Generate a new room ID for next call
+      roomId = generateRoomId();
+      if (storageAvailable('localStorage')) {
+        localStorage.setItem('roomId', roomId);
+      }
+      
       renderStartCallButton();
     }
 
     // Initialize the app
     window.onload = function() {
+      initializePeer();
       updateConnectionStatus();
       askForUserName();
     };
