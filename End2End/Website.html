@@ -29,27 +29,24 @@
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: linear-gradient(135deg, var(--background-start), var(--background-end));
       color: var(--text-color);
+      min-height: 100vh;
+      padding: 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: clamp(1rem, 5vw, 2rem);
-      min-height: 100vh;
-      line-height: 1.5;
+      justify-content: center;
     }
 
     h1 {
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
-      margin-bottom: calc(var(--spacing-unit) * 1.5);
+      margin-bottom: 2rem;
       text-align: center;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
     button {
       border: none;
-      border-radius: 9999px;
-      padding: clamp(0.75rem, 3vw, 1rem) clamp(1rem, 4vw, 1.5rem);
-      margin: calc(var(--spacing-unit) * 0.5);
-      font-size: clamp(0.875rem, 2.5vw, 1rem);
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -83,40 +80,25 @@
       color: var(--text-color);
     }
 
-    .yellow {
+    .yellow { 
       background-color: var(--warning-color);
       color: var(--text-color);
     }
 
-    .btn-group { 
-      display: flex;
-      gap: clamp(0.5rem, 2vw, 1rem);
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: var(--spacing-unit);
-      width: 100%;
-      max-width: 600px;
-    }
-
-    .participants { 
-      margin-top: calc(var(--spacing-unit) * 2);
-      background: rgba(255, 255, 255, 0.1);
-      padding: var(--spacing-unit);
-      border-radius: 1rem;
-      width: 100%;
-      max-width: 600px;
-    }
-
-    .participants h3 {
-      margin-bottom: var(--spacing-unit);
-      font-size: clamp(1.1rem, 3vw, 1.3rem);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .connection-log {
+      margin-top: 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      max-height: 10rem;
+      overflow-y: auto;
+      font-size: 0.8rem;
+      font-family: monospace;
     }
 
     .connection-status {
-      font-size: 0.8em;
+      display: inline-block;
+      font-size: 0.7rem;
       padding: 0.25rem 0.5rem;
       border-radius: 1rem;
       background-color: var(--danger-color);
@@ -150,34 +132,26 @@
 
     audio { display: none; }
 
-    #callContainer {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--spacing-unit);
-    }
-
-    /* Phone UI styling */
     .phone-container {
       width: 100%;
-      max-width: 360px;
+      max-width: 400px;
       background-color: var(--phone-ui-color);
       border-radius: 2rem;
       padding: 1rem;
       border: 8px solid var(--phone-border-color);
+      display: flex;
+      flex-direction: column;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      margin: 0 auto;
     }
 
     .phone-screen {
-      background: linear-gradient(135deg, var(--background-start), var(--background-end));
+      background-color: var(--background-start);
       border-radius: 1rem;
       padding: 1rem;
-      min-height: 500px;
+      flex: 1;
       display: flex;
       flex-direction: column;
+      min-height: 500px;
     }
 
     .phone-header {
@@ -210,45 +184,41 @@
       height: 3rem;
       border-radius: 50%;
       background-color: var(--phone-border-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .name-input-container {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 1rem;
-      border-radius: 1rem;
-      margin-bottom: 1rem;
+      border: none;
+      cursor: pointer;
     }
 
     .name-input {
       width: 100%;
       padding: 0.75rem;
       border-radius: 0.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       background-color: rgba(0, 0, 0, 0.2);
       color: var(--text-color);
       font-size: 1rem;
-      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
     }
 
-    .name-input:focus {
-      outline: none;
-      border-color: var(--primary-color);
+    .error-banner {
+      background-color: var(--danger-color);
+      color: white;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      display: none;
     }
 
     .device-status {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
+      font-size: 0.8rem;
     }
 
     .device-status-indicator {
-      width: 10px;
-      height: 10px;
+      width: 0.5rem;
+      height: 0.5rem;
       border-radius: 50%;
       background-color: var(--danger-color);
     }
@@ -263,6 +233,7 @@
       border-radius: 1rem;
       margin-bottom: 1rem;
       text-align: center;
+      position: relative;
     }
 
     .room-id {
@@ -275,51 +246,87 @@
       word-break: break-all;
     }
 
-    .remote-audio {
-      margin-top: 1rem;
+    .copy-btn {
+      position: absolute;
+      right: 1.5rem;
+      top: 2.5rem;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 0.3rem;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
     }
 
-    .connection-log {
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .call-animation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 1rem;
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+      animation: pulse 2s infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        opacity: 0.7;
+      }
+      70% {
+        transform: scale(1.05);
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(0.95);
+        opacity: 0.7;
+      }
+    }
+
+    .call-timer {
       font-family: monospace;
-      font-size: 0.8rem;
-      background: rgba(0, 0, 0, 0.3);
+      font-size: 1.2rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      background: rgba(0, 0, 0, 0.2);
       padding: 0.5rem;
       border-radius: 0.5rem;
+    }
+
+    .call-controls {
+      display: flex;
+      justify-content: space-around;
       margin-top: 1rem;
-      max-height: 100px;
-      overflow-y: auto;
-      color: rgba(255, 255, 255, 0.7);
     }
 
-    .error-banner {
-      background-color: var(--danger-color);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      margin-bottom: 1rem;
-      font-size: 0.9rem;
-      display: none;
+    .call-btn {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
 
-    @media (max-width: 480px) {
-      .btn-group {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      button {
-        width: 100%;
-        margin: calc(var(--spacing-unit) * 0.25) 0;
-      }
-
-      .phone-container {
-        border-width: 4px;
-      }
+    .call-btn.active {
+      background-color: var(--warning-color);
     }
   </style>
 </head>
 <body>
-
   <h1>Realtime Call App</h1>
   <div id="errorBanner" class="error-banner"></div>
 
@@ -332,34 +339,48 @@
           <span id="connectionStatus">Disconnected</span>
         </div>
       </div>
-      <div class="phone-content">
-        <div id="appContent">
-          <button id="startCallBtn" class="green">
-            📞 Start Call
-          </button>
-        </div>
+      <div class="phone-content" id="appContent">
+        <!-- Content will be dynamically inserted here -->
       </div>
+    </div>
+    <div class="phone-footer">
+      <button class="phone-home-button" id="homeButton"></button>
     </div>
   </div>
 
+  <!-- Audio elements -->
   <audio id="localAudio" autoplay muted></audio>
   <audio id="remoteAudio" autoplay></audio>
   <audio id="notificationSound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"></audio>
   <audio id="hapticSound" src="https://assets.mixkit.co/sfx/preview/mixkit-single-key-press-in-a-mechanical-keyboard-2542.mp3"></audio>
+  <audio id="dialpadSound" src="https://assets.mixkit.co/sfx/preview/mixkit-classic-short-dial-tone-348.mp3"></audio>
+  <audio id="callSound" src="https://assets.mixkit.co/sfx/preview/mixkit-phone-dial-tone-1310.mp3"></audio>
+  <audio id="hangupSound" src="https://assets.mixkit.co/sfx/preview/mixkit-phone-dial-tone-1309.mp3"></audio>
+  <audio id="joinSound" src="https://assets.mixkit.co/sfx/preview/mixkit-positive-notification-951.mp3"></audio>
+  <audio id="leaveSound" src="https://assets.mixkit.co/sfx/preview/mixkit-negative-tone-interface-tap-2569.mp3"></audio>
+  <audio id="muteSound" src="https://assets.mixkit.co/sfx/preview/mixkit-tech-click-1140.mp3"></audio>
+  <audio id="speakerSound" src="https://assets.mixkit.co/sfx/preview/mixkit-tech-click-1141.mp3"></audio>
 
   <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
   <script>
-    // DOM Elements
-    const callContainer = document.getElementById('callContainer');
+    // DOM elements
     const appContent = document.getElementById('appContent');
-    const localAudio = document.getElementById('localAudio');
-    const remoteAudio = document.getElementById('remoteAudio');
     const notificationSound = document.getElementById('notificationSound');
     const hapticSound = document.getElementById('hapticSound');
+    const dialpadSound = document.getElementById('dialpadSound');
+    const callSound = document.getElementById('callSound');
+    const hangupSound = document.getElementById('hangupSound');
+    const joinSound = document.getElementById('joinSound');
+    const leaveSound = document.getElementById('leaveSound');
+    const muteSound = document.getElementById('muteSound');
+    const speakerSound = document.getElementById('speakerSound');
+    const localAudio = document.getElementById('localAudio');
+    const remoteAudio = document.getElementById('remoteAudio');
     const connectionIndicator = document.getElementById('connectionIndicator');
     const connectionStatus = document.getElementById('connectionStatus');
     const timeDisplay = document.getElementById('timeDisplay');
     const errorBanner = document.getElementById('errorBanner');
+    const homeButton = document.getElementById('homeButton');
 
     // Show error message in banner
     function showError(message) {
@@ -377,13 +398,13 @@
       const minutes = now.getMinutes().toString().padStart(2, '0');
       timeDisplay.textContent = `${hours}:${minutes}`;
     }
-    
-    // Update time every minute
+
+    // Initialize time display
     updateTimeDisplay();
     setInterval(updateTimeDisplay, 60000);
 
     // Check if localStorage is available
-    const storageAvailable = (type) => {
+    function storageAvailable(type) {
       try {
         const storage = window[type];
         const x = '__storage_test__';
@@ -393,11 +414,11 @@
       } catch (e) {
         return false;
       }
-    };
+    }
 
-    // Generate a random room ID
-    function generateRoomId() {
-      return Math.random().toString(36).substring(2, 10);
+    // Generate a random 4-digit room code
+    function generateRoomCode() {
+      return Math.floor(1000 + Math.random() * 9000).toString();
     }
 
     // State variables
@@ -414,33 +435,30 @@
     let localStream = null;
     let roomId = null;
     let connectionLog = [];
+    let callStartTime = null;
+    let callTimerInterval = null;
 
     // Log connection events
     function logConnection(message) {
       const timestamp = new Date().toLocaleTimeString();
       connectionLog.push(`[${timestamp}] ${message}`);
-      console.log(`[${timestamp}] ${message}`);
       
-      // Keep log at a reasonable size
-      if (connectionLog.length > 20) {
+      // Keep only the last 50 log entries
+      if (connectionLog.length > 50) {
         connectionLog.shift();
       }
       
       // Update log display if it exists
       const logElement = document.getElementById('connectionLogContent');
       if (logElement) {
-        logElement.innerHTML = connectionLog.join('<br>');
+        logElement.innerHTML = connectionLog.map(entry => `<div>${entry}</div>`).join('');
         logElement.scrollTop = logElement.scrollHeight;
       }
     }
 
     // Detect device type
     function detectDeviceType() {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      if (/android/i.test(userAgent)) {
-        return 'mobile';
-      }
-      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         return 'mobile';
       }
       return 'desktop';
@@ -455,33 +473,36 @@
       connectionStatus.textContent = isConnected ? 'Connected' : 'Disconnected';
     }
 
-    // Provide haptic feedback
-    function provideHapticFeedback() {
-      if (deviceType === 'mobile') {
-        // Vibration API for mobile devices
-        if ('vibrate' in navigator) {
-          navigator.vibrate(50);
+    // Play sound with haptic feedback
+    function playSound(soundElement, vibrationPattern = 20) {
+      // Play sound
+      soundElement.currentTime = 0;
+      soundElement.volume = 0.3;
+      soundElement.play().catch(err => logConnection('Audio play error: ' + err.message));
+      
+      // Vibrate if available
+      if ('vibrate' in navigator) {
+        try {
+          navigator.vibrate(vibrationPattern);
+        } catch (e) {
+          logConnection('Vibration error: ' + e.message);
         }
       }
-      
-      // Sound feedback for all devices
-      hapticSound.volume = 0.3;
-      hapticSound.play().catch(err => logConnection('Audio play error: ' + err.message));
     }
 
     // Initialize PeerJS
-    function initializePeer() {
+    async function initializePeer() {
       try {
-        // Create a new Peer with a random ID
-        // Using a free public STUN server that doesn't require login
-        peer = new Peer(undefined, {
+        // Create a new Peer with our config
+        peer = new Peer({
+          // Using multiple STUN servers for better connectivity
           config: {
             'iceServers': [
               { urls: 'stun:stun.l.google.com:19302' },
               { urls: 'stun:stun1.l.google.com:19302' },
               { urls: 'stun:stun2.l.google.com:19302' },
               { urls: 'stun:stun3.l.google.com:19302' },
-              { urls: 'stun:stun4.l.google.com:19302' },
+              { urls: 'stun:stun4.l.google.com:19302' }
             ]
           },
           debug: 2
@@ -502,7 +523,7 @@
         // When receiving a call
         peer.on('call', (call) => {
           logConnection('Incoming call from: ' + call.peer);
-          notificationSound.play().catch(err => logConnection('Audio play error: ' + err.message));
+          playSound(notificationSound, [30, 50, 30]);
           
           // Answer the call automatically if we're expecting it
           if (inCall) {
@@ -510,22 +531,49 @@
           } else {
             // Show incoming call UI
             appContent.innerHTML = `
-              <div class="room-id-container">
+              <div style="text-align: center; padding: 2rem;">
                 <h3>Incoming Call</h3>
-                <div class="btn-group">
-                  <button class="green" id="answerCallBtn">📞 Answer</button>
-                  <button class="red" id="rejectCallBtn">❌ Reject</button>
+                <p>Someone is calling you</p>
+                <div style="display: flex; justify-content: space-around; margin-top: 2rem;">
+                  <button id="rejectCallBtn" class="red call-btn">❌</button>
+                  <button id="answerCallBtn" class="green call-btn">📞</button>
                 </div>
               </div>
             `;
             
-            // Store the call for later
-            currentCall = call;
-            
-            // Add event listeners
             document.getElementById('answerCallBtn').addEventListener('click', () => answerIncomingCall());
             document.getElementById('rejectCallBtn').addEventListener('click', () => rejectIncomingCall());
           }
+        });
+
+        // Handle data connection for participant info
+        peer.on('connection', (dataConn) => {
+          logConnection('Data connection established with: ' + dataConn.peer);
+          
+          dataConn.on('open', () => {
+            // Send our info to the other participant
+            dataConn.send({
+              type: 'participant-info',
+              name: userName
+            });
+          });
+          
+          dataConn.on('data', (data) => {
+            if (data.type === 'participant-info') {
+              // Update remote participant name
+              const remoteName = data.name || 'Remote User';
+              if (!participants.includes(remoteName)) {
+                participants.push(remoteName);
+                renderCallUI();
+              }
+            } else if (data.type === 'participant-left') {
+              // Handle participant leaving
+              const remoteName = data.name;
+              participants = participants.filter(p => p !== remoteName);
+              renderCallUI();
+              playSound(leaveSound, [30, 30]);
+            }
+          });
         });
 
         // Handle errors
@@ -548,28 +596,11 @@
           isConnected = false;
           updateConnectionStatus();
           
-          // Attempt to reconnect
+          // Try to reconnect
           setTimeout(() => {
             logConnection('Attempting to reconnect...');
             peer.reconnect();
           }, 3000);
-        });
-        
-        // Handle connection to a peer
-        peer.on('connection', (conn) => {
-          logConnection('Data connection established with: ' + conn.peer);
-          
-          conn.on('data', (data) => {
-            // Handle data messages (e.g., chat, participant info)
-            if (data.type === 'participant-info') {
-              // Update remote participant name
-              const remoteName = data.name || 'Remote User';
-              if (!participants.includes(remoteName)) {
-                participants.push(remoteName);
-                renderCallUI();
-              }
-            }
-          });
         });
       } catch (error) {
         logConnection('Error initializing PeerJS: ' + error.message);
@@ -580,31 +611,29 @@
     // Answer incoming call
     async function answerIncomingCall() {
       try {
-        provideHapticFeedback();
+        playSound(joinSound, [30, 50, 30]);
         inCall = true;
         
-        // Get user media if we don't have it yet
-        if (!localStream) {
-          localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          localAudio.srcObject = localStream;
-        }
+        // Get user media
+        localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        localAudio.srcObject = localStream;
         
+        // Answer the call
         answerCall(currentCall);
         
       } catch (error) {
-        logConnection('Error accessing microphone: ' + error.message);
-        showError('Error accessing microphone: ' + error.message);
-        inCall = false;
+        logConnection('Error answering call: ' + error.message);
+        showError('Error answering call: ' + error.message);
       }
     }
-    
-    // Answer a call with our stream
+
+    // Answer a call with our local stream
     function answerCall(call) {
-      logConnection('Answering call from: ' + call.peer);
+      currentCall = call;
       call.answer(localStream);
       handleCall(call);
       
-      // Establish a data connection for participant info
+      // Establish data connection for participant info
       const dataConn = peer.connect(call.peer);
       dataConn.on('open', () => {
         dataConn.send({
@@ -617,7 +646,7 @@
     // Reject incoming call
     function rejectIncomingCall() {
       logConnection('Rejected incoming call');
-      provideHapticFeedback();
+      playSound(hangupSound, [50]);
       currentCall = null;
       renderStartCallButton();
     }
@@ -627,34 +656,23 @@
       // Save current call reference
       currentCall = call;
       
-      // When we receive a stream from the remote peer
+      // Start call timer
+      startCallTimer();
+      
+      // When we receive the remote stream
       call.on('stream', (remoteStream) => {
         logConnection('Received remote stream');
         remoteAudio.srcObject = remoteStream;
         isConnected = true;
         updateConnectionStatus();
-        notificationSound.play().catch(err => logConnection('Audio play error: ' + err.message));
-        
-        // Add remote participant if not already added
-        if (!participants.includes('Remote User')) {
-          participants.push('Remote User');
-        }
-        
         renderCallUI();
+        playSound(joinSound, [30, 50, 30]);
       });
       
-      // When the call ends
+      // When call is closed
       call.on('close', () => {
         logConnection('Call ended');
-        isConnected = false;
-        updateConnectionStatus();
-        
-        // Remove remote participant
-        participants = participants.filter(p => p !== 'Remote User');
-        
-        if (inCall) {
-          renderCallUI();
-        }
+        endCall();
       });
       
       // Handle call errors
@@ -675,8 +693,10 @@
             <button class="green" style="width: 100%; margin-top: 1rem;" id="saveNameBtn">Save</button>
           </div>
         `;
+        
         document.getElementById('saveNameBtn').addEventListener('click', saveUserName);
       } else {
+        userName = localStorage.getItem('userName');
         renderStartCallButton();
       }
     }
@@ -684,22 +704,24 @@
     // Save user name
     function saveUserName() {
       const nameInput = document.getElementById('userNameInput');
-      if (nameInput.value.trim()) {
-        userName = nameInput.value.trim();
+      const name = nameInput.value.trim();
+      
+      if (name) {
+        userName = name;
         if (storageAvailable('localStorage')) {
-          localStorage.setItem('userName', userName);
+          localStorage.setItem('userName', name);
         }
-        participants[0] = userName;
-        provideHapticFeedback();
+        participants = [userName];
         renderStartCallButton();
+      } else {
+        showError('Please enter a valid name');
       }
     }
 
-    // Render start call button
+    // Render the start call button
     function renderStartCallButton() {
       appContent.innerHTML = `
-        <div class="room-id-container">
-          <h3>Start or Join a Call</h3>
+        <div style="text-align: center; padding: 1rem;">
           <p>Your Peer ID: <span id="myPeerId">Connecting...</span></p>
         </div>
         <button id="startCallBtn" class="green">
@@ -718,23 +740,23 @@
       if (peer && peer.id) {
         document.getElementById('myPeerId').textContent = peer.id;
       } else {
-        // Wait for peer ID to be assigned
+        const peerIdElement = document.getElementById('myPeerId');
         const checkPeerId = setInterval(() => {
           if (peer && peer.id) {
-            document.getElementById('myPeerId').textContent = peer.id;
+            peerIdElement.textContent = peer.id;
             clearInterval(checkPeerId);
           }
-        }, 500);
+        }, 1000);
       }
       
       // Add event listeners
       document.getElementById('startCallBtn').addEventListener('click', startCall);
       document.getElementById('joinCallBtn').addEventListener('click', joinRoom);
       
-      // Update connection log
+      // Update log display
       const logElement = document.getElementById('connectionLogContent');
       if (logElement) {
-        logElement.innerHTML = connectionLog.join('<br>');
+        logElement.innerHTML = connectionLog.map(entry => `<div>${entry}</div>`).join('');
         logElement.scrollTop = logElement.scrollHeight;
       }
     }
@@ -750,19 +772,18 @@
       }
       
       try {
-        logConnection('Attempting to join call with peer: ' + targetRoomId);
-        provideHapticFeedback();
+        playSound(dialpadSound, [20]);
         inCall = true;
         
         // Get user media
         localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
         localAudio.srcObject = localStream;
         
-        // Call the peer with the target room ID
+        // Call the target peer
         const call = peer.call(targetRoomId, localStream);
         handleCall(call);
         
-        // Establish a data connection for participant info
+        // Establish data connection for participant info
         const dataConn = peer.connect(targetRoomId);
         dataConn.on('open', () => {
           dataConn.send({
@@ -771,20 +792,20 @@
           });
         });
         
+        // Set the room ID to the target's ID
+        roomId = targetRoomId;
         renderCallUI();
         
       } catch (error) {
-        logConnection('Error joining call: ' + error.message);
-        showError('Error joining call: ' + error.message);
-        inCall = false;
+        logConnection('Error joining room: ' + error.message);
+        showError('Error joining room: ' + error.message);
       }
     }
 
-    // Start call function
+    // Start a new call
     async function startCall() {
       try {
-        logConnection('Starting a new call');
-        provideHapticFeedback();
+        playSound(callSound, [30, 30, 30]);
         inCall = true;
         
         // Use our peer ID as the room ID
@@ -802,30 +823,66 @@
       } catch (error) {
         logConnection('Error accessing microphone: ' + error.message);
         showError('Error accessing microphone: ' + error.message);
-        inCall = false;
       }
     }
 
-    // Render call UI
+    // Start call timer
+    function startCallTimer() {
+      callStartTime = new Date();
+      updateCallTimer();
+      callTimerInterval = setInterval(updateCallTimer, 1000);
+    }
+
+    // Update call timer
+    function updateCallTimer() {
+      if (!callStartTime) return;
+      
+      const now = new Date();
+      const diff = now - callStartTime;
+      const minutes = Math.floor(diff / 60000);
+      const seconds = Math.floor((diff % 60000) / 1000);
+      
+      const timerElement = document.getElementById('callTimer');
+      if (timerElement) {
+        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+    }
+
+    // Copy room ID to clipboard
+    function copyRoomId() {
+      if (!roomId) return;
+      
+      navigator.clipboard.writeText(roomId).then(() => {
+        playSound(hapticSound, [20]);
+        showError('Room ID copied to clipboard!');
+      }).catch(err => {
+        logConnection('Copy error: ' + err.message);
+        showError('Failed to copy: ' + err.message);
+      });
+    }
+
+    // Render the call UI
     function renderCallUI() {
       appContent.innerHTML = `
+        <div class="call-animation"></div>
         <div class="room-id-container">
-          <h3>Active Call</h3>
-          <p>Share this Peer ID with others to connect:</p>
-          <div class="room-id">${peer.id}</div>
+          <h3>Room ID</h3>
+          <div class="room-id">${roomId || 'Connecting...'}</div>
+          <button class="copy-btn" id="copyRoomBtn" title="Copy Room ID">📋</button>
         </div>
-        <div class="btn-group">
-          <button class="gray" id="muteBtn">${muted ? '🎙️ Unmute' : '🔇 Mute'}</button>
-          <button class="gray" id="speakerBtn">${
-            deviceType === 'mobile' ? 
-            (speaker ? '🔊 Loudspeaker' : '🔈 Phone') : 
-            (speaker ? '🔊 Speaker On' : '🔇 Speaker Off')
-          }</button>
-          <button class="red" id="endCallBtn">📴 End Call</button>
+        <div class="call-timer" id="callTimer">00:00</div>
+        <div class="call-controls">
+          <button id="muteBtn" class="call-btn ${muted ? 'active' : 'gray'}">
+            ${muted ? '🔇' : '🎤'}
+          </button>
+          <button id="speakerBtn" class="call-btn ${speaker ? 'active' : 'gray'}">
+            ${speaker ? '🔊' : '🔈'}
+          </button>
+          <button id="endCallBtn" class="call-btn red">📵</button>
         </div>
         <div class="participants">
           <h3>
-            Participants
+            Participants 
             <span class="connection-status ${isConnected ? 'connected' : ''}">
               ${isConnected ? 'Connected' : 'Waiting for connection...'}
             </span>
@@ -843,28 +900,39 @@
       document.getElementById('muteBtn').addEventListener('click', toggleMute);
       document.getElementById('speakerBtn').addEventListener('click', toggleSpeaker);
       document.getElementById('endCallBtn').addEventListener('click', endCall);
+      document.getElementById('copyRoomBtn').addEventListener('click', copyRoomId);
       
-      // Update connection log
+      // Update log display
       const logElement = document.getElementById('connectionLogContent');
       if (logElement) {
-        logElement.innerHTML = connectionLog.join('<br>');
+        logElement.innerHTML = connectionLog.map(entry => `<div>${entry}</div>`).join('');
         logElement.scrollTop = logElement.scrollHeight;
+      }
+      
+      // Update call timer if we're in a call
+      if (inCall && !callTimerInterval) {
+        startCallTimer();
       }
     }
 
-    // Toggle mute function
+    // Toggle mute
     function toggleMute() {
-      provideHapticFeedback();
       muted = !muted;
-      const tracks = localStream?.getAudioTracks();
-      if (tracks) tracks.forEach(t => t.enabled = !muted);
+      playSound(muteSound, [20]);
+      
+      if (localStream) {
+        localStream.getAudioTracks().forEach(track => {
+          track.enabled = !muted;
+        });
+      }
+      
       renderCallUI();
     }
 
-    // Toggle speaker function
+    // Toggle speaker
     function toggleSpeaker() {
-      provideHapticFeedback();
       speaker = !speaker;
+      playSound(speakerSound, [20]);
       
       // On mobile devices, we would use the setSinkId API to switch audio output
       if (deviceType === 'mobile' && 'setSinkId' in HTMLMediaElement.prototype) {
@@ -882,37 +950,67 @@
     // End call function
     function endCall() {
       logConnection('Ending call');
-      provideHapticFeedback();
+      playSound(hangupSound, [50]);
       inCall = false;
       isConnected = false;
       updateConnectionStatus();
       
+      // Stop call timer
+      if (callTimerInterval) {
+        clearInterval(callTimerInterval);
+        callTimerInterval = null;
+        callStartTime = null;
+      }
+      
       // Close the current call if it exists
       if (currentCall) {
+        // Notify other participants that we're leaving
+        try {
+          const dataConn = peer.connect(currentCall.peer);
+          dataConn.on('open', () => {
+            dataConn.send({
+              type: 'participant-left',
+              name: userName
+            });
+            dataConn.close();
+          });
+        } catch (e) {
+          logConnection('Error notifying about leaving: ' + e.message);
+        }
+        
         currentCall.close();
         currentCall = null;
       }
       
-      // Stop all tracks in the local stream
+      // Stop all media tracks
       if (localStream) {
         localStream.getTracks().forEach(track => track.stop());
         localStream = null;
       }
       
-      // Clear the audio elements
-      localAudio.srcObject = null;
-      remoteAudio.srcObject = null;
-      
-      // Keep the user's name but reset other participants
+      // Reset participants list
       participants = [userName];
       
+      // Go back to the start call UI
       renderStartCallButton();
     }
 
+    // Home button handler
+    homeButton.addEventListener('click', () => {
+      playSound(hapticSound, [20]);
+      if (inCall) {
+        endCall();
+      } else {
+        renderStartCallButton();
+      }
+    });
+
     // Initialize the app
     window.onload = function() {
+      // Initialize PeerJS
       initializePeer();
-      updateConnectionStatus();
+      
+      // Ask for user name
       askForUserName();
     };
   </script>
