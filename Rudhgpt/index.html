@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perplexity Chat - AI Assistant</title>
+    <meta name="description" content="Perplexity Chat - An AI assistant powered by Perplexity AI">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --text-color: #1f2937;
+            --bg-color: #ffffff;
+            --secondary-bg: #f3f4f6;
+            --border-color: #e5e7eb;
+            --hover-color: #4f46e5;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .dark {
+            --primary-color: #818cf8;
+            --text-color: #f9fafb;
+            --bg-color: #111827;
+            --secondary-bg: #1f2937;
+            --border-color: #374151;
+            --hover-color: #6366f1;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: var(--secondary-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.25rem;
+            margin: 0;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .sidebar-hidden {
+            transform: translateX(-100%);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .chat-window {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .input-container {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+        }
+
+        .input-box {
+            display: flex;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background-color: var(--bg-color);
+        }
+
+        .input-box textarea {
+            flex: 1;
+            border: none;
+            padding: 0.75rem;
+            resize: none;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            max-height: 200px;
+        }
+
+        .send-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .send-button:hover {
+            background-color: var(--hover-color);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-avatar {
+            background-color: #10b981;
+        }
+
+        .message-content {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background-color: var(--secondary-bg);
+        }
+
+        .user-message .message-content {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .new-chat-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .new-chat-button:hover {
+            background-color: var(--hover-color);
+        }
+
+        .conversation-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .conversation-item {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .conversation-item:hover {
+            background-color: var(--border-color);
+        }
+
+        .theme-toggle, .api-key-button {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            transition: background-color 0.2s;
+            margin-bottom: 0.75rem;
+            position: relative;
+        }
+
+        .theme-toggle:hover, .api-key-button:hover {
+            background-color: var(--border-color);
+        }
+        
+        .api-key-testing {
+            pointer-events: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .api-key-testing::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: api-key-loading 1.5s infinite;
+        }
+        
+        @keyframes api-key-loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .api-key-success {
+            background-color: #48bb78 !important; /* Green color for success */
+            transition: background-color 0.3s ease;
+        }
+        
+        .api-key-success:hover {
+            background-color: #38a169 !important;
+        }
+        
+        .model-selector {
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+        }
+        
+        .model-selector label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .model-select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+        }
+
+        .theme-toggle svg, .api-key-button svg {
+            margin-right: 0.5rem;
+        }
+
+        .loader {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .loader-dots {
+            display: flex;
+            margin-left: 0.75rem;
+        }
+
+        .loader-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin-right: 4px;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loader-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .loader-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: absolute;
+                height: 100%;
+                z-index: 10;
+            }
+
+            .mobile-toggle {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                left: 1rem;
+                z-index: 5;
+            }
+
+            .main-content {
+                padding-top: 3.5rem;
+            }
+        }
+
+        .code-block {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 0.5rem 0;
+        }
+
+        .dark .code-block {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>Perplexity AI</h1>
+                <button class="sidebar-toggle-mobile">&times;</button>
+            </div>
+            <div class="sidebar-content">
+                <button class="new-chat-button">+ New Chat</button>
+                
+                <div class="sidebar-section">
+                    <h2>Conversations</h2>
+                    <div class="conversation-list">
+                        <!-- Conversation items will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h2>Model</h2>
+                    <div class="model-selector">
+                        <select id="model-select">
+                            <option value="pplx-7b-online">pplx-7b-online</option>
+                            <option value="pplx-7b-chat">pplx-7b-chat</option>
+                            <option value="pplx-70b-online">pplx-70b-online</option>
+                            <option value="pplx-70b-chat">pplx-70b-chat</option>
+                            <option value="llama-2-70b-chat">llama-2-70b-chat</option>
+                            <option value="mistral-7b-instruct">mistral-7b-instruct</option>
+                            <option value="mixtral-8x7b-instruct">mixtral-8x7b-instruct</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h2>Settings</h2>
+                    <div class="theme-toggle">
+                        <span>Dark Mode</span>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle-checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <button class="api-key-button">Set API Key</button>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <button class="mobile-toggle">☰</button>
+            <div class="chat-window" id="chat-window">
+                <div class="message">
+                    <div class="message-avatar">P</div>
+                    <div class="message-content">
+                        Hello! I'm your Perplexity AI assistant. How can I help you today?
+                    </div>
+                </div>
+            </div>
+            <div class="input-container">
+                <div class="input-box">
+                    <textarea id="message-input" placeholder="Ask me anything..."></textarea>
+                    <button class="send-button" id="send-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const themeToggle = document.querySelector('.theme-toggle');
+        const sunIcon = document.querySelector('.sun-icon');
+        const moonIcon = document.querySelector('.moon-icon');
+        const sidebar = document.querySelector('.sidebar');
+        const mobileToggle = document.querySelector('.mobile-toggle');
+        const chatWindow = document.getElementById('chat-window');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const apiKeyButton = document.querySelector('.api-key-button');
+        const newChatButton = document.querySelector('.new-chat-button');
+
+        // State
+        let isDarkMode = false;
+        let apiKey = localStorage.getItem('perplexity_api_key') || '';
+        let messages = [];
+        let isLoading = false;
+        let selectedModel = localStorage.getItem('perplexity_model') || 'pplx-7b-online';
+        let conversations = JSON.parse(localStorage.getItem('perplexity_conversations') || '[]');
+
+        // Load conversations from localStorage
+        function loadConversations() {
+            const conversationList = document.querySelector('.conversation-list');
+            conversationList.innerHTML = ''; // Clear existing items
+            
+            if (conversations.length === 0) {
+                // Add a placeholder if no conversations
+                const placeholder = document.createElement('div');
+                placeholder.className = 'conversation-item';
+                placeholder.textContent = 'No conversations yet';
+                placeholder.style.color = '#888';
+                conversationList.appendChild(placeholder);
+                return;
+            }
+            
+            // Sort conversations by last updated (newest first)
+            const sortedConversations = [...conversations].sort((a, b) => b.lastUpdated - a.lastUpdated);
+            
+            // Get current conversation ID
+            const currentId = localStorage.getItem('current_conversation_id');
+            
+            // Add conversation items
+            sortedConversations.forEach(conv => {
+                const item = document.createElement('div');
+                item.className = 'conversation-item';
+                if (currentId === conv.id) {
+                    item.classList.add('active');
+                }
+                item.textContent = conv.title;
+                item.dataset.id = conv.id;
+                
+                // Add click event to load conversation
+                item.addEventListener('click', () => loadConversation(conv.id));
+                
+                conversationList.appendChild(item);
+            });
+        }
+        
+        // Load a specific conversation
+        function loadConversation(conversationId) {
+            const conversation = conversations.find(c => c.id === conversationId);
+            if (conversation) {
+                // Clear chat window
+                chatWindow.innerHTML = '';
+                
+                // Reset messages array
+                messages = [];
+                
+                // Set current conversation ID
+                localStorage.setItem('current_conversation_id', conversationId);
+                
+                // Load messages
+                if (conversation.messages.length > 0) {
+                    conversation.messages.forEach(msg => {
+                        addMessageToChat(msg.role, msg.content, false);
+                        messages.push(msg);
+                    });
+                } else {
+                    // Add welcome message if no messages
+                    addMessageToChat('assistant', 'Hello! I\'m your Perplexity AI assistant. How can I help you today?', false);
+                }
+                
+                // Update active state in sidebar
+                document.querySelectorAll('.conversation-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.id === conversationId) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // Close sidebar on mobile
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.add('sidebar-hidden');
+                }
+            }
+        }
+        
+        // Initialize
+        function init() {
+            // Load theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                enableDarkMode();
+            }
+
+            // Set selected model in dropdown
+            const modelSelect = document.getElementById('model-select');
+            modelSelect.value = selectedModel;
+
+            // Load conversation history
+            loadConversations();
+
+            // Auto-resize textarea
+            messageInput.addEventListener('input', autoResizeTextarea);
+
+            // Event listeners
+            themeToggle.addEventListener('click', toggleTheme);
+            mobileToggle.addEventListener('click', toggleSidebar);
+            sendButton.addEventListener('click', sendMessage);
+            apiKeyButton.addEventListener('click', promptApiKey);
+            newChatButton.addEventListener('click', startNewChat);
+            modelSelect.addEventListener('change', updateSelectedModel);
+            
+            // Handle Enter key
+            messageInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Check for API key
+            if (!apiKey) {
+                setTimeout(promptApiKey, 1000);
+            }
+            
+            // Check if we're loading an existing conversation
+            const currentId = localStorage.getItem('current_conversation_id');
+            if (currentId) {
+                const conversation = conversations.find(c => c.id === currentId);
+                if (conversation) {
+                    // Load the conversation
+                    loadConversation(currentId);
+                }
+            }
+        }
+
+        // Update selected model
+        function updateSelectedModel() {
+            const modelSelect = document.getElementById('model-select');
+            selectedModel = modelSelect.value;
+            localStorage.setItem('perplexity_model', selectedModel);
+        }
+
+        // Load conversations from localStorage
+        function loadConversations() {
+            const conversationList = document.querySelector('.conversation-list');
+            conversationList.innerHTML = ''; // Clear existing items
+            
+            if (conversations.length === 0) {
+                // Add default items if no saved conversations
+                const defaultItems = [
+                    { id: 'default-1', title: 'Chat about AI' },
+                    { id: 'default-2', title: 'Programming help' },
+                    { id: 'default-3', title: 'Travel recommendations' }
+                ];
+                
+                defaultItems.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'conversation-item';
+                    itemDiv.textContent = item.title;
+                    itemDiv.dataset.id = item.id;
+                    conversationList.appendChild(itemDiv);
+                });
+            } else {
+                // Add saved conversations
+                conversations.forEach(conversation => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'conversation-item';
+                    itemDiv.textContent = conversation.title || 'Untitled Chat';
+                    itemDiv.dataset.id = conversation.id;
+                    itemDiv.addEventListener('click', () => loadConversation(conversation.id));
+                    conversationList.appendChild(itemDiv);
+                });
+            }
+            
+            // Add click event to conversation items
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    if (id && id.startsWith('default-')) {
+                        // Handle default items
+                        startNewChat();
+                    }
+                });
+            });
+        }
+
+        // Theme functions
+        function toggleTheme() {
+            if (isDarkMode) {
+                disableDarkMode();
+            } else {
+                enableDarkMode();
+            }
+        }
+
+        function enableDarkMode() {
+            document.body.classList.add('dark');
+            sunIcon.style.display = 'none';
+            moonIcon.style.display = 'block';
+            isDarkMode = true;
+            localStorage.setItem('theme', 'dark');
+        }
+
+        function disableDarkMode() {
+            document.body.classList.remove('dark');
+            sunIcon.style.display = 'block';
+            moonIcon.style.display = 'none';
+            isDarkMode = false;
+            localStorage.setItem('theme', 'light');
+        }
+
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            sidebar.classList.toggle('sidebar-hidden');
+        }
+
+        // Auto-resize textarea
+        function autoResizeTextarea() {
+            messageInput.style.height = 'auto';
+            messageInput.style.height = (messageInput.scrollHeight) + 'px';
+        }
+
+        // API Key management
+        function promptApiKey() {
+            const newApiKey = prompt('Please enter your Perplexity API key:', apiKey);
+            if (newApiKey !== null) {
+                apiKey = newApiKey.trim();
+                localStorage.setItem('perplexity_api_key', apiKey);
+                if (apiKey) {
+                    // Validate API key format
+                    if (apiKey.startsWith('pplx-') && apiKey.length > 20) {
+                        alert('API key saved successfully!');
+                        // Test the API key with a simple request
+                        testApiKey();
+                    } else {
+                        alert('Warning: The API key format looks incorrect. It should start with "pplx-" and be longer than 20 characters.');
+                        return;
+                    }
+                } else {
+                    alert('API key cleared. Some features may not work without an API key.');
+                }
+            }
+        }
+        
+        // Test API key with a simple request
+        function testApiKey() {
+            // Add animation to API key button
+            const apiKeyButton = document.querySelector('.api-key-button');
+            apiKeyButton.classList.add('api-key-testing');
+            
+            // Create a testing message in the chat
+            const testingMessage = document.createElement('div');
+            testingMessage.className = 'message';
+            testingMessage.innerHTML = '<div class="message-avatar">P</div><div class="message-content">Testing your API key...</div>';
+            chatWindow.appendChild(testingMessage);
+            
+            // Get the API key
+            const apiKey = localStorage.getItem('perplexity_api_key');
+            
+            // Scroll to bottom
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            
+            // Test the API key with a real API call
+            if (apiKey && apiKey.startsWith('pplx-') && apiKey.length > 20) {
+                // Make a simple API call to test the key
+                fetch('https://api.perplexity.ai/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: selectedModel || 'pplx-7b-online',
+                        messages: [{ role: 'user', content: 'Hello, this is a test message. Please respond with a short confirmation.' }]
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`API error: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // API key is valid
+                    testingMessage.innerHTML = '<div class="message-avatar">P</div><div class="message-content">API key validated successfully! You can now send messages using the Perplexity API.</div>';
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                })
+                .catch(error => {
+                    // API key is invalid or there was an error
+                    console.error('API key test error:', error);
+                    testingMessage.innerHTML = `<div class="message-avatar">P</div><div class="message-content">Error testing API key: ${error.message}. Please check your API key and try again.</div>`;
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                })
+                .finally(() => {
+                    // Remove animation from API key button
+                    apiKeyButton.classList.remove('api-key-testing');
+                });
+            } else {
+                // Simulate API key testing for invalid keys
+                setTimeout(() => {
+                    testingMessage.innerHTML = '<div class="message-avatar">P</div><div class="message-content">Your API key format appears to be invalid. Please make sure it starts with "pplx-" and is the correct length. The application will use simulated responses.</div>';
+                    chatWindow.scrollTop = chatWindow.scrollHeight;
+                    apiKeyButton.classList.remove('api-key-testing');
+                }, 1000);
+            }
+        }
+        
+        // Load a specific conversation
+        function loadConversation(id) {
+            const conversation = conversations.find(c => c.id === id);
+            if (conversation) {
+                // Clear chat window
+                chatWindow.innerHTML = '';
+                
+                // Load messages
+                messages = conversation.messages || [];
+                
+                // Display messages
+                messages.forEach(msg => {
+                    addMessageToChat(msg.role, msg.content, false);
+                });
+                
+                // If no messages, add welcome message
+                if (messages.length === 0) {
+                    addMessageToChat('assistant', 'Hello! I\'m your Perplexity AI assistant. How can I help you today?', false);
+                }
+                
+                // Close sidebar on mobile
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.add('sidebar-hidden');
+                }
+            }
+        }
+
+        // Message handling
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message && !isLoading) {
+                // Add user message to chat
+                addMessageToChat('user', message);
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                
+                // Show loading indicator
+                isLoading = true;
+                showLoader();
+                
+                // Get API key
+                const apiKey = localStorage.getItem('perplexity_api_key');
+                
+                // Get selected model
+                const model = selectedModel || 'pplx-7b-online';
+                
+                // Add animation to API key button when using API
+                if (apiKey && apiKey.startsWith('pplx-') && apiKey.length > 20) {
+                    const apiKeyButton = document.querySelector('.api-key-button');
+                    apiKeyButton.classList.add('api-key-testing');
+                    
+                    // Remove animation after 5 seconds (failsafe)
+                    setTimeout(() => {
+                        apiKeyButton.classList.remove('api-key-testing');
+                    }, 5000);
+                }
+                
+                // Use simulateApiResponse which will either call the real API or simulate a response
+                setTimeout(() => {
+                    if (!apiKey) {
+                        removeLoader();
+                        addMessageToChat('assistant', 'Please set your Perplexity API key to use this feature.');
+                        isLoading = false;
+                        return;
+                    }
+                    
+                    // Use the API or simulate response based on API key validity
+                    simulateApiResponse(message);
+                }, 500);
+            }
+        }
+
+        function addMessageToChat(role, content, saveToHistory = true) {
+            // Create message elements
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role === 'user' ? 'user-message' : ''}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = `message-avatar ${role === 'user' ? 'user-avatar' : ''}`;
+            avatar.textContent = role === 'user' ? 'U' : 'P';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            
+            // Format message content with basic markdown
+            messageContent.innerHTML = formatMessage(content);
+            
+            // Assemble and add to chat
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(messageContent);
+            chatWindow.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            
+            // Store message
+            if (saveToHistory) {
+                messages.push({ role, content });
+                saveCurrentConversation();
+            }
+        }
+        
+        // Save current conversation to localStorage
+        function saveCurrentConversation() {
+            // Generate a unique ID for new conversations
+            if (messages.length > 0) {
+                let currentConversation;
+                let currentId = localStorage.getItem('current_conversation_id');
+                
+                if (!currentId) {
+                    // Create a new conversation
+                    currentId = 'conv-' + Date.now();
+                    localStorage.setItem('current_conversation_id', currentId);
+                    
+                    // Generate title from first user message
+                    const firstUserMsg = messages.find(m => m.role === 'user');
+                    let title = 'New Chat';
+                    if (firstUserMsg) {
+                        title = firstUserMsg.content.substring(0, 30);
+                        if (firstUserMsg.content.length > 30) title += '...';
+                    }
+                    
+                    currentConversation = {
+                        id: currentId,
+                        title: title,
+                        messages: messages,
+                        lastUpdated: Date.now()
+                    };
+                    
+                    conversations.push(currentConversation);
+                } else {
+                    // Update existing conversation
+                    currentConversation = conversations.find(c => c.id === currentId);
+                    if (currentConversation) {
+                        currentConversation.messages = messages;
+                        currentConversation.lastUpdated = Date.now();
+                    } else {
+                        // Conversation not found, create new
+                        const firstUserMsg = messages.find(m => m.role === 'user');
+                        let title = 'New Chat';
+                        if (firstUserMsg) {
+                            title = firstUserMsg.content.substring(0, 30);
+                            if (firstUserMsg.content.length > 30) title += '...';
+                        }
+                        
+                        currentConversation = {
+                            id: currentId,
+                            title: title,
+                            messages: messages,
+                            lastUpdated: Date.now()
+                        };
+                        
+                        conversations.push(currentConversation);
+                    }
+                }
+                
+                // Save to localStorage (limit to 20 conversations)
+                if (conversations.length > 20) {
+                    conversations.sort((a, b) => b.lastUpdated - a.lastUpdated);
+                    conversations = conversations.slice(0, 20);
+                }
+                
+                localStorage.setItem('perplexity_conversations', JSON.stringify(conversations));
+                
+                // Update conversation list in sidebar
+                loadConversations();
+            }
+        }
+
+        function formatMessage(text) {
+            // Handle code blocks
+            text = text.replace(/```([\s\S]*?)```/g, '<div class="code-block">$1</div>');
+            
+            // Handle inline code
+            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Handle bold
+            text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            
+            // Handle italic
+            text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+            
+            // Handle line breaks
+            text = text.replace(/\n/g, '<br>');
+            
+            return text;
+        }
+
+        function showLoader() {
+            const loaderDiv = document.createElement('div');
+            loaderDiv.className = 'loader';
+            loaderDiv.id = 'loader';
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = 'P';
+            
+            const dots = document.createElement('div');
+            dots.className = 'loader-dots';
+            
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'loader-dot';
+                dots.appendChild(dot);
+            }
+            
+            loaderDiv.appendChild(avatar);
+            loaderDiv.appendChild(dots);
+            chatWindow.appendChild(loaderDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function removeLoader() {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.remove();
+            }
+        }
+
+        function simulateApiResponse(userMessage) {
+            // Get selected model
+            const model = selectedModel || 'pplx-7b-online';
+            
+            // Check if we should use the actual API
+            const apiKey = localStorage.getItem('perplexity_api_key');
+            const useRealApi = apiKey && apiKey.startsWith('pplx-') && apiKey.length > 20;
+            
+            if (useRealApi) {
+                // Use the actual Perplexity API
+                callPerplexityApi(userMessage, apiKey, model);
+            } else {
+                // Fallback to simulation
+                simulateResponse(userMessage, model);
+            }
+        }
+        
+        function callPerplexityApi(userMessage, apiKey, model) {
+            // Prepare the messages for the API call
+            // Filter out any messages that don't have valid roles (must be 'user' or 'assistant')
+            const validMessages = messages.filter(msg => msg.role === 'user' || msg.role === 'assistant');
+            
+            // Ensure we have at least the current user message
+            if (validMessages.length === 0 || validMessages[validMessages.length - 1].role !== 'user') {
+                validMessages.push({
+                    role: 'user',
+                    content: userMessage
+                });
+            }
+            
+            // Add a system message to provide context
+            const apiMessages = [
+                {
+                    role: 'system',
+                    content: 'You are a helpful assistant.'
+                },
+                ...validMessages.map(msg => ({
+                    role: msg.role,
+                    content: msg.content
+                }))
+            ];
+            
+            console.log('Sending to Perplexity API:', {
+                model: model,
+                messages: apiMessages
+            });
+            
+            // Make the API call to Perplexity
+            fetch('https://api.perplexity.ai/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Accept': 'application/json'
+                },
+                mode: 'cors',
+                body: JSON.stringify({
+                    model: model,
+                    messages: apiMessages,
+                    max_tokens: 1000,
+                    temperature: 0.7
+                })
+            })
+            .then(response => {
+                // Log the response status for debugging
+                console.log('Perplexity API response status:', response.status);
+                
+                // Handle different error status codes
+                if (!response.ok) {
+                    if (response.status === 400) {
+                        return response.json().then(errorData => {
+                            console.error('API 400 error details:', errorData);
+                            throw new Error(`API error: Bad request (400). Please check your API key and message format.`);
+                        }).catch(e => {
+                            if (e.message.includes('API error')) throw e;
+                            throw new Error(`API error: Bad request (400). The request format may be incorrect.`);
+                        });
+                    } else if (response.status === 401) {
+                        throw new Error(`API error: Unauthorized (401). Your API key may be invalid or expired.`);
+                    } else if (response.status === 403) {
+                        throw new Error(`API error: Forbidden (403). You don't have permission to use this model or your account may have usage restrictions.`);
+                    } else if (response.status === 429) {
+                        throw new Error(`API error: Too many requests (429). You've exceeded your rate limit or quota.`);
+                    } else {
+                        throw new Error(`API error: ${response.status}. Please try again later.`);
+                    }
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Process the API response
+                if (data && data.choices && data.choices[0] && data.choices[0].message) {
+                    const assistantMessage = data.choices[0].message.content;
+                    removeLoader();
+                    addMessageToChat('assistant', assistantMessage);
+                    
+                    // Update API key button to show successful integration
+                    const apiKeyButton = document.querySelector('.api-key-button');
+                    apiKeyButton.classList.remove('api-key-testing');
+                    apiKeyButton.classList.add('api-key-success');
+                    setTimeout(() => {
+                        apiKeyButton.classList.remove('api-key-success');
+                    }, 2000);
+                } else {
+                    throw new Error('Invalid API response format');
+                }
+            })
+            .catch(error => {
+                console.error('Perplexity API error:', error);
+                removeLoader();
+                
+                // Provide a more user-friendly error message
+                let errorMessage = `Sorry, there was an error with the Perplexity API: ${error.message}`;
+                
+                // Add troubleshooting tips based on the error
+                if (error.message.includes('400')) {
+                    errorMessage += "\n\nTroubleshooting tips:\n1. Make sure your API key is correct\n2. Check that you're using a supported model\n3. The message format might be invalid";
+                } else if (error.message.includes('401')) {
+                    errorMessage += "\n\nPlease check that your API key is valid and hasn't expired.";
+                } else if (error.message.includes('403')) {
+                    errorMessage += "\n\nYour account may not have access to this model or you've reached your usage limit.";
+                } else if (error.message.includes('429')) {
+                    errorMessage += "\n\nYou've exceeded your rate limit. Please wait a moment before trying again.";
+                } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    errorMessage = "Network error: Unable to connect to the Perplexity API. Please check your internet connection.";
+                }
+                
+                addMessageToChat('assistant', errorMessage);
+                
+                // Remove animation from API key button
+                const apiKeyButton = document.querySelector('.api-key-button');
+                apiKeyButton.classList.remove('api-key-testing');
+            })
+            .finally(() => {
+                isLoading = false;
+            });
+        }
+        
+        function simulateResponse(userMessage, model) {
+            // Create a more dynamic response based on the user's message
+            let response;
+            
+            // Extract the main topic from the user message
+            const userMessageLower = userMessage.toLowerCase();
+            
+            if (userMessageLower.includes('hello') || userMessageLower.includes('hi')) {
+                response = `Hello! How can I assist you today? I'm using the ${model} model.`;
+            } else if (userMessageLower.includes('help')) {
+                response = `I'm here to help! You can ask me questions about various topics using the ${model} model, and I'll do my best to provide useful information.`;
+            } else if (userMessageLower.includes('api key')) {
+                response = "Your API key is securely stored in your browser's local storage. You can update it anytime by clicking the 'Set API Key' button in the sidebar.";
+            } else if (userMessageLower.includes('code') || userMessageLower.includes('programming')) {
+                response = "Here's a simple JavaScript function example:\n```\nfunction greet(name) {\n  return `Hello, ${name}!`;\n}\n\nconsole.log(greet('World'));\n```\nThis function takes a name parameter and returns a greeting message.";
+            } else if (userMessageLower.includes('model')) {
+                response = `I'm currently using the ${model} model. You can change the model in the sidebar.`;
+            } else if (userMessageLower.includes('name')) {
+                response = `My name is Perplexity AI Assistant. I'm powered by the ${model} model. How can I help you today?`;
+            } else if (userMessageLower.includes('weather')) {
+                response = `I don't have real-time weather data, but I can tell you that weather information would typically be retrieved from a weather API. If you had a valid API key, I could provide actual weather forecasts.`;
+            } else if (userMessageLower.includes('time') || userMessageLower.includes('date')) {
+                const now = new Date();
+                response = `The current time is ${now.toLocaleTimeString()} and the date is ${now.toLocaleDateString()}. Note that this is based on your computer's clock.`;
+            } else {
+                // Generate a more specific response based on the user's query
+                response = `I understand you're asking about "${userMessage}". With a valid Perplexity API key, I could provide a detailed response to this query using the ${model} model. For now, this is a simulated response.`;
+            }
+            
+            // Remove loader and add response after a realistic delay
+            setTimeout(() => {
+                removeLoader();
+                addMessageToChat('assistant', response);
+                isLoading = false;
+            }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds for realism
+        }
+
+        function startNewChat() {
+            // Clear chat window
+            chatWindow.innerHTML = '';
+            
+            // Add welcome message
+            addMessageToChat('assistant', 'Hello! I\'m your Perplexity AI assistant. How can I help you today?', false);
+            
+            // Reset messages array
+            messages = [];
+            
+            // Clear current conversation ID
+            localStorage.removeItem('current_conversation_id');
+            
+            // Close sidebar on mobile
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add('sidebar-hidden');
+            }
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>

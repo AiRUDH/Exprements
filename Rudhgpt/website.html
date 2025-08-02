@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perplexity Chat - AI Assistant</title>
+  <style>
+    /* Base styles */
+    :root {
+      --primary-color: #3b82f6;
+      --primary-hover: #2563eb;
+      --success-color: #10b981;
+      --success-hover: #059669;
+      --text-color: #333;
+      --text-light: #6b7280;
+      --bg-color: #f9fafb;
+      --bg-card: #fff;
+      --border-color: #e5e7eb;
+    }
+
+    .dark {
+      --primary-color: #3b82f6;
+      --primary-hover: #60a5fa;
+      --success-color: #10b981;
+      --success-hover: #34d399;
+      --text-color: #f3f4f6;
+      --text-light: #9ca3af;
+      --bg-color: #111827;
+      --bg-card: #1f2937;
+      --border-color: #374151;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Layout */
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background-color: var(--bg-card);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        height: 100%;
+        z-index: 100;
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+    }
+
+    .sidebar-header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .close-sidebar {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-light);
+    }
+
+    .api-key-button {
+      margin: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--success-color);
+      color: white;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s;
+    }
+
+    .api-key-button:hover {
+      background-color: var(--success-hover);
+    }
+
+    .new-chat-button {
+      margin: 0 1rem 1rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s;
+    }
+
+    .new-chat-button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .conversations {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .conversation-item {
+      padding: 0.75rem;
+      border-radius: 0.375rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      text-align: left;
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text-color);
+    }
+
+    .conversation-item:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .dark .conversation-item:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .conversation-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .conversation-time {
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+
+    .theme-toggle {
+      padding: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .theme-button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0.75rem;
+      background: none;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: background-color 0.2s;
+    }
+
+    .theme-button:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .dark .theme-button:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      padding: 0.75rem 1rem;
+      background-color: var(--bg-card);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .menu-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-light);
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .menu-button {
+        display: block;
+      }
+    }
+
+    .app-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Chat Window */
+    .chat-window {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+
+    .message {
+      display: flex;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message-content {
+      max-width: 80%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      position: relative;
+    }
+
+    .user .message-content {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .assistant .message-content {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+    }
+
+    .message-time {
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      opacity: 0.7;
+    }
+
+    /* Input Box */
+    .input-container {
+      padding: 1rem;
+      background-color: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .input-form {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .input-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    .message-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      background-color: var(--bg-card);
+      color: var(--text-color);
+      resize: none;
+      min-height: 40px;
+      max-height: 120px;
+      outline: none;
+    }
+
+    .message-input:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    }
+
+    .send-button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .send-button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .send-button:disabled {
+      background-color: var(--text-light);
+      cursor: not-allowed;
+    }
+
+    .input-hint {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 0.5rem;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Overlay */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 90;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar-overlay.active {
+        display: block;
+      }
+    }
+
+    /* Loading Animation */
+    .loading {
+      display: flex;
+      margin-bottom: 1.5rem;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 4px;
+      padding: 0.75rem 1rem;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--text-light);
+      border-radius: 50%;
+      animation: bounce 1s infinite;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+      }
+      50% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">Conversations</h2>
+        <button class="close-sidebar" id="closeSidebar" aria-label="Close sidebar">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- API Key Button -->
+      <button class="api-key-button" id="apiKeyButton">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2zm0 0v3m-4 4h8"></path>
+        </svg>
+        <span>Set API Key</span>
+      </button>
+
+      <!-- New Chat Button -->
+      <button class="new-chat-button" id="newChatButton">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+        <span>New Chat</span>
+      </button>
+
+      <!-- Conversation History -->
+      <div class="conversations">
+        <button class="conversation-item">
+          <div class="conversation-title">React Development Tips</div>
+          <div class="conversation-time">2 hours ago</div>
+        </button>
+        <button class="conversation-item">
+          <div class="conversation-title">JavaScript Best Practices</div>
+          <div class="conversation-time">1 day ago</div>
+        </button>
+        <button class="conversation-item">
+          <div class="conversation-title">CSS Grid Layout</div>
+          <div class="conversation-time">3 days ago</div>
+        </button>
+        <button class="conversation-item">
+          <div class="conversation-title">API Integration Guide</div>
+          <div class="conversation-time">1 week ago</div>
+        </button>
+      </div>
+
+      <!-- Theme Toggle -->
+      <div class="theme-toggle">
+        <button class="theme-button" id="themeToggle">
+          <span id="themeText">Dark Mode</span>
+          <svg id="themeIcon" width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-left">
+          <button class="menu-button" id="menuButton" aria-label="Open menu">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+          <h1 class="app-title">Perplexity Chat</h1>
+        </div>
+        <button class="theme-button mobile-theme-toggle" id="mobileThemeToggle" aria-label="Toggle theme">
+          <svg id="mobileThemeIcon" width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Chat Window -->
+      <div class="chat-window" id="chatWindow">
+        <!-- Initial Message -->
+        <div class="message assistant">
+          <div class="message-content">
+            <div>Hello! I'm your AI assistant. How can I help you today?</div>
+            <div class="message-time">12:00 PM</div>
+          </div>
+        </div>
+        <!-- Messages will be added here -->
+      </div>
+
+      <!-- Input Box -->
+      <div class="input-container">
+        <form class="input-form" id="messageForm">
+          <div class="input-wrapper">
+            <textarea 
+              id="messageInput" 
+              class="message-input" 
+              placeholder="Type a message... (Enter to send, Shift+Enter for new line)" 
+              rows="1"
+            ></textarea>
+          </div>
+          <button type="submit" class="send-button" id="sendButton" disabled>
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+            </svg>
+          </button>
+        </form>
+        <div class="input-hint">Press Enter to send, Shift+Enter for new line</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <script>
+    // DOM Elements
+    const body = document.body;
+    const sidebar = document.getElementById('sidebar');
+    const menuButton = document.getElementById('menuButton');
+    const closeSidebar = document.getElementById('closeSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const themeToggle = document.getElementById('themeToggle');
+    const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+    const themeText = document.getElementById('themeText');
+    const themeIcon = document.getElementById('themeIcon');
+    const mobileThemeIcon = document.getElementById('mobileThemeIcon');
+    const apiKeyButton = document.getElementById('apiKeyButton');
+    const newChatButton = document.getElementById('newChatButton');
+    const chatWindow = document.getElementById('chatWindow');
+    const messageForm = document.getElementById('messageForm');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+
+    // State
+    let isDarkMode = localStorage.getItem('theme') === 'dark';
+    let apiKey = localStorage.getItem('pplx_api_key') || '';
+    let isLoading = false;
+
+    // Initialize theme
+    if (isDarkMode || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      enableDarkMode();
+    } else {
+      disableDarkMode();
+    }
+
+    // Event Listeners
+    menuButton.addEventListener('click', openSidebar);
+    closeSidebar.addEventListener('click', closeSidebarFunc);
+    sidebarOverlay.addEventListener('click', closeSidebarFunc);
+    themeToggle.addEventListener('click', toggleTheme);
+    mobileThemeToggle.addEventListener('click', toggleTheme);
+    apiKeyButton.addEventListener('click', promptApiKey);
+    newChatButton.addEventListener('click', startNewChat);
+    messageForm.addEventListener('submit', handleSubmit);
+    messageInput.addEventListener('input', handleInput);
+    messageInput.addEventListener('keydown', handleKeyDown);
+
+    // Functions
+    function openSidebar() {
+      sidebar.classList.add('open');
+      sidebarOverlay.classList.add('active');
+    }
+
+    function closeSidebarFunc() {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('active');
+    }
+
+    function enableDarkMode() {
+      document.documentElement.classList.add('dark');
+      themeText.textContent = 'Light Mode';
+      themeIcon.innerHTML = '<path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>';
+      mobileThemeIcon.innerHTML = themeIcon.innerHTML;
+      isDarkMode = true;
+      localStorage.setItem('theme', 'dark');
+    }
+
+    function disableDarkMode() {
+      document.documentElement.classList.remove('dark');
+      themeText.textContent = 'Dark Mode';
+      themeIcon.innerHTML = '<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>';
+      mobileThemeIcon.innerHTML = themeIcon.innerHTML;
+      isDarkMode = false;
+      localStorage.setItem('theme', 'light');
+    }
+
+    function toggleTheme() {
+      if (isDarkMode) {
+        disableDarkMode();
+      } else {
+        enableDarkMode();
+      }
+    }
+
+    function promptApiKey() {
+      const key = window.prompt('Enter your Perplexity.ai API key:', apiKey || '');
+      if (key && key.trim()) {
+        localStorage.setItem('pplx_api_key', key.trim());
+        apiKey = key.trim();
+        alert('API key saved successfully!');
+      }
+    }
+
+    function startNewChat() {
+      // Clear chat except for the initial message
+      while (chatWindow.children.length > 1) {
+        chatWindow.removeChild(chatWindow.lastChild);
+      }
+      messageInput.value = '';
+      updateSendButton();
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const content = messageInput.value.trim();
+      if (!content || isLoading) return;
+
+      if (!apiKey) {
+        promptApiKey();
+        if (!apiKey) {
+          addMessage('assistant', 'Please set your API key to continue.');
+          return;
+        }
+      }
+
+      addMessage('user', content);
+      messageInput.value = '';
+      updateSendButton();
+      messageInput.style.height = 'auto';
+
+      // Show loading indicator
+      showLoading();
+
+      // Simulate API call (replace with actual API call)
+      setTimeout(() => {
+        // In a real app, you would call the Perplexity API here
+        // For demo purposes, we'll just simulate a response
+        const response = "Thank you for your message! This is a simulated response. In a real application, this would be a response from the Perplexity AI API using your API key.";
+        addMessage('assistant', response);
+        hideLoading();
+      }, 1500);
+    }
+
+    function addMessage(role, content) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${role}`;
+
+      const messageContent = document.createElement('div');
+      messageContent.className = 'message-content';
+
+      const messageText = document.createElement('div');
+      messageText.textContent = content;
+
+      const messageTime = document.createElement('div');
+      messageTime.className = 'message-time';
+      messageTime.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      messageContent.appendChild(messageText);
+      messageContent.appendChild(messageTime);
+      messageDiv.appendChild(messageContent);
+      chatWindow.appendChild(messageDiv);
+
+      // Scroll to bottom
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function showLoading() {
+      isLoading = true;
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'loading';
+      loadingDiv.id = 'loadingIndicator';
+
+      const loadingDots = document.createElement('div');
+      loadingDots.className = 'loading-dots';
+
+      for (let i = 0; i < 3; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        loadingDots.appendChild(dot);
+      }
+
+      loadingDiv.appendChild(loadingDots);
+      chatWindow.appendChild(loadingDiv);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function hideLoading() {
+      isLoading = false;
+      const loadingIndicator = document.getElementById('loadingIndicator');
+      if (loadingIndicator) {
+        loadingIndicator.remove();
+      }
+    }
+
+    function handleInput() {
+      updateSendButton();
+      autoResizeTextarea();
+    }
+
+    function handleKeyDown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (messageInput.value.trim() && !isLoading) {
+          messageForm.dispatchEvent(new Event('submit'));
+        }
+      }
+    }
+
+    function updateSendButton() {
+      sendButton.disabled = !messageInput.value.trim() || isLoading;
+    }
+
+    function autoResizeTextarea() {
+      messageInput.style.height = 'auto';
+      messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
+    }
+  </script>
+</body>
+</html>
