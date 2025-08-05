@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My IIT Dharwad Memories</title>
+    <style>
+        :root {
+            --primary: #7e22ce;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at center, #111 0%, #000 100%);
+            color: #fff;
+            line-height: 1.6;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        
+        header {
+            padding: 2rem;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9));
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.7),
+                         0 0 20px rgba(245, 158, 11, 0.5),
+                         0 0 30px rgba(245, 158, 11, 0.3);
+            transform: translateZ(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: translateZ(30px) scale(1.05);
+            text-shadow: 0 0 15px rgba(245, 158, 11, 0.9),
+                         0 0 25px rgba(245, 158, 11, 0.7),
+                         0 0 35px rgba(245, 158, 11, 0.5);
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background-color: var(--primary);
+            transform: translateZ(10px);
+            box-shadow: 0 5px 15px rgba(126, 34, 206, 0.4);
+        }
+        
+        main {
+            margin-top: 120px;
+            padding: 2rem;
+        }
+        
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 120px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+            transform: perspective(500px) rotateX(10deg);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .memory-card {
+            background: #111;
+            border-radius: 8px;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5),
+                        0 4px 6px -2px rgba(125, 74, 239, 0.3);
+        }
+        
+        .memory-card:hover {
+            transform: translateY(-10px) rotateX(10deg) rotateY(5deg) scale(1.02);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.6),
+                        0 10px 10px -5px rgba(125, 74, 239, 0.4);
+        }
+        
+        .memory-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .memory-details {
+            padding: 1rem;
+        }
+        
+        .memory-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary);
+        }
+        
+        .memory-description {
+            color: #ddd;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #111;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                flex-wrap: wrap;
+                gap: 0.8rem;
+            }
+            
+            .memory-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">IIT Dharwad Memories</div>
+        <nav>
+            <ul>
+                <li><a href="#journey">Journey</a></li>
+                <li><a href="#gate">Dharwad Gate</a></li>
+                <li><a href="#campus">Campus</a></li>
+                <li><a href="#friends">Friends</a></li>
+                <li><a href="#roommates">Roommates</a></li>
+                <li><a href="#lunch">Daily Lunch</a></li>
+                <li><a href="#night">Night Walks</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="journey">
+            <h2>The Journey to IIT Dharwad</h2>
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8f548e11-43be-4b45-a4d6-3a7f5bebd5d2.png" class="memory-image" 
+                         alt="Travel route map from my hometown to IIT Dharwad with marked stops">
+                    <div class="memory-details">
+                        <h3 class="memory-title">The Road to IIT</h3>
+                        <p class="memory-description">The exciting journey from my home to begin my internship at IIT Dharwad.</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/2d732c9d-d885-496b-b3d2-a5b9a5ddc8c6.png" class="memory-image" 
+                         alt="First view of IIT Dharwad campus from afar surrounded by greenery">
+                    <div class="memory-details">
+                        <h3 class="memory-title">First Sight</h3>
+                        <p class="memory-description">The first time I saw the IIT Dharwad campus in the distance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="gate">
+            <h2>IIT Dharwad Gate</h2>
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cc79f6f2-cc31-4a13-b271-8d9917a2ae94.png" class="memory-image" 
+                         alt="Main gate of IIT Dharwad with the institute name and logo in clear view">
+                    <div class="memory-details">
+                        <h3 class="memory-title">The Grand Entrance</h3>
+                        <p class="memory-description">Walking through these gates for the first time was unforgettable.</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ab59c072-c5ee-45c1-8dd5-fab30b20a560.png" class="memory-image" 
+                         alt="Close-up of IIT Dharwad gate sign at golden hour with warm lighting">
+                    <div class="memory-details">
+                        <h3 class="memory-title">Golden Hour</h3>
+                        <p class="memory-description">The gate looks especially beautiful during sunset hours.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="campus">
+            <h2>Campus Life</h2>
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c162389c-2a0b-4382-9034-36396762d65b.png" class="memory-image" 
+                         alt="Panoramic view of IIT Dharwad campus with modern buildings and green lawns">
+                    <div class="memory-details">
+                        <h3 class="memory-title">Campus Overview</h3>
+                        <p class="memory-description">The beautiful architecture blending with nature at IIT Dharwad.</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/701e63f7-57a1-4b50-a422-784124a79fd4.png" class="memory-image" 
+                         alt="Academic buildings at IIT Dharwad with students walking between classes">
+                    <div class="memory-details">
+                        <h3 class="memory-title">Academic Buildings</h3>
+                        <p class="memory-description">Where knowledge flows and ideas come to life.</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/276b3b84-45b5-4efa-8350-11bf8817fe39.png" class="memory-image" 
+                         alt="Serene campus lawn with trees and benches showing students relaxing between classes">
+                    <div class="memory-details">
+                        <h3 class="memory-title">Green Spaces</h3>
+                        <p class="memory-description">Perfect spots to relax and reflect between classes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="friends">
+            <h2>Best Friends</h2>
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/196de846-ecbc-4c19-be07-32e9bc32de21.png" class="memory-image" 
+                         alt="Group of friends sitting together on the campus lawn smiling at the camera">
+                    <div class="memory-details">
+                        <h3 class="memory-title">The Squad</h3>
+                        <p class="memory-description">Friends who made the internship experience truly special.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="roommates">
+            <h2>Roommates</h2>
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/80dd7040-1724-4693-87aa-574c064d333e.png" class="memory-image" 
+                         alt="Inside view of our hostel room with two beds and study tables neatly arranged">
+                    <div class="memory-details">
+                        <h3 class="memory-title">Our Room</h3>
+                        <p class="memory-description">This became our home away from home during the internship.</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1b3a1e79-3de9-434c-bbc8-f8061c078d78.png" class="memory-image" 
+                         alt="Me and my roommate standing outside our hostel building making funny faces">
+                    <div class="memory-details">
+                        <h3 class="memory-title">Roomie!</h3>
+                        <p class="memory-description">Late night talks, shared food, and unforgettable memories.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="lunch">
+            <h2>Daily Lunch</h2>
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1d90adc9-d47f-429a-a437-1bdec5231549.png" class="memory-image" 
+                         alt="Mess hall at IIT Dharwad showing typical lunch spread with variety of dishes">
+                    <div class="memory-details">
+                        <h3 class="memory-title">Mess Food</h3>
+                        <p class="memory-description">The taste of the mess food that fueled our days.</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1f0373e3-ed00-412d-9149-54096b973acf.png" class="memory-image" 
+                         alt="Our lunch table with friends sharing food and laughing together">
+                    <div class="memory-details">
+                        <h3 class="memory-title">Lunch Dates</h3>
+                        <p class="memory-description">Meal times were always more fun with friends.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="night">
+            <h2>Night Walks</h2>
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/118ec2f9-0a0c-40c0-a382-0d9cfc43ea87.png" class="memory-image" 
+                         alt="IIT Dharwad campus at night with illuminated pathways and buildings against dark sky">
+                    <div class="memory-details">
+                        <h3 class="memory-title">Campus Nights</h3>
+                        <p class="memory-description">The peaceful beauty of campus after sunset.</p>
+                    </div>
+                </div>
+                
+                <div class="memory-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/3060b112-9272-4ced-895a-e5474e298d0b.png" class="memory-image" 
+                         alt="Group of friends walking together at night under campus lights with long shadows">
+                    <div class="memory-details">
+                        <h3 class="memory-title">Nighttime Adventures</h3>
+                        <p class="memory-description">Walking with friends under the moonlight, sharing stories.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2023 My IIT Dharwad Memories | Created With Love</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize smooth scroll with offset for fixed header
+            initSmoothScroll();
+            
+            // Initialize card animations
+            initCardAnimations();
+        });
+
+        function initSmoothScroll() {
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('href');
+                    const section = document.querySelector(sectionId);
+                    const headerHeight = document.querySelector('header').offsetHeight;
+                    const position = section.offsetTop - headerHeight;
+                    
+                    window.scrollTo({
+                        top: position,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update URL without page reload
+                    history.pushState(null, null, sectionId);
+                });
+            });
+        }
+
+        function initCardAnimations() {
+            const memoryCards = document.querySelectorAll('.memory-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            memoryCards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(40px)';
+                card.style.transition = 'opacity 0.5s ease, transform
+
