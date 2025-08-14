@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>MySouk — AI Agents for Local Business Growth</title>
+  <meta name="description" content="AI-driven digital growth for small offline businesses. Future-proof design, predictive analytics, headless commerce, and autonomous AI agents."/>
+  <meta name="theme-color" content="#1e40af">
+  <meta name="color-scheme" content="dark light">
+  
+  <!-- Progressive Web App Support -->
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTXlTb3VrIC0gQUkgQWdlbnRzIiwic2hvcnRfbmFtZSI6Ik15U291ayIsImRlc2NyaXB0aW9uIjoiQUktZHJpdmVuIGRpZ2l0YWwgdHJhbnNmb3JtYXRpb24iLCJzdGFydF91cmwiOiIvIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzBhMGYxZiIsInRoZW1lX2NvbG9yIjoiIzFlNDBhZiIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlNVGt5SWlCb1pXbG5hSFE5SWpFNU1pSWdlRzFzYm5NOUltaDBkSEE2THk5M2QzY3Vkek11YjNKbkx6SXdNREF2YzNabklpQjJhV1YzUW05NFBTSXdJREFnTVRreUlERTVNaUkrUEdScFpuTStQR1psUm14dmIyUkdiRzlrSUdsa1BTSmhJaUJtYkc5dmMyNWtRMjlzYjNJOUlpTXhaVFF3WVdZaUlHWnNiMjlrVDNCaFkybDBlVDBpTUM0M0lpQm1iRzlrVEdsbmFIUmpiMnh2Y2owaUkyWTVOelF4TmlJZ1pteDFiMlJEYjJ4dmNqMGlJekZsTkRCaFppSXZQand2WkdsbWN6NDhkbWwzUWc5eUlpQmphR1Z6YzNKbFltOWhjbVI5SWk5K1BDOXpkbWMrIiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
+  <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTkyIDE5MiI+PGRlZnM+PGZlRmxvb2RGbG9vZCBpZD0iYSIgZmxvb2RDb2xvcj0iIzFlNDBhZiIgZmxvb2RPcGFjaXR5PSIwLjciIGZsb29kTGlnaHRjb2xvcj0iI2Y5NzQxNiIgZmx1b3JDb2xvcj0iIzFlNDBhZiIvPjwvZGVmcz48dmlldyBjaGVzcz0iUmVjdCIvPjwvc3ZnPg==">
+  
+  <!-- Performance Optimization -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" as="style">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* CSS Variables with modern color system */
+    :root {
+      --primary: #1e40af;
+      --primary-2: #0b1f6b;
+      --blue: #3b82f6;
+      --cyan: #22d3ee;
+      --accent: #f97316;
+      --accent-2: #10b981;
+      --bg: #0a0f1f;
+      --surface: #0f172a;
+      --glass: rgba(255,255,255,0.06);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --white: #fff;
+      --ring: #60a5fa;
+      --gradient: conic-gradient(from 220deg at 50% 50%, #0ea5e9, #60a5fa, #22d3ee, #0ea5e9);
+      
+      /* Fluid typography */
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+      --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+      --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+      --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+      --text-3xl: clamp(1.875rem, 1.6rem + 1.375vw, 2.5rem);
+      --text-4xl: clamp(2.25rem, 2rem + 1.25vw, 3rem);
+      --text-5xl: clamp(3rem, 2.5rem + 2.5vw, 4rem);
+      
+      /* Animation durations */
+      --duration-fast: 150ms;
+      --duration-normal: 250ms;
+      --duration-slow: 350ms;
+      
+      /* Spacing scale */
+      --space-xs: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
+      --space-sm: clamp(0.75rem, 0.6rem + 0.75vw, 1rem);
+      --space-md: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+      --space-lg: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+      --space-xl: clamp(2.25rem, 1.8rem + 2.25vw, 3.375rem);
+      --space-2xl: clamp(3.375rem, 2.7rem + 3.375vw, 5rem);
+    }
+
+    /* Base Styles */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text);
+      background: 
+        radial-gradient(1200px 800px at 80% -10%, rgba(99,102,241,0.25), transparent 60%),
+        radial-gradient(900px 600px at 0% 0%, rgba(34,211,238,0.2), transparent 60%),
+        var(--bg);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    /* Noise Texture */
+    .noise {
+      pointer-events: none;
+      position: fixed; inset: 0;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.04"/></svg>');
+      mix-blend-mode: soft-light; z-index: 1;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-md);
+    }
+
+    /* Header & Navigation */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      backdrop-filter: saturate(140%) blur(12px);
+      -webkit-backdrop-filter: saturate(140%) blur(12px);
+      background: linear-gradient(180deg, rgba(10,15,31,0.85), rgba(10,15,31,0.55));
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-top: env(safe-area-inset-top);
+      transition: background-color var(--duration-normal) ease;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .3px;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--gradient);
+      position: relative;
+      box-shadow: 0 8px 30px rgba(34,211,238,0.25);
+      animation: logo-pulse 4s ease-in-out infinite;
+    }
+    @keyframes logo-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .brand-logo::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.38), rgba(255,255,255,0.04));
+    }
+    .brand span { font-size: var(--text-lg); }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 10px 12px;
+      border-radius: 8px;
+      transition: all var(--duration-fast) ease;
+      position: relative;
+    }
+    .nav-links a::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: var(--glass);
+      opacity: 0;
+      transition: opacity var(--duration-fast) ease;
+    }
+    .nav-links a:hover {
+      color: var(--white);
+    }
+    .nav-links a:hover::before {
+      opacity: 1;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 600;
+      position: relative;
+      cursor: pointer;
+      transition: all var(--duration-fast) cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 44px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.3);
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #22d3ee, #3b82f6);
+      box-shadow: 
+        0 10px 30px rgba(34,211,238,0.25), 
+        inset 0 0 0 1px rgba(255,255,255,0.15);
+    }
+    .btn-outline {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(10px);
+    }
+    .magnetic {
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+
+    .menu {
+      display: none;
+      color: var(--white);
+      font-size: var(--text-xl);
+      padding: var(--space-xs);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color var(--duration-fast) ease;
+    }
+    .menu:hover {
+      background: var(--glass);
+    }
+    @media(max-width: 900px) {
+      .nav-links { display: none; }
+      .menu { display: block; }
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      padding: 160px 0 100px;
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      z-index: 2;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: center;
+    }
+    @media(max-width: 1000px) {
+      .grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+        text-align: center;
+      }
+      .hero-cta {
+        justify-content: center;
+      }
+    }
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(34,211,238,0.08);
+      border: 1px solid rgba(34,211,238,0.25);
+      color: #99f6e4;
+      font-weight: 600;
+      font-size: var(--text-sm);
+      margin-bottom: var(--space-md);
+    }
+    .kicker .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #a7f3d0, #10b981);
+      box-shadow: 0 0 14px #10b981, 0 0 30px rgba(16,185,129,0.6);
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+    }
+
+    h1, .hero-heading {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.05;
+      margin: 16px 0 14px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: clamp(1rem, 1.5vw, 1.15rem);
+      max-width: 58ch;
+    }
+    .hero-cta {
+      margin-top: 26px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .orbital {
+      position: relative;
+      height: 520px;
+      border-radius: 22px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 20px 60px rgba(0,0,0,0.35);
+    }
+    .orbital .ring {
+      position: absolute;
+      inset: -20%;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(34,211,238,0.15), transparent 70%);
+      filter: blur(26px);
+      animation: rotate 18s linear infinite;
+    }
+    .orbital .ring.r2 {
+      animation-duration: 26s;
+      opacity: .6;
+    }
+    .orbital canvas {
+      position: absolute;
+      inset: 0;
+    }
+    .badges {
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      backdrop-filter: blur(8px);
+      background: rgba(15,23,42,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: var(--text-sm);
+    }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+
+    /* Trust Section */
+    .trust {
+      padding: 28px 0 18px;
+      opacity: .9;
+    }
+    .marquee {
+      display: flex;
+      gap: 38px;
+      overflow: hidden;
+      mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    }
+    .marquee-track {
+      display: flex;
+      gap: 38px;
+      animation: scroll 26s linear infinite;
+    }
+    @keyframes scroll { to { transform: translateX(-50%); } }
+    .trust .pill {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    /* Services Section */
+    section {
+      position: relative;
+      z-index: 2;
+    }
+    .section {
+      padding: 84px 0;
+    }
+    .section h2 {
+      font-size: var(--text-3xl);
+      margin: 0 0 10px;
+    }
+    .section p.lead {
+      color: var(--muted);
+      max-width: 60ch;
+      margin: 0 0 28px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media(max-width: 1000px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s ease, box-shadow .3s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+    .card .icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #22d3ee, #3b82f6);
+      display: grid;
+      place-items: center;
+      color: white;
+      box-shadow: 0 10px 30px rgba(34,211,238,0.25);
+      margin-bottom: 12px;
+    }
+    .card h3 {
+      margin: 10px 0 8px;
+    }
+    .card p {
+      color: var(--muted);
+    }
+    .list {
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin: 10px 0;
+      color: #cbd5e1;
+    }
+    .list li i {
+      color: var(--accent-2);
+    }
+
+    /* Labs / New Tech */
+    .labs {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 28px;
+      align-items: center;
+    }
+    @media(max-width: 1000px) {
+      .labs {
+        grid-template-columns: 1fr;
+      }
+    }
+    .labs .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: var(--text-sm);
+      color: #a5b4fc;
+      background: rgba(99,102,241,0.15);
+      border: 1px solid rgba(99,102,241,0.35);
+    }
+    .terminal {
+      padding: 18px;
+      min-height: 260px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: radial-gradient(600px 300px at 15% 0%, rgba(34,211,238,0.12), transparent 60%), transparent;
+    }
+    .line {
+      opacity: .95;
+    }
+    .caret {
+      display: inline-block;
+      width: 10px;
+      height: 1em;
+      background: #60a5fa;
+      margin-left: 2px;
+      animation: blink 1.1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .labs-visual {
+      height: 100%;
+      min-height: 320px;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(500px 220px at 20% 20%, rgba(34,211,238,0.12), transparent 60%),
+        radial-gradient(420px 240px at 80% 80%, rgba(59,130,246,0.14), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .ai-nodes {
+      position: absolute;
+      inset: 0;
+    }
+    .node {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #e0f2fe, #60a5fa 70%);
+      box-shadow: 0 0 20px #60a5fa88, 0 0 40px #22d3ee55;
+      animation: float 9s ease-in-out infinite;
+    }
+    .node:nth-child(2) { left: 20%; top: 18%; animation-duration: 7s; }
+    .node:nth-child(3) { left: 78%; top: 24%; animation-duration: 10s; }
+    .node:nth-child(4) { left: 30%; top: 70%; animation-duration: 8s; }
+    .node:nth-child(5) { left: 65%; top: 72%; animation-duration: 11s; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+
+    /* Portfolio */
+    .portfolio {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media(max-width: 1000px) {
+      .portfolio {
+        grid-template-columns: 1fr;
+      }
+    }
+    .shot {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      transition: transform .2s ease, box-shadow .3s ease;
+    }
+    .shot:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+    .shot .thumb {
+      height: 180px;
+      background: linear-gradient(120deg, #0ea5e9 0%, #3b82f6 40%, #22d3ee 100%);
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 40px;
+    }
+    .shot .meta {
+      padding: 16px;
+      color: #cbd5e1;
+    }
+
+    /* Testimonials */
+    .testi {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    @media(max-width: 1000px) {
+      .testi {
+        grid-template-columns: 1fr;
+      }
+    }
+    .quote {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    .q {
+      color: #cbd5e1;
+      font-style: italic;
+    }
+    .who {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #3b82f6;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 700;
+    }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      padding: 84px 0;
+      background: radial-gradient(700px 300px at 50% 0%, rgba(34,211,238,0.15), transparent 70%);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Footer */
+    footer {
+      padding: 50px 0;
+      background: linear-gradient(180deg, rgba(15,23,42,0.9), rgba(10,15,31,1));
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .fgrid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    @media(max-width: 900px) {
+      .fgrid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .fcol h4 {
+      margin: 0 0 8px;
+    }
+    .fcol a, .fcol p {
+      color: #94a3b8;
+      text-decoration: none;
+      display: block;
+      margin: 6px 0;
+    }
+    .social a {
+      display: inline-grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      color: #e2e8f0;
+      margin-right: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Reveal animations on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Reduced motion respect */
+    @media (prefers-reduced-motion: reduce) {
+      .magnetic, .orbital .ring, .marquee-track, .node, .kicker .dot, .caret {
+        animation: none;
+      }
+      .reveal {
+        transition: none;
+      }
+      body {
+        scroll-behavior: auto;
+      }
+    }
+
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      :root {
+        --glass: rgba(255,255,255,0.15);
+      }
+      .card, .shot, .quote, .orbital, .labs-visual, .labs .panel {
+        border: 2px solid rgba(255,255,255,0.3);
+      }
+    }
+
+    /* Dark/Light mode support (future enhancement) */
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #ffffff;
+        --surface: #f8fafc;
+        --glass: rgba(0,0,0,0.06);
+        --text: #0f172a;
+        --muted: #64748b;
+      }
+      body {
+        background: 
+          radial-gradient(1200px 800px at 80% -10%, rgba(99,102,241,0.15), transparent 60%),
+          radial-gradient(900px 600px at 0% 0%, rgba(34,211,238,0.1), transparent 60%),
+          var(--bg);
+      }
+      header {
+        background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header>
+    <nav class="container">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true"></div>
+        <span>MySouk</span>
+      </div>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#solutions">Solutions</a>
+        <a href="#labs">Labs</a>
+        <a href="#work">Work</a>
+        <a href="#contact" class="btn btn-outline magnetic">Contact</a>
+      </div>
+      <a class="menu" href="#contact"><i class="fa-solid fa-circle-nodes"></i></a>
+    </nav>
+  </header>
+
+  <main id="home" class="hero">
+    <div class="container grid">
+      <div>
+        <span class="kicker"><span class="dot"></span> Autonomous AI for Local Growth</span>
+        <h1 class="hero-heading">Turn Offline Hustle into Online Momentum with AI Agents</h1>
+        <p class="sub">MySouk equips grocery stores, malls, and local retailers with AI that predicts demand, automates marketing, and powers headless commerce—so growth compounds while operations stay simple.</p>
+        <div class="hero-cta">
+          <a href="#contact" class="btn btn-primary magnetic"><i class="fa-solid fa-rocket"></i> Start in 7 Days</a>
+          <a href="#solutions" class="btn btn-outline magnetic"><i class="fa-solid fa-grid-2"></i> See Solutions</a>
+        </div>
+        <div class="trust" aria-label="trust markers">
+          <div class="marquee">
+            <div class="marquee-track">
+              <span class="pill"><i class="fa-solid fa-shield-heart"></i> Privacy-first AI</span>
+              <span class="pill"><i class="fa-solid fa-gauge-high"></i> 99.9% Uptime</span>
+              <span class="pill"><i class="fa-solid fa-bolt"></i> Sub-50ms APIs</span>
+              <span class="pill"><i class="fa-solid fa-certificate"></i> ISO-ready Process</span>
+              <span class="pill"><i class="fa-solid fa-leaf"></i> Green Hosting</span>
+              <span class="pill"><i class="fa-solid fa-brain"></i> RAG + Agents</span>
+              <!-- duplicate for loop effect -->
+              <span class="pill"><i class="fa-solid fa-shield-heart"></i> Privacy-first AI</span>
+              <span class="pill"><i class="fa-solid fa-gauge-high"></i> 99.9% Uptime</span>
+              <span class="pill"><i class="fa-solid fa-bolt"></i> Sub-50ms APIs</span>
+              <span class="pill"><i class="fa-solid fa-certificate"></i> ISO-ready Process</span>
+              <span class="pill"><i class="fa-solid fa-leaf"></i> Green Hosting</span>
+              <span class="pill"><i class="fa-solid fa-brain"></i> RAG + Agents</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="orbital reveal">
+        <div class="ring"></div>
+        <div class="ring r2"></div>
+        <canvas id="particles" aria-hidden="true"></canvas>
+        <div class="badges">
+          <span class="badge"><i class="fa-solid fa-microchip"></i> Edge AI Inference</span>
+          <span class="badge"><i class="fa-solid fa-layer-group"></i> Headless Commerce</span>
+          <span class="badge"><i class="fa-solid fa-mobile-screen-button"></i> PWA Offline</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- SOLUTIONS -->
+  <section id="solutions" class="section container">
+    <h2 class="reveal">Solutions built for 2025 and beyond</h2>
+    <p class="lead reveal">Future-proof stacks that are fast, secure, and scalable. Designed to persuade, convert, and retain through AI-driven personalization.</p>
+
+    <div class="cards">
+      <div class="card reveal">
+        <div class="icon"><i class="fa-solid fa-globe"></i></div>
+        <h3>AI Websites that Sell</h3>
+        <p>Adaptive UI, semantic SEO, blazing performance, and dynamic pricing experiments.</p>
+        <ul class="list">
+          <li><i class="fa-solid fa-check"></i> Mobile-first, Core Web Vitals A-grade</li>
+          <li><i class="fa-solid fa-check"></i> Intent-aware content blocks</li>
+          <li><i class="fa-solid fa-check"></i> Schema, local SEO, multi-location</li>
+        </ul>
+      </div>
+      <div class="card reveal">
+        <div class="icon"><i class="fa-solid fa-chart-line"></i></div>
+        <h3>Growth Automations</h3>
+        <p>Always-on AI agents for ads, retention, and CRM that learn and optimize.</p>
+        <ul class="list">
+          <li><i class="fa-solid fa-check"></i> Predictive audiences & LTV models</li>
+          <li><i class="fa-solid fa-check"></i> UGC + social scheduling autopilot</li>
+          <li><i class="fa-solid fa-check"></i> Offer testing without dev cycles</li>
+        </ul>
+      </div>
+      <div class="card reveal">
+        <div class="icon"><i class="fa-solid fa-store"></i></div>
+        <h3>Dropship & Headless</h3>
+        <p>Plug-and-play catalogs, efficient fulfillment, and composable checkout flows.</p>
+        <ul class="list">
+          <li><i class="fa-solid fa-check"></i> Supplier APIs + inventory sync</li>
+          <li><i class="fa-solid fa-check"></i> OMS, returns, fraud guard</li>
+          <li><i class="fa-solid fa-check"></i> POS bridge for offline-to-online</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- LABS / NEW TECH -->
+  <section id="labs" class="section container">
+    <h2 class="reveal">AI Labs: Future-ready tech</h2>
+    <p class="lead reveal">We're building with tomorrow's tech stack today. Our AI agents learn your business and make autonomous decisions to drive growth.</p>
+
+    <div class="labs">
+      <div class="panel reveal">
+        <div class="panel-head">
+          <span>AI Agent Console</span>
+          <div class="chips">
+            <span class="chip">TypeScript</span>
+            <span class="chip">LangChain</span>
+            <span class="chip">Vector DB</span>
+          </div>
+        </div>
+        <div class="terminal">
+          <div class="line">$ <span style="color:#a5b4fc">ai-agent</span> --init --store-id=<span style="color:#f97316">grocery-1</span></div>
+          <div class="line">Initializing MySouk AI Agent for Grocery Store #1</div>
+          <div class="line">Loading inventory data: <span style="color:#10b981">✓</span></div>
+          <div class="line">Loading customer segments: <span style="color:#10b981">✓</span></div>
+          <div class="line">Loading sales history: <span style="color:#10b981">✓</span></div>
+          <div class="line">Training demand prediction model...</div>
+          <div class="line">Model accuracy: <span style="color:#10b981">94.2%</span></div>
+          <div class="line">Connecting to marketing channels: <span style="color:#10b981">✓</span></div>
+          <div class="line">Agent ready. Listening for events...</div>
+          <div class="line">$ <span class="caret"></span></div>
+        </div>
+      </div>
+
+      <div class="labs-visual reveal">
+        <div class="ai-nodes">
+          <div class="node"></div>
+          <div class="node"></div>
+          <div class="node"></div>
+          <div class="node"></div>
+          <div class="node"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="work" class="section container">
+    <h2 class="reveal">Our work</h2>
+    <p class="lead reveal">See how we've helped local businesses transform their digital presence and operations.</p>
+
+    <div class="portfolio">
+      <div class="shot reveal">
+        <div class="thumb"><i class="fa-solid fa-store"></i></div>
+        <div class="meta">
+          <h3>FreshMart Grocery</h3>
+          <p>AI-powered inventory management and personalized offers increased sales by 32%.</p>
+        </div>
+      </div>
+      <div class="shot reveal">
+        <div class="thumb"><i class="fa-solid fa-bag-shopping"></i></div>
+        <div class="meta">
+          <h3>Westside Mall</h3>
+          <p>Unified digital presence for 24 stores with centralized ordering and pickup.</p>
+        </div>
+      </div>
+      <div class="shot reveal">
+        <div class="thumb"><i class="fa-solid fa-utensils"></i></div>
+        <div class="meta">
+          <h3>Local Eats Collective</h3>
+          <p>Restaurant group saw 47% increase in online orders with AI-optimized menus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section container">
+    <h2 class="reveal">What our clients say</h2>
+    <p class="lead reveal">Don't just take our word for it. Here's what store owners have to say about MySouk.</p>
+
+    <div class="testi">
+      <div class="quote reveal">
+        <p class="q">"MySouk's AI completely transformed how we manage inventory. We've cut waste by 40% while never running out of popular items."</p>
+        <div class="who">
+          <div class="avatar">JD</div>
+          <div>
+            <strong>John Dae</strong><br>
+            <small>FreshMart Owner</small>
+          </div>
+        </div>
+      </div>
+      <div class="quote reveal">
+        <p class="q">"The headless commerce setup lets us sell anywhere—our website, Instagram, even WhatsApp—with unified inventory."</p>
+        <div class="who">
+          <div class="avatar">SP</div>
+          <div>
+            <strong>Sarah Park</strong><br>
+            <small>Boutique Manager</small>
+          </div>
+        </div>
+      </div>
+      <div class="quote reveal">
+        <p class="q">"Their AI marketing agent creates better ads than our previous agency, and it works 24/7 optimizing campaigns."</p>
+        <div class="who">
+          <div class="avatar">RK</div>
+          <div>
+            <strong>Raj Kumar</strong><br>
+            <small>Electronics Store</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="cta">
+    <div class="container">
+      <h2 class="reveal">Ready to transform your business?</h2>
+      <p class="lead reveal">Get started with MySouk in just 7 days. No technical knowledge required.</p>
+      <div class="reveal">
+        <a href="#contact" class="btn btn-primary magnetic"><i class="fa-solid fa-message"></i> Schedule a Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="fgrid">
+        <div class="fcol">
+          <h4>MySouk</h4>
+          <p>AI-driven digital growth for small offline businesses.</p>
+          <div class="social">
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="fcol">
+          <h4>Solutions</h4>
+          <a href="#">AI Websites</a>
+          <a href="#">Growth Automation</a>
+          <a href="#">Dropshipping</a>
+          <a href="#">Headless Commerce</a>
+        </div>
+        <div class="fcol">
+          <h4>Resources</h4>
+          <a href="#">Blog</a>
+          <a href="#">Case Studies</a>
+          <a href="#">Documentation</a>
+          <a href="#">Pricing</a>
+        </div>
+        <div class="fcol">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Careers</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+      <div style="margin-top:30px;text-align:center;color:var(--muted);font-size:14px">
+        &copy; 2025 MySouk. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Particle animation for the orbital visual
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('particles');
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      
+      // Resize handler
+      function resize() {
+        width = canvas.width = canvas.offsetWidth;
+        height = canvas.height = canvas.offsetHeight;
+      }
+      
+      // Create particles
+      const particleCount = 80;
+      const particles = [];
+      
+      function Particle() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 1 - 0.5;
+        this.speedY = Math.random() * 1 - 0.5;
+        this.color = `rgba(255, 255, 255, ${Math.random() * 0.3 + 0.2})`;
+      }
+      
+      Particle.prototype.update = function() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        
+        // Bounce off edges
+        if (this.x > width || this.x < 0) this.speedX *= -1;
+        if (this.y > height || this.y < 0) this.speedY *= -1;
+      }
+      
+      Particle.prototype.draw = function() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      function init() {
+        resize();
+        for (let i = 0; i < particleCount; i++) {
+          particles.push(new Particle());
+        }
+      }
+      
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw();
+          
+          // Connect particles with lines
+          for (let j = i; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 100) {
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance/100)})`;
+              ctx.lineWidth = 0.5;
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+        
+        requestAnimationFrame(animate);
+      }
+      
+      // Initialize and start animation
+      init();
+      animate();
+      
+      // Handle window resize
+      window.addEventListener('resize', resize);
+    });
+    
+    // Reveal animations on scroll
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+      });
+    });
+    
+    // Magnetic buttons effect
+    document.addEventListener('DOMContentLoaded', () => {
+      const magnetics = document.querySelectorAll('.magnetic');
+      
+      magnetics.forEach(magnetic => {
+        magnetic.addEventListener('mousemove', (e) => {
+          const rect = magnetic.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          
+          magnetic.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+        });
+        
+        magnetic.addEventListener('mouseleave', () => {
+          magnetic.style.transform = 'translate(0px, 0px)';
+        });
+      });
+    });
+    
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', () => {
+      const menuButton = document.querySelector('.menu');
+      const navLinks = document.querySelector('.nav-links');
+      
+      if (menuButton && navLinks) {
+        menuButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+      }
+    });
+    
+    // Header scroll effect
+    document.addEventListener('DOMContentLoaded', () => {
+      const header = document.querySelector('header');
+      
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+          header.style.background = 'rgba(10,15,31,0.95)';
+          header.style.borderBottom = '1px solid rgba(255,255,255,0.1)';
+        } else {
+          header.style.background = 'linear-gradient(180deg, rgba(10,15,31,0.85), rgba(10,15,31,0.55))';
+          header.style.borderBottom = '1px solid rgba(255,255,255,0.06)';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
