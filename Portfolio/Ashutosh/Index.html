@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashutosh Singhal | Accessibility Strategist & Inclusive Innovation Consultant</title>
+  <meta name="description" content="Portfolio of Ashutosh Singhal, Accessibility Strategist & Inclusive Innovation Consultant driving digital inclusion, policy advocacy, and large-scale accessibility impact across India." />
+
+  <!-- Fonts & Base Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-alt: #020617;
+      --card: rgba(15,23,42,0.86);
+      --border: rgba(148,163,184,0.35);
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --accent-alt: #a855f7;
+      --danger: #f97373;
+      --radius-lg: 22px;
+      --radius-md: 12px;
+      --shadow-soft: 0 22px 80px rgba(15,23,42,0.92);
+      --blur: 18px;
+    }
+
+    * ,*::before,*::after { box-sizing: border-box; }
+
+    html,body {
+      margin:0;
+      padding:0;
+      scroll-behavior:smooth;
+    }
+
+    body {
+      font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56,189,248,0.24), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(168,85,247,0.28), transparent 55%),
+        #020617;
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    .container {
+      width:min(1120px,100% - 32px);
+      margin-inline:auto;
+    }
+
+    .skip-link {
+      position:absolute;
+      left:-999px;
+      top:0;
+      background:#020617;
+      color:#f9fafb;
+      padding:10px 16px;
+      border-radius:999px;
+      z-index:1000;
+    }
+    .skip-link:focus { left:16px; top:16px; }
+
+    /* NAVBAR */
+    .navbar {
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter:blur(18px);
+      background:linear-gradient(to bottom, rgba(15,23,42,0.96), rgba(15,23,42,0.85));
+      border-bottom:1px solid rgba(148,163,184,0.3);
+    }
+    .nav-inner {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding-block:10px;
+    }
+    .nav-brand {
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .brand-dot {
+      width:10px;height:10px;border-radius:999px;
+      background:radial-gradient(circle,var(--accent-alt),var(--accent));
+      margin-bottom:4px;
+    }
+    .logo {
+      margin:0;
+      font-size:1rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    .logo-sub {
+      margin:0;
+      font-size:.75rem;
+      color:var(--muted);
+    }
+    .nav-menu {
+      list-style:none;
+      display:flex;
+      gap:18px;
+      margin:0;
+      padding:0;
+      align-items:center;
+    }
+    .nav-menu a {
+      font-size:.9rem;
+      color:var(--muted);
+      padding:6px 11px;
+      border-radius:999px;
+      transition:background .18s ease,color .18s ease;
+      text-decoration:none;
+    }
+    .nav-menu a:hover,
+    .nav-menu a:focus-visible {
+      background:rgba(15,23,42,0.9);
+      color:#f9fafb;
+      outline:none;
+    }
+    .cta-nav {
+      background:linear-gradient(to right,var(--accent),var(--accent-alt));
+      color:#020617 !important;
+      font-weight:600;
+      box-shadow:0 10px 26px rgba(15,23,42,0.8);
+    }
+    .mobile-toggle {
+      display:none;
+      flex-direction:column;
+      gap:4px;
+      padding:8px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      background:transparent;
+      cursor:pointer;
+    }
+    .mobile-toggle span {
+      width:18px;height:2px;border-radius:999px;
+      background:#e5e7eb;
+    }
+
+    /* HERO */
+    .hero {
+      padding:80px 0 64px;
+    }
+    .hero-inner { position:relative; }
+    .hero-intro { max-width:720px; }
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:4px 12px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.45);
+      background:rgba(15,23,42,0.95);
+      font-size:.75rem;
+      color:var(--muted);
+    }
+    .pill-dot {
+      width:6px;height:6px;border-radius:999px;
+      background:var(--accent);
+    }
+    .hero-title {
+      margin:18px 0 12px;
+      font-size:clamp(2.2rem,4vw,2.8rem);
+      line-height:1.1;
+    }
+    .gradient-text {
+      background:linear-gradient(to right,var(--accent),var(--accent-alt));
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+    .hero-sub {
+      margin:0 0 20px;
+      color:var(--muted);
+      max-width:640px;
+      font-size:.98rem;
+    }
+    .hero-stats {
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:22px;
+    }
+    .stat {
+      flex:1 1 130px;
+      min-width:130px;
+      padding:12px 16px;
+      border-radius:16px;
+      background:rgba(15,23,42,0.88);
+      border:1px solid rgba(148,163,184,0.42);
+      box-shadow:var(--shadow-soft);
+    }
+    .stat-num { margin:0;font-size:1.4rem;font-weight:700; }
+    .stat-label { margin:2px 0 0;font-size:.8rem;color:var(--muted); }
+    .hero-actions {
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:10px;
+    }
+    .btn {
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:.9rem;
+      font-weight:500;
+      border:none;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+    }
+    .btn-primary {
+      background:linear-gradient(to right,var(--accent),var(--accent-alt));
+      color:#020617;
+      box-shadow:0 14px 40px rgba(15,23,42,0.85);
+    }
+    .btn-primary:hover { filter:brightness(1.05); }
+    .btn-ghost {
+      border:1px solid rgba(148,163,184,0.6);
+      background:rgba(15,23,42,0.9);
+      color:var(--text);
+    }
+    .hero-cred {
+      margin:4px 0 0;
+      font-size:.82rem;
+      color:var(--muted);
+    }
+
+    /* SECTIONS */
+    .section {
+      padding:70px 0;
+    }
+    .section-alt {
+      background:radial-gradient(circle at top, rgba(15,23,42,0.92), #020617 55%);
+    }
+    .section-header {
+      margin-bottom:26px;
+    }
+    .section-tag {
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-size:.75rem;
+      color:var(--muted);
+    }
+    .section-header h2 {
+      margin:6px 0 6px;
+      font-size:1.6rem;
+    }
+    .section-header p {
+      margin:0;
+      color:var(--muted);
+      max-width:520px;
+      font-size:.9rem;
+    }
+
+    /* CARDS & COMMON */
+    .glass {
+      background:var(--card);
+      border-radius:var(--radius-lg);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow-soft);
+      backdrop-filter:blur(var(--blur));
+    }
+    .lead { font-size:.98rem;margin-top:0; }
+    .list {
+      padding-left:18px;
+      margin:8px 0 0;
+      font-size:.9rem;
+    }
+    .list li + li { margin-top:4px; }
+
+    /* ABOUT */
+    .about-grid {
+      display:grid;
+      grid-template-columns:minmax(0,1.6fr) minmax(0,1.1fr);
+      gap:22px;
+    }
+    .about-main {
+      padding:22px 22px;
+    }
+    .about-side {
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+    .mini-card {
+      padding:16px 18px;
+      background:rgba(15,23,42,0.96);
+      border-radius:var(--radius-lg);
+      border:1px solid rgba(148,163,184,0.45);
+    }
+    .pill-inline {
+      display:inline-flex;
+      padding:3px 8px;
+      font-size:.75rem;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.6);
+      color:var(--muted);
+    }
+
+    /* IMPACT */
+    .impact-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+      gap:16px;
+    }
+    .impact-card {
+      padding:18px 18px;
+      background:rgba(15,23,42,0.96);
+    }
+    .impact-num {
+      margin:0 0 4px;
+      font-size:1.6rem;
+      font-weight:700;
+    }
+    .impact-card p { font-size:.9rem;margin:4px 0 0;color:var(--muted); }
+
+    /* TIMELINE */
+    .timeline {
+      border-left:1px solid rgba(75,85,99,0.92);
+      margin-left:10px;
+      padding-left:16px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    .tl-item { position:relative; }
+    .tl-year {
+      position:absolute;
+      left:-70px;
+      top:18px;
+      font-size:.8rem;
+      color:var(--muted);
+    }
+    .tl-card {
+      padding:18px 20px;
+      background:rgba(15,23,42,0.96);
+      border-radius:var(--radius-lg);
+      border:1px solid rgba(148,163,184,0.4);
+    }
+    .tl-org {
+      margin:4px 0 8px;
+      font-size:.9rem;
+      color:var(--muted);
+    }
+
+    /* PROJECTS */
+    .projects-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:18px;
+    }
+    .project-card {
+      padding:18px 18px 20px;
+      background:rgba(15,23,42,0.96);
+      position:relative;
+      overflow:hidden;
+    }
+    .project-card::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:radial-gradient(circle at top right, rgba(56,189,248,0.18), transparent 55%);
+      opacity:0;
+      transition:opacity .2s ease;
+      pointer-events:none;
+    }
+    .project-card:hover::before { opacity:1; }
+    .project-tag {
+      font-size:.75rem;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:var(--accent);
+      margin-bottom:6px;
+    }
+    .project-card h3 {
+      margin:2px 0 6px;
+      font-size:1.05rem;
+    }
+    .project-card p {
+      margin:0 0 12px;
+      font-size:.9rem;
+      color:var(--muted);
+    }
+    .chips {
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+    }
+    .chip {
+      font-size:.75rem;
+      padding:4px 9px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.5);
+      background:rgba(15,23,42,0.98);
+    }
+
+    /* CERTIFICATIONS */
+    .cert-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:14px;
+    }
+    .cert-card {
+      padding:16px 18px;
+      background:rgba(15,23,42,0.96);
+      border-radius:var(--radius-lg);
+      border:1px solid rgba(148,163,184,0.4);
+    }
+    .cert-card h3 {
+      margin:0 0 4px;
+      font-size:.98rem;
+    }
+    .cert-card p {
+      margin:0;
+      font-size:.86rem;
+      color:var(--muted);
+    }
+
+    /* CONTACT */
+    .contact-layout {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);
+      gap:18px;
+      align-items:flex-start;
+    }
+    .contact-info {
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .info-card {
+      padding:14px 16px;
+      background:rgba(15,23,42,0.96);
+      border-radius:var(--radius-lg);
+      border:1px solid rgba(148,163,184,0.4);
+    }
+    .info-card a { font-size:.9rem; }
+    .contact-form {
+      padding:18px 18px 20px;
+      background:rgba(15,23,42,0.96);
+      border-radius:var(--radius-lg);
+      border:1px solid rgba(148,163,184,0.4);
+    }
+    .form-group { margin-bottom:12px; }
+    .form-group label {
+      display:block;
+      font-size:.85rem;
+      margin-bottom:4px;
+    }
+    input,textarea {
+      width:100%;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid rgba(75,85,99,0.95);
+      background:#020617;
+      color:var(--text);
+      font-family:inherit;
+      font-size:.9rem;
+    }
+    input:focus-visible,textarea:focus-visible {
+      outline:2px solid var(--accent);
+      outline-offset:2px;
+      border-color:transparent;
+    }
+    .form-note {
+      margin:6px 0 0;
+      font-size:.8rem;
+      color:var(--muted);
+    }
+
+    /* FOOTER */
+    .footer {
+      border-top:1px solid rgba(55,65,81,0.95);
+      background:#020617;
+      padding:20px 0 30px;
+    }
+    .footer-inner { display:flex;flex-direction:column;gap:8px; }
+    .footer-name { margin:0;font-weight:600; }
+    .footer-role { margin:0;font-size:.85rem;color:var(--muted); }
+    .footer-quote { margin:6px 0 0;font-size:.9rem;color:var(--muted); }
+    .footer-meta { margin:4px 0 0;font-size:.75rem;color:var(--muted); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-inner { padding-block:8px; }
+      .mobile-toggle { display:flex; }
+      .nav-menu {
+        position:absolute;
+        inset-inline:0;
+        top:52px;
+        background:rgba(15,23,42,0.98);
+        flex-direction:column;
+        padding:10px 16px 12px;
+        max-height:0;
+        overflow:hidden;
+        transition:max-height .18s ease;
+      }
+      .nav-menu.open { max-height:260px; }
+      .hero { padding-top:60px; }
+      .section { padding:54px 0; }
+      .about-grid,.contact-layout {
+        grid-template-columns:minmax(0,1fr);
+      }
+      .timeline { margin-left:0;padding-left:12px; }
+      .tl-year { left:-60px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <div class="nav-brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <p class="logo">ASHUTOSH SINGHAL</p>
+        <p class="logo-sub">Accessibility Strategist</p>
+      </div>
+
+      <button class="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-menu" role="menubar">
+        <li role="none"><a role="menuitem" href="#home">Home</a></li>
+        <li role="none"><a role="menuitem" href="#about">About</a></li>
+        <li role="none"><a role="menuitem" href="#impact">Impact</a></li>
+        <li role="none"><a role="menuitem" href="#experience">Experience</a></li>
+        <li role="none"><a role="menuitem" href="#projects">Projects</a></li>
+        <li role="none"><a role="menuitem" href="#contact" class="cta-nav">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- HERO -->
+    <section id="home" class="hero">
+      <div class="container hero-inner">
+        <div class="hero-intro">
+          <span class="pill">
+            <span class="pill-dot"></span>
+            Accessibility · Policy · Impact
+          </span>
+          <h1 class="hero-title">
+            Turning <span class="gradient-text">accessibility mandates</span> into
+            <span class="gradient-text">measurable business value</span>
+          </h1>
+          <p class="hero-sub">
+            Accessibility Strategist & Inclusive Innovation Consultant with 5+ years of experience in digital inclusion,
+            government policy compliance, and large‑scale accessibility ecosystems, impacting millions of users across India.
+          </p>
+
+          <div class="hero-stats" aria-label="Key impact stats">
+            <div class="stat">
+              <p class="stat-num">800+</p>
+              <p class="stat-label">Advocacy community members</p>
+            </div>
+            <div class="stat">
+              <p class="stat-num">5M+</p>
+              <p class="stat-label">Users reached via app improvements</p>
+            </div>
+            <div class="stat">
+              <p class="stat-num">5+</p>
+              <p class="stat-label">Years in accessibility leadership</p>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary">Partner with Ashutosh</a>
+            <a href="#projects" class="btn btn-ghost">Explore flagship work</a>
+          </div>
+
+          <p class="hero-cred">
+            Collaborating with government bodies, universities, NGOs, and international forums on accessibility‑first transformation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-tag">About</span>
+          <h2>Accessibility as innovation, not afterthought</h2>
+          <p>
+            Ashutosh combines lived experience as a person with visual impairment with professional consulting expertise to
+            design accessibility that works for real users and real organizations.
+          </p>
+        </header>
+
+        <div class="about-grid">
+          <article class="about-main glass">
+            <p class="lead">
+              Working at the intersection of regulation, technology, and lived experience, Ashutosh specializes in building accessibility programs that are compliant, scalable, and strategically valuable.
+            </p>
+            <p>
+              His practice focuses on translating WCAG 2.1, RPWD Act mandates, and inclusive design into frameworks that reduce legal risk, open new markets, and show authentic commitment to disability inclusion.
+            </p>
+            <h3>Core capabilities</h3>
+            <ul class="list">
+              <li>Digital accessibility auditing (WCAG 2.0/2.1 A/AA/AAA) across web and mobile products.</li>
+              <li>Inclusive curriculum and assessment design for large‑scale education initiatives.</li>
+              <li>Government accessibility policy analysis, documentation, and implementation support.</li>
+              <li>Stakeholder alignment across PWDs, NGOs, corporates, and regulators.</li>
+              <li>Assistive technology–centered consulting with strong screen‑reader proficiency.</li>
+              <li>Bilingual strategy for English and Hindi digital ecosystems.</li>
+            </ul>
+          </article>
+
+          <div class="about-side">
+            <article class="mini-card">
+              <h3>Recognitions & visibility</h3>
+              <ul class="list">
+                <li>Disability Rights Champion Award – Mission Accessibility (2024).</li>
+                <li>Media coverage in Lokmat Newspaper and CNN for accessibility advocacy.</li>
+                <li>Panelist at Change Maker 20 G20 and speaker on Radio Udaan.</li>
+              </ul>
+            </article>
+
+            <article class="mini-card">
+              <h3>Academic foundation</h3>
+              <ul class="list">
+                <li>M.A. Political Science – Hindu College, University of Delhi.</li>
+                <li>B.A. (Hons) Political Science – Shyam Lal College, University of Delhi.</li>
+                <li>First student nationally to complete BA & MA Political Science via Hindi‑language computer typing at Delhi University.</li>
+              </ul>
+            </article>
+
+            <article class="mini-card">
+              <h3>Working languages & tools</h3>
+              <p class="pill-inline">English · Hindi · VoiceOver · WCAG · AI productivity tools</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMPACT -->
+    <section id="impact" class="section section-alt">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-tag">Impact</span>
+          <h2>From policy text to people’s lives</h2>
+          <p>
+            A consistent focus on measurable outcomes ensures that accessibility is felt by users, not just written into documents.
+          </p>
+        </header>
+
+        <div class="impact-grid">
+          <article class="impact-card glass">
+            <p class="impact-num">800+</p>
+            <h3>Advocacy ecosystem</h3>
+            <p>
+              Built and leads an accessibility advocacy network of more than 800 active members across WhatsApp communities and a Google Group, connecting PWDs, NGOs, officials, and technologists.
+            </p>
+          </article>
+
+          <article class="impact-card glass">
+            <p class="impact-num">3</p>
+            <h3>Government apps influenced</h3>
+            <p>
+              Contributed to accessibility improvements in critical government platforms such as Sugamya Bharat, UMANG, and CCPD proceedings, improving usability and compliance.
+            </p>
+          </article>
+
+          <article class="impact-card glass">
+            <p class="impact-num">100+</p>
+            <h3>Professionals trained</h3>
+            <p>
+              Designed and delivered webinars, workshops, and train‑the‑trainer programs that embed accessibility skills within institutions and companies.
+            </p>
+          </article>
+
+          <article class="impact-card glass">
+            <p class="impact-num">1st</p>
+            <h3>National‑scale dialogue</h3>
+            <p>
+              Organized India’s first national dialogue on strengthening CCPD authority under the RPWD Act 2016, catalyzing collective advocacy and policy discussion.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-tag">Experience</span>
+          <h2>Selected roles & collaborations</h2>
+        </header>
+
+        <div class="timeline">
+          <article class="tl-item">
+            <p class="tl-year">2025</p>
+            <div class="tl-card glass">
+              <h3>Accessibility Consultant & Curriculum Specialist</h3>
+              <p class="tl-org">Believe in the Invisible (BITI) · Inclusive IELTS Curriculum Project</p>
+              <ul class="list">
+                <li>Architected an inclusive IELTS curriculum framework for 800+ visually impaired test‑takers with the Department of Empowerment of Persons with Disabilities.</li>
+                <li>Performed WCAG 2.1 AA–aligned audits of examination materials and documented remediation paths.</li>
+                <li>Helped embed accessibility at the design stage instead of relying on reactive fixes.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="tl-item">
+            <p class="tl-year">2025</p>
+            <div class="tl-card glass">
+              <h3>Digital Accessibility Tester & Auditor</h3>
+              <p class="tl-org">Mission Accessibility · Whose Knowledge Project · Belongg</p>
+              <ul class="list">
+                <li>Audited high‑traffic portals such as UMANG and Dainik Jagran, affecting over 5 million users.</li>
+                <li>Logged and prioritized more than 40 accessibility barriers with practical guidance for engineering teams.</li>
+                <li>Evaluated mainstream consumer apps including Zomato, Swiggy, and DigiLocker from screen‑reader and low‑vision perspectives.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="tl-item">
+            <p class="tl-year">2024</p>
+            <div class="tl-card glass">
+              <h3>Accessibility Standards Project Volunteer</h3>
+              <p class="tl-org">NALSAR University of Law, Centre for Disability Studies</p>
+              <ul class="list">
+                <li>Supported the Supreme Court matter Rajiv Raturi v. Union of India through structured accessibility assessments of government websites.</li>
+                <li>Provided technical inputs that contributed to judicial understanding of digital accessibility duties.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="tl-item">
+            <p class="tl-year">2024</p>
+            <div class="tl-card glass">
+              <h3>Trainer – Computer Fundamentals & Accessibility</h3>
+              <p class="tl-org">STMicroelectronics Foundation India · Train‑the‑Trainer Program</p>
+              <ul class="list">
+                <li>Delivered a three‑week intensive program for 25+ trainers on accessible computer usage for visually impaired learners.</li>
+                <li>Created standardized materials that enabled a cascading impact across more than 600 indirect beneficiaries.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="tl-item">
+            <p class="tl-year">2020 – Present</p>
+            <div class="tl-card glass">
+              <h3>Community Mobilization & Network Development Lead</h3>
+              <p class="tl-org">Self‑initiated accessibility advocacy ecosystem</p>
+              <ul class="list">
+                <li>Built and sustained an 800+ member network linking PWDs, NGOs, officials, and tech professionals.</li>
+                <li>Advocacy contributed to the creation of Samsung Innovation Lab 54 for assistive technology.</li>
+                <li>Convened expert conversations on training gaps, IAAP pathways, and accessibility service discovery.</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section section-alt">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-tag">Case studies</span>
+          <h2>Flagship accessibility initiatives</h2>
+        </header>
+
+        <div class="projects-grid">
+          <article class="project-card glass">
+            <p class="project-tag">Legal & Policy</p>
+            <h3>Supreme Court digital accessibility project</h3>
+            <p>
+              Supported the Rajiv Raturi v. Union of India matter through structured audits of government websites, contributing to one of India’s early efforts to frame digital accessibility as a rights‑based obligation.
+            </p>
+            <div class="chips">
+              <span class="chip">WCAG audits</span>
+              <span class="chip">Government portals</span>
+              <span class="chip">Policy insight</span>
+            </div>
+          </article>
+
+          <article class="project-card glass">
+            <p class="project-tag">Education</p>
+            <h3>Inclusive IELTS curriculum for visually impaired learners</h3>
+            <p>
+              Co‑created an accessibility‑first exam experience for hundreds of visually impaired candidates, aligning test delivery with assistive technology and government mandates.
+            </p>
+            <div class="chips">
+              <span class="chip">800+ candidates</span>
+              <span class="chip">Curriculum design</span>
+              <span class="chip">Govt collaboration</span>
+            </div>
+          </article>
+
+          <article class="project-card glass">
+            <p class="project-tag">Corporate & Innovation</p>
+            <h3>Samsung Innovation Lab 54 advocacy</h3>
+            <p>
+              Provided focused feedback on accessibility gaps that helped motivate the establishment of a dedicated innovation lab centered on assistive technologies and inclusive design.
+            </p>
+            <div class="chips">
+              <span class="chip">Corporate impact</span>
+              <span class="chip">Assistive tech</span>
+              <span class="chip">Strategic advocacy</span>
+            </div>
+          </article>
+
+          <article class="project-card glass">
+            <p class="project-tag">Platforms</p>
+            <h3>Government & consumer app accessibility audits</h3>
+            <p>
+              Evaluated government and consumer apps including UMANG, Zomato, Swiggy, and DigiLocker with specific attention to screen‑reader flows, navigation patterns, and error prevention.
+            </p>
+            <div class="chips">
+              <span class="chip">5M+ users</span>
+              <span class="chip">40+ issues surfaced</span>
+              <span class="chip">Continuous improvement</span>
+            </div>
+          </article>
+
+          <article class="project-card glass">
+            <p class="project-tag">Advocacy</p>
+            <h3>National dialogue on CCPD authority</h3>
+            <p>
+              Convened India’s first national‑level conversation on strengthening the Chief Commissioner for Persons with Disabilities, aligning civil society, practitioners, and policy voices.
+            </p>
+            <div class="chips">
+              <span class="chip">500+ stakeholders</span>
+              <span class="chip">RPWD Act 2016</span>
+              <span class="chip">Policy dialogue</span>
+            </div>
+          </article>
+
+          <article class="project-card glass">
+            <p class="project-tag">Community</p>
+            <h3>Accessibility advocacy network</h3>
+            <p>
+              Continues to maintain a multi‑channel ecosystem that serves as both feedback loop for institutions and peer‑support space for persons with disabilities.
+            </p>
+            <div class="chips">
+              <span class="chip">800+ members</span>
+              <span class="chip">Network design</span>
+              <span class="chip">Ongoing impact</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section class="section">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-tag">Growth</span>
+          <h2>Certifications & continuous learning</h2>
+        </header>
+
+        <div class="cert-grid">
+          <article class="cert-card glass">
+            <h3>Audio Description Pilot Training</h3>
+            <p>AM Media & Sports · IIT Madras · ARC · 2025.</p>
+          </article>
+
+          <article class="cert-card glass">
+            <h3>Internet Governance Leadership Program for PWDs</h3>
+            <p>Internet Society Accessibility Standing Group · 2025.</p>
+          </article>
+
+          <article class="cert-card glass">
+            <h3>Digital Accessible Bharat Conference</h3>
+            <p>International conference participation on digital accessibility in India · 2025.</p>
+          </article>
+
+          <article class="cert-card glass">
+            <h3>AI & productivity credentials</h3>
+            <p>ChatGPT proficiency, NIIT & UNICEF Digital Productivity, HR, Computer Applications, and Mobile Technology certifications.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section section-alt">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-tag">Contact</span>
+          <h2>Let’s build accessible futures</h2>
+          <p>
+            For consulting, collaborations, speaking engagements, or training, reach out using the form or the direct contact details below.
+          </p>
+        </header>
+
+        <div class="contact-layout">
+          <div class="contact-info">
+            <article class="info-card glass">
+              <h3>Email</h3>
+              <a href="mailto:ashutoshsinghal009@gmail.com">ashutoshsinghal009@gmail.com</a>
+            </article>
+
+            <article class="info-card glass">
+              <h3>Phone</h3>
+              <a href="tel:+918076798104">+91 8076798104</a>
+            </article>
+
+            <article class="info-card glass">
+              <h3>Location</h3>
+              <p>Delhi, India · Open to relocation.</p>
+            </article>
+          </div>
+
+          <form class="contact-form" id="contactForm" novalidate>
+            <div class="form-group">
+              <label for="name">Your name *</label>
+              <input type="text" id="name" name="name" required aria-required="true" />
+            </div>
+            <div class="form-group">
+              <label for="email">Email address *</label>
+              <input type="email" id="email" name="email" required aria-required="true" />
+            </div>
+            <div class="form-group">
+              <label for="org">Organization</label>
+              <input type="text" id="org" name="org" />
+            </div>
+            <div class="form-group">
+              <label for="message">How can Ashutosh help? *</label>
+              <textarea id="message" name="message" rows="5" required aria-required="true"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Send message</button>
+            <p class="form-note">This form is keyboard‑ and screen‑reader–friendly.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <p class="footer-name">Ashutosh Singhal</p>
+        <p class="footer-role">Accessibility Strategist & Inclusive Innovation Consultant</p>
+      </div>
+      <p class="footer-quote">
+        “Accessibility is not accommodation; it is innovation. Organizations that embed inclusive design gain resilience, new markets, and authentic social impact.”
+      </p>
+      <p class="footer-meta">© 2025 · Accessibility‑first portfolio experience.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const toggleBtn = document.querySelector(".mobile-toggle");
+    const navMenu = document.querySelector(".nav-menu");
+    if (toggleBtn && navMenu) {
+      toggleBtn.addEventListener("click", () => {
+        const open = navMenu.classList.toggle("open");
+        toggleBtn.setAttribute("aria-expanded", String(open));
+      });
+    }
+
+    // Simple client-side validation message
+    const form = document.getElementById("contactForm");
+    if (form) {
+      form.addEventListener("submit", (e) => {
+        if (!form.checkValidity()) {
+          e.preventDefault();
+          alert("Please fill in the required fields before submitting.");
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AiRUDH-Giftabled · PWD Job Assistant (Perplexity)</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #22d3ee;
+      --secondary: #a855f7;
+      --accent: #f97316;
+      --success: #10b981;
+      --bg-dark: #050816;
+      --bg-card: #0f172a;
+      --text-light: #f9fafb;
+      --text-muted: #9ca3af;
+      --border: #1f2937;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0f1629 0%, #020617 50%, #000 100%);
+      color: var(--text-light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    @keyframes slideDown { from {opacity: 0; transform: translateY(-24px);} to {opacity: 1; transform: translateY(0);} }
+    @keyframes slideUp { from {opacity: 0; transform: translateY(16px);} to {opacity: 1; transform: translateY(0);} }
+    @keyframes glow { 0%,100% { box-shadow: 0 0 20px rgba(34,211,238,0.6);} 50% { box-shadow: 0 0 35px rgba(34,211,238,1);} }
+    @keyframes pulse { 0%,100% {opacity:1;} 50%{opacity:.6;} }
+    @keyframes typing { 0%,100%{opacity:.3;} 50%{opacity:1;} }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to right, rgba(15,23,42,.97), rgba(2,6,23,.97));
+      border-bottom: 1px solid var(--border);
+      animation: slideDown .5s ease-out;
+    }
+
+    .nav {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: .9rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand { display: flex; align-items: center; gap: .75rem; }
+    .logo {
+      width: 38px; height: 38px; border-radius: 999px;
+      background: conic-gradient(from 210deg, var(--primary),var(--secondary),var(--accent),var(--primary));
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; font-weight: 800; color: #020617;
+      animation: glow 2s ease-in-out infinite;
+    }
+    .brand-main {
+      font-weight: 700; font-size: 1.2rem;
+      background: linear-gradient(135deg,var(--primary),var(--secondary));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .brand-sub { font-size: .75rem; color: var(--text-muted); }
+
+    .nav-right { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; }
+    .ai-button {
+      display:inline-flex; align-items:center; gap:.4rem;
+      padding:.45rem 1rem; border-radius:999px; border:none;
+      background: linear-gradient(135deg,#a855f7,#ec4899);
+      color:#fff; font-size:.8rem; font-weight:600; cursor:pointer;
+      box-shadow:0 4px 15px rgba(168,85,247,.4);
+      transition:transform .2s, box-shadow .2s;
+    }
+    .ai-button:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(168,85,247,.6); }
+
+    main { max-width:1300px; margin:0 auto; padding:1.75rem 1.5rem 2rem; animation:fadeIn .5s ease-out; }
+
+    .hero { text-align:center; margin-bottom:2rem; animation:slideUp .5s ease-out; }
+    .hero-title {
+      font-size: clamp(1.8rem,4vw,2.6rem); font-weight:800; margin-bottom:.6rem;
+      background: linear-gradient(135deg,var(--primary),var(--secondary),var(--accent));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    }
+    .hero-sub { font-size:.95rem; color:var(--text-muted); max-width:700px; margin:0 auto; }
+
+    .layout {
+      display:grid; grid-template-columns: minmax(0, 2fr) minmax(320px, 1.2fr);
+      gap:1.25rem; align-items:flex-start;
+    }
+    @media (max-width: 1024px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    .upload-box {
+      background: rgba(15,23,42,.85); border:2px dashed var(--border);
+      border-radius:1rem; padding:1.5rem; text-align:center;
+      margin-bottom:1.25rem; transition:all .2s ease;
+    }
+    .upload-box:hover { border-color:var(--primary); background:rgba(15,23,42,1); }
+    .upload-icon { font-size:2.5rem; margin-bottom:.4rem; }
+    input[type=file] { display:none; }
+    .file-label {
+      display:inline-block; margin-top:.6rem;
+      padding:.55rem 1.3rem; border-radius:999px; cursor:pointer;
+      background: linear-gradient(135deg,var(--primary),#0ea5e9);
+      color:#020617; font-weight:600; font-size:.85rem;
+      box-shadow:0 4px 14px rgba(34,211,238,.4); transition:all .2s;
+    }
+    .file-label:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(34,211,238,.6); }
+    .file-name { margin-top:.5rem; font-size:.8rem; color:var(--text-muted); }
+
+    .controls { margin-bottom:1rem; }
+    .search-wrap { position:relative; margin-bottom:.7rem; }
+    .search-wrap span {
+      position:absolute; left:.9rem; top:50%; transform:translateY(-50%);
+      font-size:1rem; color:var(--text-muted);
+    }
+    #searchInput {
+      width:100%; border-radius:999px; border:1px solid var(--border);
+      background: rgba(15,23,42,.9); color:var(--text-light);
+      padding:.6rem 1rem .6rem 2.6rem; font-size:.85rem;
+      transition:border-color .2s, box-shadow .2s, background .2s;
+    }
+    #searchInput:focus {
+      outline:none; border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(34,211,238,.15);
+      background:rgba(15,23,42,1);
+    }
+
+    .filters { display:flex; flex-wrap:wrap; gap:.4rem; }
+    .filter-btn {
+      border-radius:999px; padding:.35rem .75rem;
+      border:1px solid var(--border); background:rgba(15,23,42,.9);
+      color:var(--text-muted); font-size:.75rem; cursor:pointer;
+      transition:all .2s;
+    }
+    .filter-btn:hover { border-color:var(--primary); color:var(--primary); }
+    .filter-btn.active { background:var(--primary); color:#020617; border-color:var(--primary); }
+
+    .status-bar {
+      display:flex; justify-content:space-between; align-items:center;
+      flex-wrap:wrap; gap:.6rem;
+      border-radius:1rem; border:1px solid var(--border);
+      background:rgba(15,23,42,.8); padding:.7rem 1rem;
+      font-size:.8rem; margin-bottom:1rem;
+    }
+    .status-left { display:flex; align-items:center; gap:.45rem; }
+    .status-dot {
+      width:9px; height:9px; border-radius:999px;
+      background:var(--success); box-shadow:0 0 10px rgba(16,185,129,.8);
+    }
+    .status-dot.loading { background:#fbbf24; animation:pulse 1.5s infinite; }
+    .job-count {
+      padding:.25rem .7rem; border-radius:999px;
+      background: linear-gradient(135deg,var(--primary),#0ea5e9);
+      color:#020617; font-weight:700;
+    }
+
+    .cards {
+      display:grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+      gap:1rem;
+    }
+    .job-card {
+      background: linear-gradient(135deg,#0f172a,#1e293b);
+      border-radius:1rem; border:1px solid rgba(30,64,175,.6);
+      padding:1.1rem; display:flex; flex-direction:column; gap:.7rem;
+      position:relative; overflow:hidden;
+      animation:fadeIn .4s ease-out;
+      transition:transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .job-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background:linear-gradient(90deg,var(--primary),var(--secondary),var(--accent));
+      opacity:0; transition:opacity .2s;
+    }
+    .job-card:hover {
+      transform:translateY(-4px);
+      box-shadow:0 14px 36px rgba(34,211,238,.25);
+      border-color:rgba(34,211,238,.85);
+    }
+    .job-card:hover::before { opacity:1; }
+
+    .job-header { display:flex; justify-content:space-between; gap:.6rem; align-items:flex-start; }
+    .company { font-size:.98rem; font-weight:600; }
+    .pwd-badge {
+      font-size:.65rem; padding:.15rem .5rem;
+      border-radius:999px; background:rgba(16,185,129,.18);
+      border:1px solid rgba(16,185,129,.5); color:#6ee7b7;
+    }
+    .role { font-size:.85rem; color:var(--primary); font-weight:600; }
+    .tags { display:flex; flex-wrap:wrap; gap:.3rem; }
+    .tag {
+      font-size:.65rem; padding:.15rem .5rem; border-radius:999px;
+      border:1px solid rgba(34,211,238,.4);
+      background:rgba(34,211,238,.12); color:var(--primary);
+    }
+    .job-actions { display:flex; gap:.5rem; margin-top:auto; }
+    .btn {
+      flex:1; border-radius:999px; padding:.5rem .8rem;
+      border:none; font-size:.78rem; font-weight:600;
+      cursor:pointer; transition:all .2s;
+      display:inline-flex; justify-content:center; align-items:center; gap:.3rem;
+    }
+    .btn-apply {
+      background: linear-gradient(135deg,var(--primary),#0ea5e9);
+      color:#020617; box-shadow:0 4px 14px rgba(34,211,238,.4);
+    }
+    .btn-apply:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(34,211,238,.6); }
+    .btn-ai {
+      background:rgba(168,85,247,.2); color:#e9d5ff;
+      border:1px solid rgba(168,85,247,.6);
+    }
+    .btn-ai:hover { background:rgba(168,85,247,.3); transform:translateY(-1px); }
+
+    .empty {
+      text-align:center; padding:2.5rem 1rem; color:var(--text-muted); font-size:.85rem;
+    }
+
+    .chat-panel {
+      position:sticky; top:80px;
+      background: linear-gradient(135deg,#0f172a,#1e293b);
+      border-radius:1.2rem; border:1px solid rgba(168,85,247,.6);
+      padding:1.1rem; display:flex; flex-direction:column; gap:.7rem;
+      max-height:calc(100vh - 100px);
+    }
+    @media (max-width:1024px) {
+      .chat-panel { position:relative; top:0; max-height:520px; }
+    }
+    .chat-header { display:flex; align-items:center; gap:.6rem; padding-bottom:.5rem; border-bottom:1px solid var(--border); }
+    .chat-avatar {
+      width:34px; height:34px; border-radius:999px;
+      background:linear-gradient(135deg,#a855f7,#ec4899);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .chat-title h3 { font-size:.95rem; margin-bottom:.1rem; }
+    .chat-title p { font-size:.72rem; color:var(--text-muted); }
+
+    .chat-body {
+      flex:1; overflow-y:auto; padding-right:.4rem; font-size:.8rem;
+    }
+    .chat-body::-webkit-scrollbar{ width:5px; }
+    .chat-body::-webkit-scrollbar-thumb{ background:var(--secondary); border-radius:999px; }
+
+    .msg { margin-bottom:.6rem; }
+    .msg.assistant .bubble {
+      background:rgba(168,85,247,.16);
+      border:1px solid rgba(168,85,247,.35);
+      border-radius:.8rem;
+      padding:.55rem .75rem;
+    }
+    .msg.user { text-align:right; }
+    .msg.user .bubble {
+      display:inline-block;
+      background:linear-gradient(135deg,var(--primary),#0ea5e9);
+      color:#020617;
+      border-radius:.8rem;
+      padding:.55rem .75rem;
+      max-width:90%;
+    }
+    .typing {
+      display:inline-flex; gap:.2rem; padding:.45rem .6rem;
+      border-radius:.8rem; background:rgba(168,85,247,.18);
+      border:1px solid rgba(168,85,247,.4);
+    }
+    .typing span {
+      width:7px; height:7px; border-radius:999px;
+      background:var(--secondary); animation:typing 1.3s infinite;
+    }
+    .typing span:nth-child(2){ animation-delay:.15s;}
+    .typing span:nth-child(3){ animation-delay:.3s;}
+
+    .quick { display:flex; flex-wrap:wrap; gap:.35rem; }
+    .quick button {
+      border-radius:999px; border:1px solid rgba(168,85,247,.5);
+      background:rgba(168,85,247,.18); color:#e9d5ff;
+      font-size:.72rem; padding:.25rem .6rem; cursor:pointer;
+      transition:all .2s;
+    }
+    .quick button:hover { background:rgba(168,85,247,.3); transform:translateY(-1px); }
+
+    .chat-input-row { display:flex; gap:.5rem; margin-top:.4rem; }
+    #aiInput {
+      flex:1; border-radius:999px; border:1px solid var(--border);
+      background:rgba(15,23,42,.9); color:var(--text-light);
+      padding:.5rem .75rem; font-size:.8rem;
+    }
+    #aiInput:focus { outline:none; border-color:var(--secondary); box-shadow:0 0 0 3px rgba(168,85,247,.18); }
+    #aiSendBtn {
+      width:38px; height:38px; border-radius:999px; border:none;
+      background:linear-gradient(135deg,var(--secondary),#ec4899);
+      color:#fff; cursor:pointer; font-size:1rem;
+      display:flex; align-items:center; justify-content:center;
+      transition:transform .2s, opacity .2s;
+    }
+    #aiSendBtn:disabled { opacity:.4; cursor:not-allowed; }
+    #aiSendBtn:not(:disabled):hover { transform:scale(1.06); }
+
+    .sr-only {
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); border:0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="brand">
+        <div class="logo">AG</div>
+        <div>
+          <div class="brand-main">AiRUDH-Giftabled</div>
+          <div class="brand-sub">AI-Powered Job Helper for PWDs</div>
+        </div>
+      </div>
+      <div class="nav-right">
+        <button class="ai-button" type="button" onclick="document.getElementById('aiInput').focus()">
+          <span>🤖</span><span>Ask Job AI</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title" class="hero-title">One place for jobs, accessibility, and AI help</h1>
+      <p class="hero-sub">
+        Upload job sheets, explore roles, and let the AI assistant guide PWDs step‑by‑step through applying, preparing, and asking for accommodations.
+      </p>
+    </section>
+
+    <div class="layout">
+      <div>
+        <section class="upload-box" aria-labelledby="upload-title">
+          <div class="upload-icon">📂</div>
+          <h2 id="upload-title" style="font-size:1rem; margin-bottom:.3rem;">Job list CSV</h2>
+          <p style="font-size:.8rem; color:var(--text-muted);">
+            Upload a CSV where column 2 = company name and column 3 = job / JD.
+          </p>
+          <input id="csvFile" type="file" accept=".csv" />
+          <label class="file-label" for="csvFile">Choose CSV file</label>
+          <div id="fileName" class="file-name">No file selected</div>
+        </section>
+
+        <section class="controls" aria-label="Search and filters">
+          <div class="search-wrap">
+            <span>🔍</span>
+            <input id="searchInput" type="search" placeholder="Search by company, role, technology, accessibility..." />
+          </div>
+          <div class="filters">
+            <button class="filter-btn active" data-filter="all" type="button">All</button>
+            <button class="filter-btn" data-filter="ai" type="button">AI/ML</button>
+            <button class="filter-btn" data-filter="developer" type="button">Developer</button>
+            <button class="filter-btn" data-filter="intern" type="button">Intern</button>
+            <button class="filter-btn" data-filter="analyst" type="button">Analyst</button>
+            <button class="filter-btn" data-filter="python" type="button">Python</button>
+            <button class="filter-btn" data-filter="java" type="button">Java</button>
+            <button class="filter-btn" data-filter="remote" type="button">Remote</button>
+          </div>
+        </section>
+
+        <section class="status-bar" aria-live="polite">
+          <div class="status-left">
+            <span id="statusDot" class="status-dot"></span>
+            <span id="statusText">Upload a CSV or start typing to search.</span>
+          </div>
+          <span id="jobCount" class="job-count">0 jobs</span>
+        </section>
+
+        <section aria-label="Job list">
+          <div id="jobsContainer" class="cards"></div>
+          <div id="emptyState" class="empty" style="display:none;">
+            No matching jobs. Change filters or ask the AI on the right for help.
+          </div>
+        </section>
+      </div>
+
+      <aside class="chat-panel" aria-label="AI job assistant">
+        <div class="chat-header">
+          <div class="chat-avatar">🤖</div>
+          <div class="chat-title">
+            <h3>Job Assistant (Perplexity)</h3>
+            <p>Ask anything about jobs, CV, accessibility, or specific roles.</p>
+          </div>
+        </div>
+
+        <div id="aiMessages" class="chat-body" aria-live="polite">
+          <div class="msg assistant">
+            <div class="bubble">
+              Hi, this assistant is here for PWD job support. Ask for: role suggestions, CV help, cover letters, or how to request accommodations.
+            </div>
+          </div>
+        </div>
+
+        <div class="quick" aria-label="Quick questions">
+          <button type="button" onclick="sendQuick('Suggest beginner‑friendly jobs in this list for a fresher PWD.')">Suggest easy roles</button>
+          <button type="button" onclick="sendQuick('Write a short email to request reasonable accommodations for my disability during interview.')">Accommodations email</button>
+          <button type="button" onclick="sendQuick('Give interview prep tips for a Python developer fresher role.')">Interview tips</button>
+        </div>
+
+        <div class="chat-input-row">
+          <label class="sr-only" for="aiInput">Ask the AI assistant</label>
+          <input id="aiInput" type="text" placeholder="Ask about jobs, CV, accessibility..." onkeydown="if(event.key==='Enter'){event.preventDefault(); sendMessage();}" />
+          <button id="aiSendBtn" type="button" onclick="sendMessage()">➤</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    // ===== Job data state =====
+    let allJobs = [];
+    let currentFilter = 'all';
+
+    const csvFile = document.getElementById('csvFile');
+    const fileNameEl = document.getElementById('fileName');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const jobCountEl = document.getElementById('jobCount');
+    const jobsContainer = document.getElementById('jobsContainer');
+    const emptyState = document.getElementById('emptyState');
+    const searchInput = document.getElementById('searchInput');
+
+    csvFile.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      fileNameEl.textContent = file.name;
+      readCSVFile(file);
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderJobs();
+      });
+    });
+
+    searchInput.addEventListener('input', () => {
+      renderJobs();
+    });
+
+    function setStatus(msg, loading = false) {
+      statusText.textContent = msg;
+      if (loading) statusDot.classList.add('loading');
+      else statusDot.classList.remove('loading');
+    }
+
+    function readCSVFile(file) {
+      setStatus('Reading CSV...', true);
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const text = ev.target.result;
+          const rows = parseCSV(text);
+          allJobs = mapRowsToJobs(rows);
+          setStatus(`Loaded ${allJobs.length} jobs from CSV.`, false);
+          renderJobs();
+        } catch (err) {
+          console.error('CSV parse error', err);
+          setStatus('Error reading CSV. Check console for details.', false);
+          allJobs = [];
+          renderJobs();
+        }
+      };
+      reader.onerror = () => {
+        console.error('FileReader error', reader.error);
+        setStatus('Failed to read file. Try again.', false);
+      };
+      reader.readAsText(file);
+    }
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [], cell = '', inQuotes = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i], next = text[i + 1];
+        if (c === '"' && inQuotes && next === '"') { cell += '"'; i++; }
+        else if (c === '"') { inQuotes = !inQuotes; }
+        else if (c === ',' && !inQuotes) { row.push(cell); cell = ''; }
+        else if ((c === '\n' || c === '\r') && !inQuotes) {
+          if (cell || row.length) { row.push(cell); rows.push(row); row = []; cell = ''; }
+        } else cell += c;
+      }
+      if (cell || row.length) { row.push(cell); rows.push(row); }
+      return rows;
+    }
+
+    function mapRowsToJobs(rows) {
+      const jobs = [];
+      for (let i = 1; i < rows.length; i++) {
+        const r = rows[i];
+        if (!r || r.length < 3) continue;
+        const company = (r[1] || '').trim();
+        const role = (r[2] || '').trim().replace(/\n/g, ' ');
+        if (!company && !role) continue;
+        jobs.push({
+          company: company || 'Unknown company',
+          role: role || 'Role not specified',
+          tags: extractTags(company + ' ' + role)
+        });
+      }
+      return jobs;
+    }
+
+    function extractTags(text) {
+      const t = text.toLowerCase();
+      const tags = [];
+      if (t.includes('intern')) tags.push('Internship');
+      if (/\bai\b|\bml\b|machine learning/.test(t)) tags.push('AI/ML');
+      if (t.includes('python')) tags.push('Python');
+      if (t.includes('java') && !t.includes('javascript')) tags.push('Java');
+      if (/javascript|\bjs\b|react|angular|vue/.test(t)) tags.push('Frontend');
+      if (/developer|engineer/.test(t)) tags.push('Developer');
+      if (t.includes('analyst')) tags.push('Analyst');
+      if (/fullstack|full stack|fsd/.test(t)) tags.push('Full Stack');
+      if (t.includes('remote')) tags.push('Remote');
+      if (t.includes('fresher')) tags.push('Fresher');
+      return [...new Set(tags)].slice(0, 3);
+    }
+
+    function filteredJobs() {
+      const q = searchInput.value.toLowerCase().trim();
+      return allJobs.filter(j => {
+        const text = (j.company + ' ' + j.role).toLowerCase();
+        const matchesSearch = !q || text.includes(q);
+        const matchesFilter = currentFilter === 'all' ||
+          j.tags.some(tag => tag.toLowerCase().includes(currentFilter)) ||
+          text.includes(currentFilter);
+        return matchesSearch && matchesFilter;
+      });
+    }
+
+    function renderJobs() {
+      const jobs = filteredJobs();
+      jobsContainer.innerHTML = '';
+      jobCountEl.textContent = `${jobs.length} jobs`;
+
+      if (!jobs.length) {
+        emptyState.style.display = 'block';
+        return;
+      }
+      emptyState.style.display = 'none';
+
+      jobs.forEach(job => {
+        const card = document.createElement('article');
+        card.className = 'job-card';
+        const tagsHtml = job.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+        card.innerHTML = `
+          <div class="job-header">
+            <div class="company">${escapeHtml(job.company)}</div>
+            <div class="pwd-badge">♿ PWD friendly (guided)</div>
+          </div>
+          <div class="role">${escapeHtml(job.role)}</div>
+          ${tagsHtml ? `<div class="tags">${tagsHtml}</div>` : ''}
+          <div class="job-actions">
+            <button class="btn btn-apply" type="button" onclick="openSearch('${escapeHtml(job.company)}','${escapeHtml(job.role)}')">
+              🔗 Apply / Search
+            </button>
+            <button class="btn btn-ai" type="button" onclick="askForJobHelp('${escapeHtml(job.company)}','${escapeHtml(job.role)}')">
+              🤖 AI help
+            </button>
+          </div>
+        `;
+        jobsContainer.appendChild(card);
+      });
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function openSearch(company, role) {
+      const q = encodeURIComponent(company + ' ' + role + ' careers apply');
+      window.open('https://www.google.com/search?q=' + q, '_blank');
+    }
+
+    function askForJobHelp(company, role) {
+      const msg = `Help me understand and apply for the role "${role}" at "${company}". Give steps and tips suitable for a PWD candidate.`;
+      aiInput.value = msg;
+      sendMessage();
+    }
+
+    // ===== AI chat state =====
+    const aiMessages = document.getElementById('aiMessages');
+    const aiInput = document.getElementById('aiInput');
+    const aiSendBtn = document.getElementById('aiSendBtn');
+
+    function addChatMessage(role, text) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + role;
+      div.innerHTML = `<div class="bubble">${escapeHtml(text).replace(/\n/g,'<br>')}</div>`;
+      aiMessages.appendChild(div);
+      aiMessages.scrollTop = aiMessages.scrollHeight;
+    }
+
+    function addTyping() {
+      const id = 'typing-' + Date.now();
+      const div = document.createElement('div');
+      div.className = 'msg assistant';
+      div.id = id;
+      div.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
+      aiMessages.appendChild(div);
+      aiMessages.scrollTop = aiMessages.scrollHeight;
+      return id;
+    }
+
+    function removeTyping(id) {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    }
+
+    async function sendMessage() {
+      const text = aiInput.value.trim();
+      if (!text) return;
+      addChatMessage('user', text);
+      aiInput.value = '';
+      aiSendBtn.disabled = true;
+
+      const typingId = addTyping();
+
+      try {
+        const jobsContext = allJobs.slice(0, 12).map(j => `${j.company} – ${j.role}`).join('; ');
+        const payload = {
+          message: text,
+          jobsContext
+        };
+
+        const res = await fetch('/api/perplexity-chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          console.error('Perplexity backend error status', res.status);
+          throw new Error('Backend returned ' + res.status);
+        }
+
+        const data = await res.json();
+        const reply = data.reply || 'Sorry, something went wrong. Try again.';
+        removeTyping(typingId);
+        addChatMessage('assistant', reply);
+      } catch (err) {
+        console.error('AI request error', err);
+        removeTyping(typingId);
+        addChatMessage('assistant', 'There was an error talking to the AI service. Please check your internet or ask again.');
+      } finally {
+        aiSendBtn.disabled = false;
+        aiInput.focus();
+      }
+    }
+
+    function sendQuick(text) {
+      aiInput.value = text;
+      sendMessage();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AiRUDH-Giftabled - AI-Powered Accessible Job Platform for PWDs</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #22d3ee;
+      --secondary: #a855f7;
+      --accent: #f97316;
+      --success: #10b981;
+      --bg-dark: #050816;
+      --bg-card: #0f172a;
+      --text-light: #f9fafb;
+      --text-muted: #9ca3af;
+      --border: #1f2937;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #0f1629 0%, #020617 50%, #000 100%);
+      color: var(--text-light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(34, 211, 238, 0.6); }
+      50% { box-shadow: 0 0 35px rgba(34, 211, 238, 1); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes typing {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to right, rgba(15, 23, 42, 0.97), rgba(2, 6, 23, 0.97));
+      border-bottom: 1px solid var(--border);
+      animation: slideDown 0.6s ease-out;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: conic-gradient(from 210deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #020617;
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    .brand-text-main {
+      font-weight: 700;
+      font-size: 1.3rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .brand-text-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-weight: 600;
+      white-space: nowrap;
+      animation: fadeIn 1s ease-out 0.3s both;
+    }
+
+    .ai-assistant-btn {
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .ai-assistant-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(168, 85, 247, 0.6);
+    }
+
+    /* Main Layout */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      animation: fadeIn 0.8s ease-out 0.2s both;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      animation: slideUp 0.7s ease-out 0.3s both;
+    }
+
+    .hero-title {
+      font-size: clamp(1.75rem, 5vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.2rem);
+      color: var(--text-muted);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Two Column Layout */
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .main-content {
+      animation: slideUp 0.7s ease-out 0.4s both;
+    }
+
+    /* AI Chat Assistant */
+    .ai-chat-panel {
+      position: sticky;
+      top: 90px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      max-height: calc(100vh - 120px);
+      display: flex;
+      flex-direction: column;
+      animation: slideUp 0.7s ease-out 0.5s both;
+      box-shadow: 0 10px 40px rgba(168, 85, 247, 0.2);
+    }
+
+    .ai-chat-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ai-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    .ai-chat-title {
+      flex: 1;
+    }
+
+    .ai-chat-title h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .ai-chat-title p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .ai-messages {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+      padding-right: 0.5rem;
+      max-height: 450px;
+    }
+
+    .ai-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .ai-messages::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    .ai-messages::-webkit-scrollbar-thumb {
+      background: var(--secondary);
+      border-radius: 10px;
+    }
+
+    .ai-message {
+      margin-bottom: 1rem;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    .ai-message.user {
+      text-align: right;
+    }
+
+    .ai-message-content {
+      display: inline-block;
+      padding: 0.75rem 1rem;
+      border-radius: 1rem;
+      max-width: 85%;
+      word-wrap: break-word;
+    }
+
+    .ai-message.user .ai-message-content {
+      background: linear-gradient(135deg, var(--primary), #0ea5e9);
+      color: #020617;
+      font-weight: 500;
+    }
+
+    .ai-message.assistant .ai-message-content {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: var(--text-light);
+      text-align: left;
+    }
+
+    .ai-typing {
+      display: flex;
+      gap: 0.3rem;
+      padding: 0.75rem 1rem;
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 1rem;
+      display: inline-block;
+    }
+
+    .ai-typing span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--secondary);
+      animation: typing 1.4s infinite;
+    }
+
+    .ai-typing span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .ai-typing span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .ai-quick-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .quick-action-btn {
+      padding: 0.4rem 0.8rem;
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 999px;
+      color: var(--text-light);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .quick-action-btn:hover {
+      background: rgba(168, 85, 247, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .ai-input-container {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .ai-input {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.75rem 1rem;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .ai-input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+    }
+
+    .ai-send-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--secondary), #ec4899);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ai-send-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .ai-send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Upload Section */
+    .upload-section {
+      background: rgba(15, 23, 42, 0.8);
+      border: 2px dashed var(--border);
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .upload-section:hover {
+      border-color: var(--primary);
+      background: rgba(15, 23, 42, 1);
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .file-label {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--primary), #0ea5e9);
+      color: #020617;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(34, 211, 238, 0.4);
+    }
+
+    .file-label:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(34, 211, 238, 0.6);
+    }
+
+    .file-name {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Search & Filters */
+    .controls {
+      margin-bottom: 2rem;
+    }
+
+    .search-wrapper {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      color: var(--text-muted);
+    }
+
+    input[type="search"] {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.75rem 1rem 0.75rem 3rem;
+      color: var(--text-light);
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    input[type="search"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: #020617;
+      border-color: var(--primary);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.8);
+    }
+
+    .status-dot.loading {
+      background: #fbbf24;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .job-count {
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), #0ea5e9);
+      color: #020617;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    /* Accessibility Features Badge */
+    .accessibility-features {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 1rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .accessibility-features .icon {
+      font-size: 2rem;
+    }
+
+    .accessibility-features h4 {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+      color: var(--success);
+    }
+
+    .accessibility-features p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Job Cards */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+      gap: 1.25rem;
+    }
+
+    .job-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border: 1px solid rgba(30, 64, 175, 0.5);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      animation: scaleIn 0.5s ease-out both;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .job-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .job-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(34, 211, 238, 0.3);
+      border-color: rgba(34, 211, 238, 0.8);
+    }
+
+    .job-card:hover::before {
+      opacity: 1;
+    }
+
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .company-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .pwd-friendly-badge {
+      padding: 0.25rem 0.6rem;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.6);
+      color: #6ee7b7;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .job-role {
+      font-size: 0.95rem;
+      color: var(--primary);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .job-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .meta-tag {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(34, 211, 238, 0.15);
+      border: 1px solid rgba(34, 211, 238, 0.4);
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .job-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: auto;
+    }
+
+    .apply-btn, .ai-help-btn {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .apply-btn {
+      background: linear-gradient(135deg, var(--primary), #0ea5e9);
+      color: #020617;
+      box-shadow: 0 4px 15px rgba(34, 211, 238, 0.4);
+    }
+
+    .apply-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(34, 211, 238, 0.6);
+    }
+
+    .ai-help-btn {
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.6);
+      color: #e9d5ff;
+    }
+
+    .ai-help-btn:hover {
+      background: rgba(168, 85, 247, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Stagger animations */
+    .job-card:nth-child(1) { animation-delay: 0s; }
+    .job-card:nth-child(2) { animation-delay: 0.05s; }
+    .job-card:nth-child(3) { animation-delay: 0.1s; }
+    .job-card:nth-child(4) { animation-delay: 0.15s; }
+    .job-card:nth-child(5) { animation-delay: 0.2s; }
+    .job-card:nth-child(6) { animation-delay: 0.25s; }
+    .job-card:nth-child(n+7) { animation-delay: 0.3s; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .job-actions {
+        flex-direction: column;
+      }
+      .ai-chat-panel {
+        position: relative;
+        top: 0;
+        max-height: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="brand">
+        <div class="logo">AG</div>
+        <div>
+          <div class="brand-text-main">AiRUDH-Giftabled</div>
+          <div class="brand-text-sub">AI-Powered Accessible Job Platform</div>
+        </div>
+      </div>
+      <div class="nav-right">
+        <button class="ai-assistant-btn" onclick="scrollToAI()">
+          <span>🤖</span>
+          <span>AI Assistant</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1 class="hero-title">Empowering PWDs with AI-Guided Job Search</h1>
+      <p class="hero-subtitle">
+        Accessible job opportunities with personalized AI assistance for application guidance, 
+        resume tips, and interview preparation
+      </p>
+    </div>
+
+    <div class="container">
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Accessibility Features -->
+        <div class="accessibility-features">
+          <div class="icon">♿</div>
+          <div>
+            <h4>Built for Accessibility</h4>
+            <p>Screen reader compatible, keyboard navigation, high contrast, and AI-powered assistance</p>
+          </div>
+        </div>
+
+        <!-- Upload Section -->
+        <section class="upload-section" id="uploadSection">
+          <div class="upload-icon">📂</div>
+          <h3 style="margin-bottom: 0.5rem;">Upload Job Listings CSV</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+            Or use our default opportunities for Batch 2025
+          </p>
+          <input type="file" id="csvFile" accept=".csv" />
+          <label for="csvFile" class="file-label">Choose CSV File</label>
+          <div class="file-name" id="fileName">No file selected</div>
+          <button onclick="loadDefaultJobs()" style="margin-top: 1rem; background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.6); color: #e9d5ff; padding: 0.5rem 1rem; border-radius: 999px; cursor: pointer; font-weight: 600;">
+            Load Default Jobs
+          </button>
+        </section>
+
+        <!-- Controls -->
+        <section class="controls hidden" id="controlsSection">
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input
+              type="search"
+              id="searchInput"
+              placeholder="Search by company, role, technology, or accessibility features..."
+              aria-label="Search jobs"
+            />
+          </div>
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">All Jobs</button>
+            <button class="filter-btn" data-filter="ai">AI/ML</button>
+            <button class="filter-btn" data-filter="developer">Developer</button>
+            <button class="filter-btn" data-filter="intern">Internship</button>
+            <button class="filter-btn" data-filter="analyst">Analyst</button>
+            <button class="filter-btn" data-filter="python">Python</button>
+            <button class="filter-btn" data-filter="remote">Remote</button>
+            <button class="filter-btn" data-filter="fresher">Fresher</button>
+          </div>
+        </section>
+
+        <!-- Status Bar -->
+        <section class="status-bar hidden" id="statusBar">
+          <div class="status-left">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">Ready</span>
+          </div>
+          <span class="job-count" id="jobCount">0 Jobs</span>
+        </section>
+
+        <!-- Jobs -->
+        <section>
+          <div class="cards-grid" id="jobsContainer"></div>
+          <div class="empty-state hidden" id="emptyState">
+            <div class="empty-icon">🔍</div>
+            <h3>No jobs found</h3>
+            <p>Try adjusting your search or ask our AI assistant for help</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- AI Chat Assistant -->
+      <aside class="ai-chat-panel" id="aiChatPanel">
+        <div class="ai-chat-header">
+          <div class="ai-avatar">🤖</div>
+          <div class="ai-chat-title">
+            <h3>AI Job Assistant</h3>
+            <p>Powered by Google Gemini</p>
+          </div>
+        </div>
+
+        <div class="ai-messages" id="aiMessages">
+          <div class="ai-message assistant">
+            <div class="ai-message-content">
+              Hi! I'm your AI Job Assistant. I can help you with:<br><br>
+              • Find suitable jobs<br>
+              • Write cover letters<br>
+              • Prepare for interviews<br>
+              • Resume tips<br>
+              • Accessibility accommodations<br><br>
+              How can I help you today?
+            </div>
+          </div>
+        </div>
+
+        <div class="ai-quick-actions">
+          <button class="quick-action-btn" onclick="sendQuickMessage('Help me find AI/ML jobs')">Find AI Jobs</button>
+          <button class="quick-action-btn" onclick="sendQuickMessage('Write a cover letter')">Cover Letter</button>
+          <button class="quick-action-btn" onclick="sendQuickMessage('Interview tips')">Interview Tips</button>
+        </div>
+
+        <div class="ai-input-container">
+          <input
+            type="text"
+            class="ai-input"
+            id="aiInput"
+            placeholder="Ask me anything about jobs..."
+            onkeypress="handleKeyPress(event)"
+          />
+          <button class="ai-send-btn" id="aiSendBtn" onclick="sendMessage()">
+            ➤
+          </button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    // Configuration
+    const GOOGLE_API_KEY = 'AIzaSyBS9399aOV78Kfs-_0_f3yu3vnjB8mikYQ';
+    const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GOOGLE_API_KEY}`;
+
+    // State
+    let allJobs = [];
+    let currentFilter = 'all';
+    let conversationHistory = [];
+
+    // DOM Elements
+    const csvFile = document.getElementById('csvFile');
+    const fileName = document.getElementById('fileName');
+    const uploadSection = document.getElementById('uploadSection');
+    const controlsSection = document.getElementById('controlsSection');
+    const statusBar = document.getElementById('statusBar');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const jobCount = document.getElementById('jobCount');
+    const searchInput = document.getElementById('searchInput');
+    const jobsContainer = document.getElementById('jobsContainer');
+    const emptyState = document.getElementById('emptyState');
+    const aiMessages = document.getElementById('aiMessages');
+    const aiInput = document.getElementById('aiInput');
+    const aiSendBtn = document.getElementById('aiSendBtn');
+
+    // Event Listeners
+    csvFile.addEventListener('change', handleFileSelect);
+    searchInput.addEventListener('input', handleSearch);
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', handleFilter);
+    });
+
+    // Scroll to AI
+    function scrollToAI() {
+      document.getElementById('aiChatPanel').scrollIntoView({ behavior: 'smooth' });
+      aiInput.focus();
+    }
+
+    // Handle file selection
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      fileName.textContent = file.name;
+      loadCSV(file);
+    }
+
+    // Load default jobs
+    function loadDefaultJobs() {
+      // Create default job data
+      const defaultJobs = [
+        { company: '8byte', role: 'Python Intern', tags: ['Python', 'Internship', 'Fresher'] },
+        { company: 'AgreeYa Solutions', role: 'Gen AI Developer', tags: ['AI/ML', 'Developer'] },
+        { company: 'Campus Technology', role: 'Python AI Developer', tags: ['Python', 'AI/ML', 'Developer'] },
+        { company: 'Collins Aerospace', role: 'AI ML Intern', tags: ['AI/ML', 'Internship'] },
+        { company: 'Deutsche Bank', role: 'OPS Intern', tags: ['Internship', 'Analyst'] },
+        { company: 'IGT Solutions', role: 'Java FSD', tags: ['Java', 'Developer', 'Full Stack'] },
+        { company: 'Mercer', role: 'Data Engineer', tags: ['Developer', 'Data Science'] },
+        { company: 'Tech Mahindra', role: 'Sr Associate Analyst', tags: ['Analyst'] },
+        { company: 'Wipro', role: 'Fresher Openings', tags: ['Fresher'] }
+      ];
+
+      allJobs = defaultJobs;
+      uploadSection.classList.add('hidden');
+      controlsSection.classList.remove('hidden');
+      statusBar.classList.remove('hidden');
+      renderJobs();
+      updateStatus();
+    }
+
+    // Load CSV
+    function loadCSV(file) {
+      statusDot.classList.add('loading');
+      statusText.textContent = 'Loading CSV...';
+      statusBar.classList.remove('hidden');
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const text = e.target.result;
+          const rows = parseCSV(text);
+          if (rows.length <= 1) throw new Error('CSV is empty');
+
+          allJobs = processJobs(rows);
+          uploadSection.classList.add('hidden');
+          controlsSection.classList.remove('hidden');
+          statusDot.classList.remove('loading');
+          renderJobs();
+          updateStatus();
+        } catch (error) {
+          alert('Error loading CSV: ' + error.message);
+          statusDot.classList.remove('loading');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Parse CSV
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let cell = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        if (char === '"' && inQuotes && next === '"') {
+          cell += '"';
+          i++;
+        } else if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          row.push(cell);
+          cell = '';
+        } else if ((char === '\n' || char === '\r') && !inQuotes) {
+          if (cell || row.length) {
+            row.push(cell);
+            rows.push(row);
+            row = [];
+            cell = '';
+          }
+        } else {
+          cell += char;
+        }
+      }
+
+      if (cell || row.length) {
+        row.push(cell);
+        rows.push(row);
+      }
+
+      return rows;
+    }
+
+    // Process jobs
+    function processJobs(rows) {
+      const jobs = [];
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row || row.length < 3) continue;
+
+        const company = (row[1] || '').trim();
+        const role = (row[2] || '').trim().replace(/\n/g, ' ');
+        if (!company && !role) continue;
+
+        jobs.push({
+          company: company || 'Unknown Company',
+          role: role || 'Role not specified',
+          tags: extractTags(company + ' ' + role)
+        });
+      }
+      return jobs;
+    }
+
+    // Extract tags
+    function extractTags(text) {
+      const tags = [];
+      const lower = text.toLowerCase();
+
+      if (lower.includes('intern')) tags.push('Internship');
+      if (lower.match(/\bai\b|\bml\b|machine learning/)) tags.push('AI/ML');
+      if (lower.includes('python')) tags.push('Python');
+      if (lower.includes('java') && !lower.includes('javascript')) tags.push('Java');
+      if (lower.match(/javascript|\bjs\b|react|angular|vue/)) tags.push('Frontend');
+      if (lower.match(/developer|engineer/)) tags.push('Developer');
+      if (lower.includes('analyst')) tags.push('Analyst');
+      if (lower.match(/fullstack|full stack|fsd/)) tags.push('Full Stack');
+      if (lower.includes('backend')) tags.push('Backend');
+      if (lower.match(/data scien/)) tags.push('Data Science');
+      if (lower.includes('fresher')) tags.push('Fresher');
+      if (lower.includes('remote')) tags.push('Remote');
+
+      return [...new Set(tags)].slice(0, 3);
+    }
+
+    // Filter jobs
+    function getFilteredJobs() {
+      const query = searchInput.value.toLowerCase().trim();
+      return allJobs.filter(job => {
+        const matchesSearch = !query ||
+          job.company.toLowerCase().includes(query) ||
+          job.role.toLowerCase().includes(query);
+
+        const matchesFilter = currentFilter === 'all' ||
+          job.tags.some(tag => tag.toLowerCase().includes(currentFilter)) ||
+          (job.company + ' ' + job.role).toLowerCase().includes(currentFilter);
+
+        return matchesSearch && matchesFilter;
+      });
+    }
+
+    // Render jobs
+    function renderJobs() {
+      const jobs = getFilteredJobs();
+      jobsContainer.innerHTML = '';
+
+      if (jobs.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      jobs.forEach(job => {
+        const card = document.createElement('article');
+        card.className = 'job-card';
+
+        const tagsHTML = job.tags.length > 0
+          ? `<div class="job-meta">${job.tags.map(tag => 
+              `<span class="meta-tag">${escapeHtml(tag)}</span>`
+            ).join('')}</div>`
+          : '';
+
+        card.innerHTML = `
+          <div class="job-header">
+            <div class="company-name">${escapeHtml(job.company)}</div>
+            <div class="pwd-friendly-badge">♿ PWD Friendly</div>
+          </div>
+          <div class="job-role">${escapeHtml(job.role)}</div>
+          ${tagsHTML}
+          <div class="job-actions">
+            <button class="apply-btn" onclick="searchJob('${escapeHtml(job.company)}', '${escapeHtml(job.role)}')">
+              Apply Now →
+            </button>
+            <button class="ai-help-btn" onclick="getAIHelp('${escapeHtml(job.company)}', '${escapeHtml(job.role)}')">
+              🤖 AI Help
+            </button>
+          </div>
+        `;
+
+        jobsContainer.appendChild(card);
+      });
+
+      updateStatus();
+    }
+
+    // Update status
+    function updateStatus() {
+      const filtered = getFilteredJobs();
+      jobCount.textContent = `${filtered.length} Jobs`;
+      statusText.textContent = filtered.length === allJobs.length
+        ? `Showing all ${allJobs.length} opportunities`
+        : `Filtered ${filtered.length} of ${allJobs.length} jobs`;
+    }
+
+    // Handle search
+    function handleSearch() {
+      renderJobs();
+    }
+
+    // Handle filter
+    function handleFilter(e) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      e.target.classList.add('active');
+      currentFilter = e.target.dataset.filter;
+      renderJobs();
+    }
+
+    // Search job
+    function searchJob(company, role) {
+      const query = encodeURIComponent(`${company} ${role} careers apply`);
+      window.open(`https://www.google.com/search?q=${query}`, '_blank');
+    }
+
+    // Get AI help
+    function getAIHelp(company, role) {
+      scrollToAI();
+      const message = `Help me apply for ${role} at ${company}. What should I know about this role and how can I prepare?`;
+      aiInput.value = message;
+      sendMessage();
+    }
+
+    // AI Functions
+    async function sendMessage() {
+      const message = aiInput.value.trim();
+      if (!message) return;
+
+      // Add user message
+      addMessage('user', message);
+      aiInput.value = '';
+      aiSendBtn.disabled = true;
+
+      // Show typing indicator
+      const typingId = addTypingIndicator();
+
+      try {
+        // Build context with job information
+        const jobContext = allJobs.length > 0 
+          ? `\n\nAvailable jobs: ${allJobs.slice(0, 10).map(j => `${j.company} - ${j.role}`).join(', ')}`
+          : '';
+
+        const systemPrompt = `You are an AI assistant helping PWDs (Persons with Disabilities) find and apply for jobs. Be supportive, provide actionable advice, and consider accessibility needs. Available jobs context:${jobContext}`;
+
+        const response = await fetch(GEMINI_API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `${systemPrompt}\n\nUser: ${message}`
+              }]
+            }]
+          })
+        });
+
+        if (!response.ok) throw new Error('AI request failed');
+
+        const data = await response.json();
+        const aiResponse = data.candidates[0].content.parts[0].text;
+
+        removeTypingIndicator(typingId);
+        addMessage('assistant', aiResponse);
+
+      } catch (error) {
+        removeTypingIndicator(typingId);
+        addMessage('assistant', 'Sorry, I encountered an error. Please try again or rephrase your question.');
+        console.error('AI Error:', error);
+      }
+
+      aiSendBtn.disabled = false;
+      aiInput.focus();
+    }
+
+    function sendQuickMessage(message) {
+      aiInput.value = message;
+      sendMessage();
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    function addMessage(role, content) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `ai-message ${role}`;
+      messageDiv.innerHTML = `<div class="ai-message-content">${escapeHtml(content).replace(/\n/g, '<br>')}</div>`;
+      aiMessages.appendChild(messageDiv);
+      aiMessages.scrollTop = aiMessages.scrollHeight;
+    }
+
+    function addTypingIndicator() {
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'ai-message assistant';
+      typingDiv.id = 'typing-indicator';
+      typingDiv.innerHTML = '<div class="ai-typing"><span></span><span></span><span></span></div>';
+      aiMessages.appendChild(typingDiv);
+      aiMessages.scrollTop = aiMessages.scrollHeight;
+      return 'typing-indicator';
+    }
+
+    function removeTypingIndicator(id) {
+      const typing = document.getElementById(id);
+      if (typing) typing.remove();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
