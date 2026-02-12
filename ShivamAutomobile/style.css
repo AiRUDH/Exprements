@@ -1,0 +1,296 @@
+/* style.css - 2026 Industrial Neumorphism System */
+
+:root {
+  /* Brand Identity Colors */
+  --primary-hue: 210; /* Industrial Steel Blue */
+  --accent-hue: 25;   /* Copper/Rust Orange for CTAs */
+  
+  /* Light Mode Configuration */
+  --bg-base: #e0e5ec;
+  --text-main: #2d3436;
+  --text-muted: #636e72;
+  
+  /* Neumorphic Shadow Calculations (Light) */
+  --shadow-light: 9px 9px 16px rgb(163,177,198,0.6), 
+                  -9px -9px 16px rgba(255,255,255, 0.5);
+  --shadow-inset: inset 6px 6px 10px 0 rgba(163,177,198, 0.7), 
+                  inset -6px -6px 10px 0 rgba(255,255,255, 0.8);
+  
+  /* Glassmorphism Variables */
+  --glass-bg: rgba(255, 255, 255, 0.25);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+  --glass-blur: blur(12px);
+
+  /* Animation Physics */
+  --anim-spring: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Dark Mode Overrides (The "Night Shift") */
+[data-theme="dark"] {
+  --bg-base: #262729; /* Gunmetal Gray */
+  --text-main: #dfe6e9;
+  --text-muted: #b2bec3;
+  
+  /* Dark Mode Shadows (Softer, deeper) */
+  --shadow-light: 5px 5px 10px #1b1c1e, 
+                  -5px -5px 10px #313234;
+  --shadow-inset: inset 5px 5px 10px #1b1c1e, 
+                  inset -5px -5px 10px #313234;
+  
+  --glass-bg: rgba(0, 0, 0, 0.3);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Global Reset & Typography */
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  transition: background-color 0.4s ease, color 0.4s ease;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* UTILITY CLASSES */
+
+/* The Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Neumorphic Card Component */
+.neu-card {
+  background: var(--bg-base);
+  box-shadow: var(--shadow-light);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255,255,255,0.05); /* Subtle rim light */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.neu-card:hover {
+  transform: translateY(-5px); /* Lift effect */
+  box-shadow: 12px 12px 20px rgb(163,177,198,0.7), 
+              -12px -12px 20px rgba(255,255,255, 0.6);
+}
+
+[data-theme="dark"] .neu-card:hover {
+  box-shadow: 7px 7px 14px #1b1c1e, 
+              -7px -7px 14px #313234;
+}
+
+/* Neumorphic Button Component */
+.neu-btn {
+  background: var(--bg-base);
+  box-shadow: var(--shadow-light);
+  border-radius: 50px; /* Pill shape */
+  border: none;
+  color: hsl(var(--primary-hue), 80%, 40%);
+  font-weight: 700;
+  padding: 12px 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s var(--anim-spring);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: inherit;
+}
+
+[data-theme="dark"] .neu-btn {
+  color: hsl(var(--primary-hue), 80%, 70%); /* Lighter text for dark mode */
+}
+
+.neu-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 11px 11px 18px rgb(163,177,198,0.7), 
+              -11px -11px 18px rgba(255,255,255, 0.6);
+}
+
+[data-theme="dark"] .neu-btn:hover {
+  box-shadow: 6px 6px 12px #1b1c1e, 
+              -6px -6px 12px #313234;
+}
+
+/* Active/Pressed State */
+.neu-btn:active,
+.neu-btn.pressed {
+  box-shadow: var(--shadow-inset);
+  transform: scale(0.96);
+}
+
+/* The "Glass" Overlay for Technical Specs */
+.glass-overlay {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+/* Product Card Specific Styles */
+.product-card {
+  transition: all 0.4s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* Hero Section */
+  header.container {
+    grid-template-columns: 1fr !important;
+    padding-top: 120px !important;
+    gap: 30px !important;
+  }
+  
+  h1 {
+    font-size: 2.5rem !important;
+  }
+  
+  /* Navigation */
+  nav.glass-overlay {
+    width: 95% !important;
+    padding: 12px 15px !important;
+  }
+  
+  nav.glass-overlay ul {
+    display: none !important;
+  }
+  
+  .logo {
+    font-size: 1.2rem !important;
+  }
+  
+  #theme-toggle {
+    padding: 8px 15px !important;
+    font-size: 0.85rem !important;
+  }
+  
+  /* Product Grid */
+  .product-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Chatbot */
+  #chatbot {
+    width: 90vw !important;
+    right: 5vw !important;
+    bottom: 20px !important;
+  }
+  
+  /* CTA Buttons */
+  .cta-group {
+    flex-direction: column !important;
+  }
+  
+  .cta-group button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem !important;
+  }
+  
+  h2 {
+    font-size: 1.8rem !important;
+  }
+  
+  .neu-card {
+    padding: 1.5rem !important;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary-hue), 30%, 50%);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary-hue), 40%, 40%);
+}
+
+/* Chat Messages */
+.msg {
+  margin-bottom: 12px;
+  max-width: 85%;
+  word-wrap: break-word;
+}
+
+.msg.user {
+  background: var(--bg-base);
+  padding: 10px 15px;
+  border-radius: 15px 15px 5px 15px;
+  box-shadow: var(--shadow-inset);
+  margin-left: auto;
+  text-align: right;
+  display: block;
+}
+
+.msg.bot {
+  background: var(--bg-base);
+  padding: 10px 15px;
+  border-radius: 15px 15px 15px 5px;
+  box-shadow: var(--shadow-light);
+}
+
+/* Accessibility Focus Styles */
+*:focus {
+  outline: 2px solid hsl(var(--primary-hue), 80%, 50%);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  nav, #chatbot, footer {
+    display: none;
+  }
+  
+  .neu-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}

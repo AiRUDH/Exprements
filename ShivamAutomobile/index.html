@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shivam Automobile: Premium Manufacturer of Multi-leaf and Parabolic Springs in Baraut, India. Advanced suspension systems for commercial vehicles.">
+    <title>Shivam Automobile | Advanced Suspension Engineering</title>
+    
+    <!-- Model Viewer for 3D/AR -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+    
+    <!-- Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Schema.org Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AutoPartsStore",
+      "name": "Shivam Automobile",
+      "image": "https://www.shivamautomobile.in/assets/logo.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Delhi Saharanpur Road, Near Pashu Peeth",
+        "addressLocality": "Baraut",
+        "addressRegion": "Uttar Pradesh",
+        "postalCode": "250611",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "29.1021",
+        "longitude": "77.2625"
+      },
+      "url": "https://www.shivamautomobile.in",
+      "telephone": "+91-1234567890",
+      "priceRange": "$$"
+    }
+    </script>
+</head>
+<body>
+
+    <!-- Navigation Bar with Glassmorphism -->
+    <nav class="glass-overlay" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1200px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px;">
+        <div class="logo" style="font-weight: 900; font-size: 1.5rem;">SHIVAM<span style="color:hsl(var(--accent-hue), 80%, 50%)">.AUTO</span></div>
+        <ul style="display: flex; gap: 30px; list-style: none;">
+            <li><a href="#products" style="text-decoration: none; color: inherit; font-weight: 600;">Products</a></li>
+            <li><a href="#provenance" style="text-decoration: none; color: inherit; font-weight: 600;">Provenance</a></li>
+            <li><a href="#contact" style="text-decoration: none; color: inherit; font-weight: 600;">Contact</a></li>
+        </ul>
+        <button id="theme-toggle" class="neu-btn" aria-label="Toggle Dark Mode">
+            <span class="icon">🌙</span> Night Shift
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="container" style="padding-top: 150px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; min-height: 100vh;">
+        <div class="hero-content">
+            <div class="neu-card" style="display: inline-block; padding: 8px 20px; border-radius: 50px; margin-bottom: 20px; font-size: 0.9rem;">
+                <span style="color: #27ae60; font-size: 1.2rem;">●</span> Factory Status: <strong>Operational</strong>
+            </div>
+            <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px; font-weight: 900;">
+                Forging the Future of <br>
+                <span style="color: hsl(var(--primary-hue), 60%, 50%);">Heavy Suspension.</span>
+            </h1>
+            <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 30px; line-height: 1.8;">
+                From the heat of Baraut's furnaces to the precision of Parabolic engineering. 
+                Experience the 2026 standard in automotive durability.
+            </p>
+            <div class="cta-group" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <button class="neu-btn" onclick="scrollToProducts()">
+                    <span>🔍</span> Explore Inventory
+                </button>
+                <button class="neu-btn" onclick="alert('AR feature requires 3D models. Point your mobile device at a surface to place the product.')">
+                    <span>📱</span> View in AR
+                </button>
+            </div>
+            
+            <!-- Market Insight Pulse -->
+            <div id="market-insight" class="neu-card" style="margin-top: 40px; padding: 20px; font-size: 0.95rem;">
+                <strong style="color: hsl(var(--primary-hue), 60%, 50%);">📊 Market Pulse:</strong> <span id="pulse-text">Analyzing regional demand...</span>
+            </div>
+        </div>
+        
+        <!-- 3D Model Viewer -->
+        <div class="hero-visual" style="position: relative;">
+            <div class="neu-card" style="padding: 30px; text-align: center;">
+                <div style="width: 100%; height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; font-weight: 700;">
+                    3D Model Viewer
+                    <br><small style="font-size: 0.8rem; opacity: 0.8;">(Requires .glb model file)</small>
+                </div>
+                <p style="margin-top: 15px; color: var(--text-muted); font-size: 0.9rem;">
+                    Interactive 3D visualization of Parabolic Spring with AR support
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Products Section -->
+    <section id="products" class="container" style="padding: 100px 20px;">
+        <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.5rem; font-weight: 900;">Precision Engineered Components</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 60px; font-size: 1.1rem;">Manufacturing excellence across suspension systems and extrusion products</p>
+        
+        <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px;">
+            <!-- Product Card 1: Parabolic Springs -->
+            <article class="neu-card product-card" style="position: relative;">
+                <div class="badge" style="position: absolute; top: 20px; right: 20px; font-size: 0.8rem; background: var(--bg-base); padding: 8px 15px; border-radius: 10px; box-shadow: var(--shadow-inset); font-weight: 700;">
+                    SUP-11 Grade
+                </div>
+                <div class="img-placeholder" style="height: 220px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 700;">
+                    🔩 Parabolic Spring
+                </div>
+                <h3 style="font-size: 1.5rem; margin-bottom: 10px; font-weight: 800;">Parabolic Springs</h3>
+                <p style="color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">Variable thickness leaves for superior load distribution and weight reduction. Engineered for heavy-duty commercial vehicles.</p>
+                <div class="specs glass-overlay" style="margin-bottom: 20px; font-size: 0.95rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Load Capacity:</span> <strong>12 Tons</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Lifecycle:</span> <strong>200k Cycles</strong>
+                    </div>
+                </div>
+                <button class="neu-btn" style="width: 100%;">
+                    <span>💬</span> Configure & Quote
+                </button>
+            </article>
+
+            <!-- Product Card 2: Multi-leaf Springs -->
+            <article class="neu-card product-card" style="position: relative;">
+                <div class="badge" style="position: absolute; top: 20px; right: 20px; font-size: 0.8rem; background: var(--bg-base); padding: 8px 15px; border-radius: 10px; box-shadow: var(--shadow-inset); font-weight: 700;">
+                    SUP-9 Grade
+                </div>
+                <div class="img-placeholder" style="height: 220px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 700;">
+                    🛠️ Multi-leaf
+                </div>
+                <h3 style="font-size: 1.5rem; margin-bottom: 10px; font-weight: 800;">Multi-leaf Springs</h3>
+                <p style="color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">Heavy-duty semi-elliptical plates for trucks and railway wagons. Maximum durability and load-bearing capacity.</p>
+                <div class="specs glass-overlay" style="margin-bottom: 20px; font-size: 0.95rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Load Capacity:</span> <strong>15 Tons</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Applications:</span> <strong>Trucks, Rail</strong>
+                    </div>
+                </div>
+                <button class="neu-btn" style="width: 100%;">
+                    <span>💬</span> Configure & Quote
+                </button>
+            </article>
+
+            <!-- Product Card 3: Extrusion Products -->
+            <article class="neu-card product-card" style="position: relative;">
+                <div class="badge" style="position: absolute; top: 20px; right: 20px; font-size: 0.8rem; background: var(--bg-base); padding: 8px 15px; border-radius: 10px; box-shadow: var(--shadow-inset); font-weight: 700;">
+                    Custom Alloy
+                </div>
+                <div class="img-placeholder" style="height: 220px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: 700;">
+                    ⚙️ Extrusion
+                </div>
+                <h3 style="font-size: 1.5rem; margin-bottom: 10px; font-weight: 800;">Extrusion Profiles</h3>
+                <p style="color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">High-volume manufacturing of plastic tubing and complex copper alloy profiles with precision tolerances.</p>
+                <div class="specs glass-overlay" style="margin-bottom: 20px; font-size: 0.95rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Materials:</span> <strong>PVC / Copper</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Tolerance:</span> <strong>± 0.05mm</strong>
+                    </div>
+                </div>
+                <button class="neu-btn" style="width: 100%;">
+                    <span>📄</span> View Material Data
+                </button>
+            </article>
+
+            <!-- Product Card 4: Air Suspension -->
+            <article class="neu-card product-card" style="position: relative;">
+                <div class="badge" style="position: absolute; top: 20px; right: 20px; font-size: 0.8rem; background: var(--bg-base); padding: 8px 15px; border-radius: 10px; box-shadow: var(--shadow-inset); font-weight: 700;">
+                    Innovation
+                </div>
+                <div class="img-placeholder" style="height: 220px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); border-radius: 15px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; color: #333; font-size: 1.5rem; font-weight: 700;">
+                    💨 Air System
+                </div>
+                <h3 style="font-size: 1.5rem; margin-bottom: 10px; font-weight: 800;">Air Suspension</h3>
+                <p style="color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">Advanced air suspension systems focusing on innovation and smooth ride quality for modern transport.</p>
+                <div class="specs glass-overlay" style="margin-bottom: 20px; font-size: 0.95rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Type:</span> <strong>Pneumatic</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Pressure:</span> <strong>6-10 Bar</strong>
+                    </div>
+                </div>
+                <button class="neu-btn" style="width: 100%;">
+                    <span>💬</span> Configure & Quote
+                </button>
+            </article>
+        </div>
+    </section>
+
+    <!-- Blockchain Provenance Section -->
+    <section id="provenance" class="container" style="padding: 80px 20px;">
+        <div class="neu-card" style="padding: 50px;">
+            <h3 style="margin-bottom: 15px; font-size: 2rem; font-weight: 900;">
+                <span style="font-size: 2rem;">🔗</span> Blockchain Provenance Tracker
+            </h3>
+            <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px;">
+                Verify the origin of your steel. Scan the QR code on any Shivam product to view its digital passport and complete manufacturing journey.
+            </p>
+            <div class="timeline" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                <div class="step glass-overlay" style="padding: 25px; text-align: center;">
+                    <div class="icon" style="font-size: 3rem; margin-bottom: 15px;">⛏️</div>
+                    <h4 style="font-size: 1.2rem; margin-bottom: 10px; font-weight: 800;">Raw Material</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">
+                        <strong>Verified:</strong> Tata Steel Jamshedpur<br>
+                        <span style="font-family: monospace; font-size: 0.8rem;">Hash: #a9f3c2e1...</span>
+                    </p>
+                </div>
+                <div class="step glass-overlay" style="padding: 25px; text-align: center;">
+                    <div class="icon" style="font-size: 3rem; margin-bottom: 15px;">🔥</div>
+                    <h4 style="font-size: 1.2rem; margin-bottom: 10px; font-weight: 800;">Heat Treatment</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">
+                        <strong>Temp:</strong> 950°C<br>
+                        <strong>Duration:</strong> 45 mins<br>
+                        Baraut Facility
+                    </p>
+                </div>
+                <div class="step glass-overlay" style="padding: 25px; text-align: center;">
+                    <div class="icon" style="font-size: 3rem; margin-bottom: 15px;">✅</div>
+                    <h4 style="font-size: 1.2rem; margin-bottom: 10px; font-weight: 800;">Quality Check</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">
+                        <strong>Load Test:</strong> Passed<br>
+                        <strong>Inspector:</strong> ID_402<br>
+                        ISO Certified
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="container" style="padding: 80px 20px;">
+        <div class="neu-card" style="padding: 50px; text-align: center;">
+            <h3 style="margin-bottom: 20px; font-size: 2rem; font-weight: 900;">Get in Touch</h3>
+            <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 30px;">
+                Ready to discuss your suspension needs? Our engineering team is here to help.
+            </p>
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <button class="neu-btn" onclick="window.location.href='tel:+911234567890'">
+                    <span>📞</span> Call Us
+                </button>
+                <button class="neu-btn" onclick="window.location.href='mailto:info@shivamautomobile.in'">
+                    <span>✉️</span> Email Us
+                </button>
+                <button class="neu-btn" onclick="alert('WhatsApp: +91-1234567890')">
+                    <span>💬</span> WhatsApp
+                </button>
+            </div>
+            <div style="margin-top: 40px; color: var(--text-muted);">
+                <p><strong>Address:</strong> Delhi Saharanpur Road, Near Pashu Peeth, Baraut, UP 250611</p>
+                <p><strong>Factory Hours:</strong> Mon-Sat, 9:00 AM - 6:00 PM</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chatbot -->
+    <div id="chatbot" class="neu-card" style="position: fixed; bottom: 30px; right: 30px; width: 350px; max-width: 90vw; z-index: 2000; padding: 0; box-shadow: var(--shadow-light), 0 10px 40px rgba(0,0,0,0.2);">
+        <div class="chat-header" onclick="toggleChat()" style="padding: 18px; background: var(--bg-base); border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; align-items: center; gap: 12px; border-radius: 20px 20px 0 0;">
+            <div class="avatar" style="width: 35px; height: 35px; background: hsl(var(--primary-hue), 80%, 50%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900;">S</div>
+            <div>
+                <strong style="display: block;">Shivam Assistant</strong>
+                <small style="color: var(--text-muted); font-size: 0.8rem;">Ask about products & pricing</small>
+            </div>
+        </div>
+        <div id="chat-body" style="height: 350px; padding: 20px; overflow-y: auto; display: none; background: var(--bg-base);">
+            <div class="msg bot" style="background: var(--bg-base); padding: 12px 15px; border-radius: 15px 15px 15px 5px; box-shadow: var(--shadow-light); margin-bottom: 15px; font-size: 0.9rem;">
+                👋 Hello! I can help you with lead times, steel grades, or bulk pricing. What are you looking for?
+            </div>
+        </div>
+        <div id="chat-input-area" style="padding: 15px; display: none; border-top: 1px solid rgba(0,0,0,0.05); background: var(--bg-base); border-radius: 0 0 20px 20px;">
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="user-input" placeholder="Ask about Parabolic Springs..." style="flex: 1; padding: 10px 15px; border: none; background: var(--bg-base); box-shadow: var(--shadow-inset); border-radius: 25px; outline: none; color: var(--text-main);">
+                <button class="neu-btn" style="padding: 10px 20px; border-radius: 25px;" onclick="sendMessage()">
+                    <span>📤</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: var(--bg-base); padding: 40px 20px; text-align: center; color: var(--text-muted); border-top: 1px solid rgba(0,0,0,0.05);">
+        <p style="margin-bottom: 10px;">© 2026 Shivam Automobile. All rights reserved.</p>
+        <p style="font-size: 0.9rem;">Manufactured with precision in Baraut, Uttar Pradesh, India</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
