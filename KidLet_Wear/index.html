@@ -3,404 +3,494 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NXTGEN | Premium Streetwear Delhi</title>
-    <style>
-        /* --- BEAST MODE CSS VARS --- */
-        :root {
-            --bg-color: #0a0a0a;
-            --card-bg: #1a1a1a;
-            --text-main: #ffffff;
-            --text-sec: #a0a0a0;
-            --accent: #8b5cf6; /* Electric Purple */
-            --accent-hover: #7c3aed;
-            --success: #10b981;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --shadow: 0 10px 30px rgba(0,0,0,0.5);
-            --glass: rgba(255, 255, 255, 0.05);
-        }
-
-        /* Light Mode Support */
-        [data-theme="light"] {
-            --bg-color: #f3f4f6;
-            --card-bg: #ffffff;
-            --text-main: #111827;
-            --text-sec: #4b5563;
-            --shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
-        
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: var(--font-main);
-            overflow-x: hidden;
-        }
-
-        /* --- UI COMPONENTS --- */
-        button { cursor: pointer; border: none; outline: none; }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
-
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-
-        /* --- HEADER --- */
-        header {
-            position: fixed;
-            top: 0; width: 100%;
-            background: rgba(10, 10, 10, 0.9);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--glass);
-        }
-        .nav-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            height: 70px;
-        }
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
-        .logo span { color: var(--accent); }
-        
-        .nav-links { display: flex; gap: 20px; list-style: none; }
-        .nav-item { cursor: pointer; font-weight: 500; position: relative; }
-        .nav-item::after {
-            content: ''; position: absolute; width: 0; height: 2px;
-            bottom: -5px; left: 0; background: var(--accent); transition: width 0.3s;
-        }
-        .nav-item:hover::after { width: 100%; }
-
-        .nav-icons { display: flex; gap: 15px; align-items: center; }
-        .cart-icon { position: relative; cursor: pointer; font-size: 1.2rem; }
-        .badge {
-            position: absolute; top: -8px; right: -8px;
-            background: var(--accent); color: white;
-            font-size: 0.7rem; padding: 2px 6px; border-radius: 50%;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            height: 80vh;
-            display: flex; align-items: center; justify-content: center;
-            text-align: center;
-            background: radial-gradient(circle at center, #2e1065 0%, var(--bg-color) 70%);
-            margin-top: 70px;
-        }
-        .hero h1 { font-size: 4rem; line-height: 1.1; margin-bottom: 20px; }
-        .hero p { font-size: 1.2rem; color: var(--text-sec); margin-bottom: 30px; }
-        .hero span { color: var(--accent); }
-
-        /* --- FILTERS --- */
-        .filters { padding: 40px 0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .filter-btn {
-            background: var(--card-bg); color: var(--text-main);
-            padding: 10px 20px; border-radius: 30px; border: 1px solid var(--glass);
-        }
-        .filter-btn.active { background: var(--accent); border-color: var(--accent); }
-
-        /* --- PRODUCT GRID --- */
-        .products-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px; padding-bottom: 80px;
-        }
-        
-        .product-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid var(--glass);
-            position: relative;
-        }
-        .product-card:hover { transform: translateY(-10px); box-shadow: var(--shadow); }
-        
-        .product-img {
-            height: 300px; width: 100%; object-fit: cover;
-            background: #2a2a2a; /* Placeholder color */
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3rem; color: #333;
-        }
-        
-        .product-info { padding: 20px; }
-        .product-cat { color: var(--accent); font-size: 0.8rem; text-transform: uppercase; font-weight: 700; }
-        .product-title { font-size: 1.1rem; margin: 5px 0; }
-        .product-price { font-size: 1.2rem; font-weight: 700; margin-bottom: 15px; }
-        
-        .product-actions { display: flex; gap: 10px; }
-        .btn-add { flex: 1; background: var(--text-main); color: var(--bg-color); padding: 10px; border-radius: 6px; font-weight: 600; }
-        .btn-add:hover { background: var(--accent); color: white; }
-
-        /* --- MODALS --- */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 2000;
-            display: none; align-items: center; justify-content: center;
-            opacity: 0;
-        }
-        .modal-overlay.open { display: flex; animation: fadeIn 0.3s forwards; }
-        
-        .modal-content {
-            background: var(--card-bg);
-            width: 90%; max-width: 500px;
-            padding: 30px; border-radius: 20px;
-            position: relative; border: 1px solid var(--glass);
-        }
-        
-        .cart-items { max-height: 400px; overflow-y: auto; margin: 20px 0; }
-        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--glass); }
-        
-        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; }
-
-        /* --- TOAST NOTIFICATION --- */
-        .toast {
-            position: fixed; bottom: 20px; right: 20px;
-            background: var(--accent); color: white;
-            padding: 15px 25px; border-radius: 8px;
-            transform: translateY(100px); transition: transform 0.3s;
-            z-index: 3000; box-shadow: var(--shadow);
-        }
-        .toast.show { transform: translateY(0); }
-
-        /* --- ANIMATIONS --- */
-        @keyframes fadeIn { to { opacity: 1; } }
-        
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .nav-links { display: none; } /* Simplified mobile nav */
-        }
-    </style>
+    <meta name="description" content="KidLet Wear - Premium clothing for kids and teens in Delhi. Shop trendy, casual, and ethnic wear with local delivery within 200km.">
+    <meta name="keywords" content="kids clothing Delhi, teen fashion, KidLet Wear, online clothing store, trendy teen wear">
+    <title>KidLet Wear - Premium Kids & Teen Fashion</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <div class="nav-brand">
+                <img src="Logo.jpeg" alt="KidLet Wear Logo" class="logo">
+                <span class="brand-name">KidLet Wear</span>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#shop" class="nav-link">Shop</a>
+                <a href="#categories" class="nav-link">Categories</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="icon-btn" id="searchBtn" aria-label="Search">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn cart-btn" id="cartBtn" aria-label="Shopping cart">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+                <button class="btn btn-primary" id="loginBtn">Login</button>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-    <header>
-        <div class="container nav-bar">
-            <div class="logo">NXT<span>GEN</span></div>
-            <ul class="nav-links">
-                <li class="nav-item" onclick="filterProducts('all')">New Drops</li>
-                <li class="nav-item" onclick="filterProducts('casual')">Casual</li>
-                <li class="nav-item" onclick="filterProducts('ethnic')">Ethnic</li>
-                <li class="nav-item" onclick="loginModal.classList.add('open')">Account</li>
-            </ul>
-            <div class="nav-icons">
-                <button onclick="toggleTheme()">🌗</button>
-                <div class="cart-icon" onclick="openCart()">
-                    🛒 <span class="badge" id="cart-count">0</span>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+        </div>
+        
+        <div class="container hero-container">
+            <div class="hero-content">
+                <div class="badge-pill">
+                    <span class="badge-dot"></span>
+                    New Collection 2026
+                </div>
+                <h1 class="hero-title">
+                    Style That <span class="gradient-text">Speaks</span><br>
+                    Your Vibe
+                </h1>
+                <p class="hero-subtitle">
+                    Discover the latest trends in kids & teen fashion. From casual cool to ethnic elegance, 
+                    find your perfect look with KidLet Wear.
+                </p>
+                <div class="hero-cta">
+                    <button class="btn btn-large btn-primary" onclick="scrollToSection('shop')">
+                        Shop Now
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                    <button class="btn btn-large btn-secondary" onclick="scrollToSection('categories')">
+                        Explore Categories
+                    </button>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Products</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1000+</div>
+                        <div class="stat-label">Happy Customers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">200km</div>
+                        <div class="stat-label">Delivery Radius</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <div class="card-shimmer"></div>
+                    <div class="card-content">
+                        <div class="card-icon">🎨</div>
+                        <div class="card-text">Trendy Designs</div>
+                    </div>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="card-shimmer"></div>
+                    <div class="card-content">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-text">Fast Delivery</div>
+                    </div>
+                </div>
+                <div class="floating-card card-3">
+                    <div class="card-shimmer"></div>
+                    <div class="card-content">
+                        <div class="card-icon">💎</div>
+                        <div class="card-text">Premium Quality</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </header>
+        
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <p>Scroll to explore</p>
+        </div>
+    </section>
 
-    <section class="hero">
+    <!-- Categories Section -->
+    <section class="categories-section" id="categories">
         <div class="container">
-            <h1>DELHI'S FUTURE<br><span>STREETWEAR</span></h1>
-            <p>Premium fits for the new generation. Delivered within 200km.</p>
-            <button class="btn-primary" onclick="document.getElementById('shop').scrollIntoView()">Shop The Drop</button>
+            <div class="section-header">
+                <h2 class="section-title">Shop by <span class="gradient-text">Mood</span></h2>
+                <p class="section-subtitle">Find your style, express yourself</p>
+            </div>
+            
+            <div class="categories-grid">
+                <div class="category-card" data-category="casual">
+                    <div class="category-image">
+                        <div class="category-overlay"></div>
+                        <div class="category-icon">👕</div>
+                    </div>
+                    <div class="category-content">
+                        <h3>Casual Cool</h3>
+                        <p>Everyday comfort meets style</p>
+                        <button class="btn btn-sm btn-outline" onclick="filterProducts('casual')">Explore</button>
+                    </div>
+                </div>
+                
+                <div class="category-card" data-category="trendy">
+                    <div class="category-image">
+                        <div class="category-overlay"></div>
+                        <div class="category-icon">✨</div>
+                    </div>
+                    <div class="category-content">
+                        <h3>Trendy Teen</h3>
+                        <p>Stay ahead of the curve</p>
+                        <button class="btn btn-sm btn-outline" onclick="filterProducts('trendy')">Explore</button>
+                    </div>
+                </div>
+                
+                <div class="category-card" data-category="ethnic">
+                    <div class="category-image">
+                        <div class="category-overlay"></div>
+                        <div class="category-icon">🪔</div>
+                    </div>
+                    <div class="category-content">
+                        <h3>Ethnic Elegance</h3>
+                        <p>Traditional with a twist</p>
+                        <button class="btn btn-sm btn-outline" onclick="filterProducts('ethnic')">Explore</button>
+                    </div>
+                </div>
+                
+                <div class="category-card" data-category="party">
+                    <div class="category-image">
+                        <div class="category-overlay"></div>
+                        <div class="category-icon">🎉</div>
+                    </div>
+                    <div class="category-content">
+                        <h3>Party Perfect</h3>
+                        <p>Shine at every celebration</p>
+                        <button class="btn btn-sm btn-outline" onclick="filterProducts('party')">Explore</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="shop" class="container">
-        <div class="filters">
-            <button class="filter-btn active" onclick="filterProducts('all')">All</button>
-            <button class="filter-btn" onclick="filterProducts('casual')">Streetwear</button>
-            <button class="filter-btn" onclick="filterProducts('ethnic')">Modern Ethnic</button>
-            <button class="filter-btn" onclick="filterProducts('party')">Party</button>
-        </div>
-        
-        <div class="products-grid" id="product-grid">
+    <!-- Products Section -->
+    <section class="products-section" id="shop">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured <span class="gradient-text">Collection</span></h2>
+                <div class="filter-controls">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="casual">Casual</button>
+                    <button class="filter-btn" data-filter="trendy">Trendy</button>
+                    <button class="filter-btn" data-filter="ethnic">Ethnic</button>
+                    <button class="filter-btn" data-filter="party">Party</button>
+                </div>
             </div>
+            
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be dynamically loaded -->
+            </div>
+            
+            <div class="load-more-container">
+                <button class="btn btn-outline" id="loadMoreBtn">Load More Products</button>
+            </div>
+        </div>
     </section>
 
-    <div class="modal-overlay" id="cart-modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeCart()">&times;</span>
-            <h2>Your Cart</h2>
-            <div class="cart-items" id="cart-items-container">
-                <p style="text-align:center; color: var(--text-sec)">Your cart is empty.</p>
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <h3>Local Delivery</h3>
+                    <p>Fast delivery within 200km of Delhi</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                    </div>
+                    <h3>Secure Payments</h3>
+                    <p>UPI, Cards, COD - Your choice</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Easy Returns</h3>
+                    <p>7-day hassle-free returns</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Always here to help you</p>
+                </div>
             </div>
-            <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:20px; font-size:1.2rem;">
-                <span>Total:</span>
-                <span id="cart-total">₹0</span>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">What Our <span class="gradient-text">Customers Say</span></h2>
             </div>
-            <button class="btn-primary" style="width: 100%" onclick="checkout()">Proceed to Checkout (COD)</button>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="login-modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="document.getElementById('login-modal').classList.remove('open')">&times;</span>
-            <h2>Welcome Back</h2>
-            <input type="email" placeholder="Email" style="width:100%; padding:12px; margin:10px 0; background:var(--bg-color); border:1px solid var(--glass); color:white; border-radius:6px;">
-            <input type="password" placeholder="Password" style="width:100%; padding:12px; margin:10px 0; background:var(--bg-color); border:1px solid var(--glass); color:white; border-radius:6px;">
-            <button class="btn-primary" style="width:100%; margin-top:10px;" onclick="showToast('Logged in successfully!'); document.getElementById('login-modal').classList.remove('open')">Sign In</button>
-            <p style="margin-top:15px; font-size:0.8rem; color:var(--text-sec); text-align:center;">Or continue with Google</p>
-        </div>
-    </div>
-
-    <div class="toast" id="toast">Action Successful</div>
-
-    <script>
-        /* --- BEAST MODE JS LOGIC --- */
-
-        // 1. DATA (Simulating MongoDB)
-        const products = [
-            { id: 1, name: "Cyber Punk Oversized Tee", price: 1299, category: "casual", image: "👕" },
-            { id: 2, name: "Neon Delhi Hoodie", price: 2499, category: "casual", image: "🧥" },
-            { id: 3, name: "Silk Fusion Kurta", price: 3500, category: "ethnic", image: "👘" },
-            { id: 4, name: "Cargo Tech Pants", price: 1899, category: "casual", image: "👖" },
-            { id: 5, name: "Midnight Party Blazer", price: 4999, category: "party", image: "🤵" },
-            { id: 6, name: "Urban Sneakers Gen-Z", price: 3200, category: "casual", image: "👟" },
-        ];
-
-        // 2. STATE
-        let cart = JSON.parse(localStorage.getItem('nxtgen_cart')) || [];
-        
-        // 3. CORE FUNCTIONS
-        const grid = document.getElementById('product-grid');
-        const cartCount = document.getElementById('cart-count');
-        const cartModal = document.getElementById('cart-modal');
-        const loginModal = document.getElementById('login-modal');
-
-        function init() {
-            renderProducts(products);
-            updateCartCount();
-        }
-
-        function renderProducts(data) {
-            grid.innerHTML = data.map(product => `
-                <div class="product-card">
-                    <div class="product-img">${product.image}</div>
-                    <div class="product-info">
-                        <div class="product-cat">${product.category}</div>
-                        <h3 class="product-title">${product.name}</h3>
-                        <div class="product-price">₹${product.price}</div>
-                        <div class="product-actions">
-                            <button class="btn-add" onclick="addToCart(${product.id})">Add to Cart</button>
+            
+            <div class="testimonials-slider" id="testimonialsSlider">
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Amazing quality and super fast delivery! My daughter loves her new outfits from KidLet Wear."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">P</div>
+                        <div>
+                            <div class="author-name">Priya Sharma</div>
+                            <div class="author-location">Delhi</div>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
-
-        function filterProducts(cat) {
-            // Update UI buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // Filter Logic
-            if(cat === 'all') {
-                renderProducts(products);
-            } else {
-                const filtered = products.filter(p => p.category === cat);
-                renderProducts(filtered);
-            }
-        }
-
-        function addToCart(id) {
-            const product = products.find(p => p.id === id);
-            cart.push(product);
-            saveCart();
-            updateCartCount();
-            showToast(`${product.name} added to bag!`);
-        }
-
-        function updateCartCount() {
-            cartCount.innerText = cart.length;
-        }
-
-        function saveCart() {
-            localStorage.setItem('nxtgen_cart', JSON.stringify(cart));
-        }
-
-        function openCart() {
-            cartModal.classList.add('open');
-            renderCartItems();
-        }
-
-        function closeCart() {
-            cartModal.classList.remove('open');
-        }
-
-        function renderCartItems() {
-            const container = document.getElementById('cart-items-container');
-            const totalEl = document.getElementById('cart-total');
-            
-            if(cart.length === 0) {
-                container.innerHTML = `<p style="text-align:center; color: var(--text-sec)">Your cart is empty.</p>`;
-                totalEl.innerText = "₹0";
-                return;
-            }
-
-            let total = 0;
-            container.innerHTML = cart.map((item, index) => {
-                total += item.price;
-                return `
-                <div class="cart-item">
-                    <div>
-                        <div style="font-weight:bold">${item.name}</div>
-                        <div style="font-size:0.8rem; color:var(--text-sec)">Size: M | Color: Black</div>
+                
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Best collection for teens! Trendy, affordable, and the quality is top-notch."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">R</div>
+                        <div>
+                            <div class="author-name">Rahul Verma</div>
+                            <div class="author-location">Gurgaon</div>
+                        </div>
                     </div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div>₹${item.price}</div>
-                        <button onclick="removeFromCart(${index})" style="color:red; font-weight:bold">&times;</button>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"The ethnic wear collection is stunning! Perfect for festivals and family functions."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <div>
+                            <div class="author-name">Anjali Gupta</div>
+                            <div class="author-location">Noida</div>
+                        </div>
                     </div>
-                </div>`;
-            }).join('');
+                </div>
+            </div>
+        </div>
+    </section>
 
-            totalEl.innerText = "₹" + total;
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            saveCart();
-            renderCartItems();
-            updateCartCount();
-        }
-
-        function checkout() {
-            if(cart.length === 0) return alert("Cart is empty!");
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <img src="Logo.jpeg" alt="KidLet Wear Logo" class="footer-logo">
+                        <span class="brand-name">KidLet Wear</span>
+                    </div>
+                    <p class="footer-desc">Premium kids & teen fashion delivered to your doorstep across Delhi NCR.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="var(--bg-primary)" stroke-width="2"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="var(--bg-primary)" stroke-width="2"></line>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="WhatsApp">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#shop">Shop</a></li>
+                        <li><a href="#categories">Categories</a></li>
+                        <li><a href="#about">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Customer Care</h4>
+                    <ul class="footer-links">
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#shipping">Shipping Info</a></li>
+                        <li><a href="#returns">Returns</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Newsletter</h4>
+                    <p>Get updates on new arrivals and exclusive offers!</p>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
+            </div>
             
-            // Simulating API call
-            const btn = document.querySelector('.modal-content .btn-primary');
-            const originalText = btn.innerText;
-            btn.innerText = "Processing...";
+            <div class="footer-bottom">
+                <p>&copy; 2026 KidLet Wear. All rights reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="close-btn" id="closeCart" aria-label="Close cart">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <p>Your cart is empty</p>
+            </div>
+        </div>
+        
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span class="total-amount" id="cartTotal">₹0</span>
+            </div>
+            <button class="btn btn-primary btn-block" id="checkoutBtn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- AI Chatbot -->
+    <div class="chatbot-widget" id="chatbot">
+        <button class="chatbot-toggle" id="chatbotToggle" aria-label="Chat with us">
+            <svg class="chat-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        
+        <div class="chatbot-window" id="chatbotWindow" style="display:none;">
+            <div class="chatbot-header">
+                <div class="chatbot-avatar">🤖</div>
+                <div>
+                    <h4>KidLet Assistant</h4>
+                    <p class="status">Online</p>
+                </div>
+            </div>
             
-            setTimeout(() => {
-                alert(`Order Placed Successfully! \nOrder ID: #${Math.floor(Math.random() * 10000)}\nPayment: COD (Cash on Delivery)\nDelivery: Delhi/NCR (2 Days)`);
-                cart = [];
-                saveCart();
-                closeCart();
-                updateCartCount();
-                btn.innerText = originalText;
-            }, 1500);
-        }
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <p>Hi! I'm your KidLet style assistant. How can I help you today?</p>
+                        <div class="quick-actions">
+                            <button class="quick-btn" onclick="sendQuickMessage('Help me find an outfit')">Find an outfit</button>
+                            <button class="quick-btn" onclick="sendQuickMessage('Size guide')">Size guide</button>
+                            <button class="quick-btn" onclick="sendQuickMessage('Track my order')">Track order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <form class="chatbot-input" id="chatbotForm">
+                <input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off">
+                <button type="submit" aria-label="Send message">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
 
-        function toggleTheme() {
-            const body = document.body;
-            const current = body.getAttribute('data-theme');
-            if(current === 'light') {
-                body.removeAttribute('data-theme');
-            } else {
-                body.setAttribute('data-theme', 'light');
-            }
-        }
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        // Initialize
-        init();
-
-    </script>
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
