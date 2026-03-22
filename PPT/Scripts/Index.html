@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" style=""><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySock Script | Apna Market, Ab Online</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Poppins:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+      :root {
+        --bg-dark: #030108;
+        --neon-pink: #ec4899;
+        --neon-violet: #8b5cf6;
+        --text-white: #ffffff;
+        --text-gray: #d1d5db;
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --cue-visual: #0d9488; /* Dark Teal */
+        --cue-audio: #eab308; /* Yellow */
+        --cue-vo: #8b5cf6; /* Violet */
+        --cue-note: #ec4899; /* Pink */
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-gray);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px;
+      }
+
+      /* Typography */
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-family: 'Poppins', sans-serif;
+        color: var(--text-white);
+        margin-top: 0;
+      }
+
+      .gradient-text {
+        background: linear-gradient(90deg, var(--neon-pink), var(--neon-violet));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      /* Cover Page */
+      .cover-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border-bottom: 1px solid var(--glass-border);
+        margin-bottom: 60px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .cover-page::before {
+        content: '';
+        position: absolute;
+        top: -30%; left: -20%;
+        width: 70%; height: 70%;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+      }
+
+      .cover-page::after {
+        content: '';
+        position: absolute;
+        bottom: -20%; right: -10%;
+        width: 60%; height: 60%;
+        background: radial-gradient(circle, rgba(236, 72, 153, 0.10) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+      }
+
+      .cover-inner {
+        position: relative;
+        z-index: 2;
+        padding: 40px;
+      }
+
+      .cover-bg-grid {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-image:
+          linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+        background-size: 50px 50px;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .badge {
+        border: 1px solid var(--neon-pink);
+        color: var(--neon-pink);
+        padding: 8px 16px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        margin-bottom: 40px;
+        background: rgba(236, 72, 153, 0.1);
+      }
+
+      .cover-title {
+        font-size: 3.8rem;
+        line-height: 1.1;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        font-weight: 800;
+        text-shadow: 0 0 40px rgba(236, 72, 153, 0.3);
+      }
+
+      .cover-subtitle {
+        font-size: 1.5rem;
+        color: var(--text-white);
+        margin-bottom: 5px;
+        font-weight: 500;
+      }
+
+      .cover-target {
+        font-family: 'Inter', sans-serif;
+        color: var(--text-gray);
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+      }
+
+      .neon-rule {
+        height: 3px;
+        width: 200px;
+        background: linear-gradient(90deg, var(--neon-pink), var(--neon-violet));
+        margin: 0 auto 40px auto;
+        box-shadow: 0 0 15px var(--neon-pink), 0 0 30px rgba(139,92,246,0.4);
+      }
+
+      .brand-footer {
+        margin-top: 60px;
+        font-size: 1.2rem;
+      }
+
+      .url-glow {
+        color: var(--neon-pink);
+        text-decoration: none;
+        text-shadow: 0 0 12px var(--neon-pink), 0 0 30px rgba(236,72,153,0.4);
+        font-weight: 700;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+      }
+
+      /* Sections */
+      .section {
+        margin-bottom: 60px;
+      }
+
+      .section-header {
+        border-left: 4px solid var(--neon-violet);
+        padding-left: 20px;
+        margin-bottom: 30px;
+      }
+
+      .section-title {
+        font-size: 2rem;
+        margin-bottom: 5px;
+      }
+
+      /* Cards & Grid */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .glass-panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        padding: 25px;
+        border-radius: 12px;
+      }
+
+      .psych-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .psych-list li {
+        margin-bottom: 15px;
+        padding-left: 20px;
+        position: relative;
+      }
+
+      .psych-list li::before {
+        content: '•';
+        color: var(--neon-pink);
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+      }
+
+      .highlight {
+        color: var(--text-white);
+        font-weight: 600;
+      }
+
+      /* Script Timeline */
+      .script-scene {
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 40px;
+        border-left: 2px solid var(--glass-border);
+      }
+
+      .timestamp {
+        background: var(--bg-dark);
+        border: 1px solid var(--neon-violet);
+        color: var(--neon-violet);
+        padding: 4px 10px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 15px;
+      }
+
+      .scene-title {
+        display: inline-block;
+        margin-left: 10px;
+        font-weight: 700;
+        color: var(--text-white);
+        text-transform: uppercase;
+      }
+
+      /* Callout Boxes */
+      .box {
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        font-size: 0.95rem;
+      }
+
+      .box-visual {
+        background: rgba(13, 148, 136, 0.1);
+        border-left: 3px solid var(--cue-visual);
+        color: #ccfbf1;
+      }
+
+      .box-audio {
+        background: rgba(234, 179, 8, 0.1);
+        border-left: 3px solid var(--cue-audio);
+        color: #fef08a;
+      }
+
+      .box-vo {
+        background: rgba(139, 92, 246, 0.1);
+        border-left: 3px solid var(--cue-vo);
+        color: #ede9fe;
+      }
+
+      .box-note {
+        background: rgba(236, 72, 153, 0.1);
+        border-left: 3px solid var(--cue-note);
+        color: #fce7f3;
+        font-style: italic;
+      }
+
+      .box-translation {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px dashed rgba(255, 255, 255, 0.2);
+        padding: 10px;
+        margin-top: 8px;
+        font-size: 0.9rem;
+        color: #9ca3af;
+      }
+
+      .label {
+        font-weight: 700;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: block;
+        margin-bottom: 5px;
+        opacity: 0.8;
+      }
+
+      /* Table */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        color: var(--text-gray);
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--glass-border);
+        padding: 12px;
+        text-align: left;
+      }
+
+      th {
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--neon-pink);
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+      }
+
+      tr:hover td {
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      /* Icons */
+      .icon-mr {
+        margin-right: 8px;
+      }
+
+      /* Progress dots for scene numbers */
+      .scene-number {
+        position: absolute;
+        left: -14px;
+        top: 0;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--neon-pink), var(--neon-violet));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        box-shadow: 0 0 12px rgba(236,72,153,0.5);
+      }
+
+      /* Section number accent */
+      .section-num {
+        display: inline-block;
+        background: linear-gradient(90deg, var(--neon-pink), var(--neon-violet));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 0.9rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+      }
+
+      /* Cover meta info bar */
+      .cover-meta-bar {
+        display: flex;
+        gap: 40px;
+        justify-content: center;
+        align-items: center;
+        margin: 30px 0;
+        flex-wrap: wrap;
+      }
+
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .meta-label {
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #6b7280;
+        font-weight: 600;
+      }
+
+      .meta-value {
+        font-size: 0.95rem;
+        color: var(--text-white);
+        font-weight: 600;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      .meta-divider {
+        width: 1px;
+        height: 40px;
+        background: var(--glass-border);
+      }
+
+      /* Psych trigger badge */
+      .trigger-badge {
+        display: inline-block;
+        background: rgba(236, 72, 153, 0.12);
+        border: 1px solid rgba(236, 72, 153, 0.3);
+        color: var(--neon-pink);
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 20px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-left: 8px;
+      }
+
+      .psych-card {
+        background: rgba(139, 92, 246, 0.05);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 10px;
+        padding: 20px;
+      }
+
+      .psych-card h4 {
+        color: var(--neon-violet);
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+    </style>
+  </head>
+  <body style="">
+    <div class="container">
+      <!-- 1. COVER PAGE -->
+      <div class="cover-page">
+        <div class="cover-bg-grid"></div>
+        <div class="cover-inner">
+          <div class="badge"><i class="fas fa-lock icon-mr"></i> Confidential — Production Strategy Document</div>
+
+          <h1 class="cover-title gradient-text">APNA MARKET,<br>AB ONLINE</h1>
+          <div class="cover-subtitle">MySock AI — 60-Second Cinematic Pitch Script</div>
+          <div class="cover-target"><i class="fas fa-map-marker-alt icon-mr" style="color: var(--neon-pink)"></i>Delhi NCR &nbsp;|&nbsp; Tier 3 Offline Business Owners</div>
+
+          <div class="neon-rule"></div>
+
+          <div class="cover-meta-bar">
+            <div class="meta-item">
+              <span class="meta-label">Duration</span>
+              <span class="meta-value">60 Seconds</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-label">Language</span>
+              <span class="meta-value">Hinglish (Hindi + English)</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-label">Tone</span>
+              <span class="meta-value">Cinematic · Authoritative · Relatable</span>
+            </div>
+            <div class="meta-divider"></div>
+            <div class="meta-item">
+              <span class="meta-label">Prepared by</span>
+              <span class="meta-value">MySock AI Strategy Team</span>
+            </div>
+          </div>
+
+          <div class="brand-footer" style="margin-top: 40px;">
+            <span class="gradient-text" style="font-weight: 800; font-family: 'Poppins'; font-size: 2rem;">MySock</span>
+            <br><br>
+            <a href="https://www.mysock.in" class="url-glow">www.mysock.in</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. AUDIENCE PSYCHOLOGY -->
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">Audience Psychology Breakdown</h2>
+          <p>Decoding the Delhi NCR Tier 3 Businessman</p>
+        </div>
+
+        <div class="grid-2">
+          <div class="glass-panel">
+            <h3><i class="fas fa-user-tie icon-mr" style="color: var(--neon-violet)"></i> Who They Are</h3>
+            <ul class="psych-list">
+              <li>Traditional Delhi NCR businessmen (kirana, wholesale, manufacturing, retail).</li>
+              <li>35-60 years old, deeply established in offline markets.</li>
+              <li>Suspicious of "slick" digital agencies.</li>
+              <li>Practical, ROI-focused, no-nonsense.</li>
+            </ul>
+          </div>
+
+          <div class="glass-panel">
+            <h3><i class="fas fa-brain icon-mr" style="color: var(--neon-pink)"></i> Mindset &amp; Fears</h3>
+            <ul class="psych-list">
+              <li><strong>Mindset:</strong> "Humara naam kaafi hai is market mein" (Our name is enough here).</li>
+              <li><strong>Fear:</strong> "Ye sab ullu banane waale hain" (These are all scammers).</li>
+              <li><strong>Desire:</strong> More revenue, not being left behind by competitors.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="glass-panel" style="margin-top: 20px">
+          <h3><i class="fas fa-bullseye icon-mr" style="color: var(--cue-visual)"></i> Triggers &amp; Language</h3>
+          <div class="grid-2">
+            <div>
+              <span class="highlight">Language:</span> Hinglish (Hindi + English). Direct &amp; Practical.<br>
+              <span class="highlight">Tone:</span> "Apna Aadmi" — A trusted peer, not a corporate robot.
+            </div>
+            <div>
+              <span class="highlight">Key Triggers:</span>
+              <ul class="psych-list">
+                <li>Pride in legacy (Izat).</li>
+                <li>Fear of irrelevance.</li>
+                <li>Simple ROI clarity.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. DIRECTOR'S NOTES -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">02 — Director's Strategy</div>
+          <h2 class="section-title">Director's Notes</h2>
+          <p>Atmosphere &amp; Execution Strategy</p>
+        </div>
+
+        <div class="glass-panel">
+          <div style="margin-bottom: 20px">
+            <strong style="color: var(--neon-pink)">TONE:</strong> Authoritative but RELATABLE. Like a successful
+            businessman talking to another businessman. Not preachy.
+          </div>
+          <div style="margin-bottom: 20px">
+            <strong style="color: var(--neon-violet)">PACING:</strong> Open with a sharp hook they FEEL. Middle builds
+            credibility. Close with an assumptive action. Strict 60 seconds.
+          </div>
+          <div style="margin-bottom: 20px">
+            <strong style="color: var(--cue-visual)">VISUALS:</strong> Real Delhi market footage mixed with premium
+            dark/neon tech visuals. Bridge their chaotic reality with our organized digital mastery.
+          </div>
+          <div>
+            <strong style="color: var(--cue-audio)">AUDIO:</strong> Start with authentic Delhi chaos (chai glass,
+            traffic). Cut to silence. Transition to driving Modern Synth-Wave (Hans Zimmer style with Indian undertone).
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. FULL SCRIPT -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">03 — The Script</div>
+          <h2 class="section-title">Video Script</h2>
+          <p>Duration: 60 Seconds &nbsp;|&nbsp; 6 Scenes &nbsp;|&nbsp; Hinglish VO</p>
+        </div>
+
+        <!-- Scene 1 -->
+        <div class="script-scene">
+          <div class="scene-number">1</div>
+          <span class="timestamp">0:00–0:08</span> <span class="scene-title">THE DISRUPTIVE HOOK</span>
+
+          <div class="box box-visual">
+            <span class="label">VISUAL</span>
+            Real footage — a busy Chandni Chowk / Karol Bagh / Lajpat Nagar market. Shopkeepers hustling. A customer
+            walks into a shop.<br>
+            <strong>Cut to:</strong> Same customer on their phone, ordering from a competitor's website.<br>
+            <strong>Cut to:</strong> PITCH BLACK. Silence.
+          </div>
+
+          <div class="box box-audio">
+            <span class="label">AUDIO</span>
+            [SFX: Market crowd noise fades → single glass of chai being placed on counter → dead silence]
+          </div>
+
+          <div class="box box-vo">
+            <span class="label">VOICE OVER (Confident Male, Hindi)</span>
+            "Aapka naam is market mein koi nahin jaanta? Ya... sirf is market mein jaanta hai?"
+            <div class="box-translation">
+              Translation: "Nobody knows your name in this market? Or... only THIS market knows your name?"
+            </div>
+          </div>
+
+          <div class="box box-note">
+            <span class="label">DIRECTOR'S NOTE</span>
+            This line should hit like a gut punch. The pause after "sirf" (only) is critical.
+          </div>
+        </div>
+
+        <!-- Scene 2 -->
+        <div class="script-scene">
+          <div class="scene-number">2</div>
+          <span class="timestamp">0:08–0:20</span> <span class="scene-title">THE PROBLEM (RELATABLE REFRAME)</span>
+
+          <div class="box box-visual">
+            <span class="label">VISUAL</span>
+            Split screen — Left side: a traditional shop with customers. Right side: a competitor's website showing
+            online orders, Google reviews, Instagram page. Camera pushes toward the right side.<br>
+            <strong>Overlay text:</strong> "Aapka competitor ab 24/7 open hai — online."
+          </div>
+
+          <div class="box box-audio">
+            <span class="label">AUDIO</span>
+            [Low, building synth tone. Market sounds fade completely.]
+          </div>
+
+          <div class="box box-vo">
+            <span class="label">VOICE OVER</span>
+            "Aap 30 saal se mehnat kar rahe hain. Quality dete hain. Service dete hain. Fir bhi... Google par koi nahi
+            milta aapko."
+            <div class="box-translation">
+              Translation: "You've been working hard for 30 years. You give quality. You give service. Still... nobody
+              finds you on Google."
+            </div>
+            <br>
+            "Woh digital waale? Unhe aapka kaam nahin pata. Aapko unka digital nahin pata."
+            <div class="box-translation">
+              Translation: "Those digital people? They don't understand your business. You don't understand their
+              digital."
+            </div>
+          </div>
+
+          <div class="box box-note">
+            <span class="label">DIRECTOR'S NOTE</span>
+            Validate their pride. Don't talk DOWN to them. Acknowledge 30 years of work.
+          </div>
+        </div>
+
+        <!-- Scene 3 -->
+        <div class="script-scene">
+          <div class="scene-number">3</div>
+          <span class="timestamp">0:20–0:32</span> <span class="scene-title">THE REVEAL — MYSOCK AI</span>
+
+          <div class="box box-visual">
+            <span class="label">VISUAL</span>
+            Out of darkness, the MySock "S" infinity logo glows in neon pink and violet. Then: A premium glassmorphism
+            dashboard appears — showing a Delhi-based business Google Business profile, Instagram page, WhatsApp
+            Business, online orders, Google reviews — all live.<br>
+            <strong>Text overlay:</strong> "MYSOCK AI — Aapki Digital Team"
+          </div>
+
+          <div class="box box-audio">
+            <span class="label">AUDIO</span>
+            [Synth-wave beat drops. Confident, modern, forward-momentum energy.]
+          </div>
+
+          <div class="box box-vo">
+            <span class="label">VOICE OVER</span>
+            "MySock ne ek kaam kiya — AI ko aapke jaise business owners ke liye banaya."
+            <div class="box-translation">
+              Translation: "MySock did one thing — built AI specifically for business owners like you."
+            </div>
+            <br>
+            "Hum aate hain, samajhte hain aapka kaam, aur phir — digital mein bhi wahi izzat dilaate hain jo aapko
+            bazaar mein milti hai."
+            <div class="box-translation">
+              Translation: "We come, understand your work, and then — give you the same respect in digital that you get
+              in the market."
+            </div>
+          </div>
+
+          <div class="box box-note">
+            <span class="label">DIRECTOR'S NOTE</span>
+            "Izzat" (respect/reputation) is the emotional core for this audience. Use it.
+          </div>
+        </div>
+
+        <!-- Scene 4 -->
+        <div class="script-scene">
+          <div class="scene-number">4</div>
+          <span class="timestamp">0:32–0:45</span> <span class="scene-title">THE CAPABILITIES (PRACTICAL PROOF)</span>
+
+          <div class="box box-visual">
+            <span class="label">VISUAL</span>
+            Rapid succession of 3 real-world outcome visuals:<br>
+            1. A phone screen showing Google search: "[Business Name] Delhi" — first result, 4.9 stars, 200 reviews.<br>
+            2. An Instagram reel getting 50K views for a local Delhi shop.<br>
+            3. A WhatsApp Business chat showing 40 new customer inquiries in one day.<br>
+            <strong>Overlay:</strong> Each gets a neon pink "✓" checkmark.
+          </div>
+
+          <div class="box box-audio">
+            <span class="label">AUDIO</span>
+            [Each visual has a clean "ding" SFX. Music continues building.]
+          </div>
+
+          <div class="box box-vo">
+            <span class="label">VOICE OVER</span>
+            "Google par top — check. Instagram par brand — check. WhatsApp par customers — check."
+            <br><br>
+            "Aur yeh sab? Aapko kuch nahi karna. Hum handle karte hain."
+            <div class="box-translation">
+              Translation: "And all of this? You don't have to do anything. We handle it."
+            </div>
+          </div>
+
+          <div class="box box-note">
+            <span class="label">DIRECTOR'S NOTE</span>
+            "Aapko kuch nahi karna" is the magic phrase. Busy offline businessmen DON'T want to learn digital. They want
+            it DONE.
+          </div>
+        </div>
+
+        <!-- Scene 5 -->
+        <div class="script-scene">
+          <div class="scene-number">5</div>
+          <span class="timestamp">0:45–0:55</span> <span class="scene-title">THE TRUST ANCHOR (SOCIAL PROOF)</span>
+
+          <div class="box box-visual">
+            <span class="label">VISUAL</span>
+            A confident 45-year-old Delhi businessman (well-dressed, traditional yet modern) sitting across from a
+            MySock strategist. Professional handshake. Warm lighting with neon glow background.<br>
+            <strong>Text overlay:</strong> "100+ Delhi NCR Businesses" / "Average 3x Online Visibility in 90 Days"
+          </div>
+
+          <div class="box box-audio">
+            <span class="label">AUDIO</span>
+            [Music softens slightly — emotional beat]
+          </div>
+
+          <div class="box box-vo">
+            <span class="label">VOICE OVER</span>
+            "Aur yeh koi promise nahin hai — yeh un 100+ Delhi businesses ki kahani hai jinhone pehle step liya."
+            <div class="box-translation">
+              Translation: "And this is not a promise — this is the story of 100+ Delhi businesses that took the first
+              step."
+            </div>
+            <br>
+            "Aapka offline brand strong hai. Humara kaam hai — use online bhi utna hi strong banana."
+            <div class="box-translation">
+              Translation: "Your offline brand is strong. Our job is — to make it equally strong online."
+            </div>
+          </div>
+
+          <div class="box box-note">
+            <span class="label">DIRECTOR'S NOTE</span>
+            Social proof MUST be Delhi-specific. "Delhi businesses" triggers local trust far more than generic claims.
+          </div>
+        </div>
+
+        <!-- Scene 6 -->
+        <div class="script-scene">
+          <div class="scene-number">6</div>
+          <span class="timestamp">0:55–1:00</span> <span class="scene-title">THE CALL TO ACTION</span>
+
+          <div class="box box-visual">
+            <span class="label">VISUAL</span>
+            Camera pulls back. Bold white text appears: "PEHLA KADAM AAPKA HAI." Below it: "Book Your Free Discovery
+            Session"<br>
+            The URL "www.mysock.in" pulses in neon pink glow.
+          </div>
+
+          <div class="box box-audio">
+            <span class="label">AUDIO</span>
+            [SFX: Deep cinematic boom. Music fades out to silence. One final note.]
+          </div>
+
+          <div class="box box-vo">
+            <span class="label">VOICE OVER</span>
+            "Pehla kadam aapka hai."
+            <div class="box-translation">Translation: "The first step is yours."</div>
+            <br>
+            "MySock.in par jaaiye. Aaj hi appointment lein. Free hai."
+            <div class="box-translation">Translation: "Go to MySock.in. Book an appointment today. It's free."</div>
+          </div>
+
+          <div class="box box-note">
+            <span class="label">DIRECTOR'S NOTE</span>
+            End on SILENCE after the final line. Let it breathe. Confidence doesn't need to fill silence.
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. PRODUCTION RECOMMENDATIONS -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">04 — Production</div>
+          <h2 class="section-title">Production Recommendations</h2>
+          <p>Technical Specs &amp; Execution Guidance for the Team</p>
+        </div>
+
+        <div class="glass-panel">
+          <ul class="psych-list">
+            <li>
+              <strong>B-Roll Sourcing:</strong> Authentic Delhi market footage (Chandni Chowk, Lajpat Nagar, Karol Bagh, Nehru
+              Place). Must feel REAL, not stock American office. Source from local videographers or high-tier Indian stock platforms.
+            </li>
+            <li>
+              <strong>VO Artist:</strong> Male, 35-45 years old, Delhi/NCR accent. Confident but warm. NOT a radio
+              announcer. Tone: "Successful businessman friend giving gyaan." Avoid flat corporate delivery.
+            </li>
+            <li>
+              <strong>Music Track:</strong> Open with 3 seconds of authentic Delhi ambient sounds (chai stall, market crowd, auto-rickshaw horn) → cut to silence → drop into driving Modern Synth-Wave. Recommended: Hans Zimmer-inspired score with a subtle tabla/sitar undertone.
+            </li>
+            <li>
+              <strong>Color Grade:</strong> Dark, cinematic base (#030108). Market footage in slightly desaturated tones. MySock reveal visuals in full neon pink (#ec4899) and violet (#8b5cf6) glory.
+            </li>
+            <li>
+              <strong>Text Overlays:</strong> Font: Poppins Bold. White on dark. Key Hindi phrases in Devanagari script for cultural authenticity and emotional resonance.
+            </li>
+            <li>
+              <strong>Distribution Channels:</strong> Primary — Instagram Reels &amp; YouTube Shorts (9:16 vertical). Secondary — LinkedIn Feed Video (16:9 landscape). WhatsApp Business broadcast for warm leads.
+            </li>
+            <li>
+              <strong>Subtitles:</strong> MANDATORY. Large, bold, bottom-third. Both Hindi and English translation shown simultaneously for maximum comprehension.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 6. SUMMARY TABLE -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-num">05 — Quick Reference</div>
+          <h2 class="section-title">Script at a Glance</h2>
+          <p>Scene-by-scene breakdown for rapid team briefing</p>
+        </div>
+
+        <div class="glass-panel" style="padding: 0; overflow: hidden">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Scene Name</th>
+                <th>Key VO Line</th>
+                <th>Emotion Trigger</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0:00</td>
+                <td>Hook</td>
+                <td>"Sirf is market mein jaanta hai?"</td>
+                <td>FOMO / Reality Check</td>
+              </tr>
+              <tr>
+                <td>0:08</td>
+                <td>Problem</td>
+                <td>"Woh digital waale?"</td>
+                <td>Validation / Us vs Them</td>
+              </tr>
+              <tr>
+                <td>0:20</td>
+                <td>Reveal</td>
+                <td>"Wahi izzat dilaate hain"</td>
+                <td>Pride / Solution</td>
+              </tr>
+              <tr>
+                <td>0:32</td>
+                <td>Capabilities</td>
+                <td>"Aapko kuch nahi karna"</td>
+                <td>Relief / Ease</td>
+              </tr>
+              <tr>
+                <td>0:45</td>
+                <td>Trust</td>
+                <td>"100+ Delhi businesses"</td>
+                <td>Trust / Social Proof</td>
+              </tr>
+              <tr>
+                <td>0:55</td>
+                <td>CTA</td>
+                <td>"Pehla kadam aapka hai"</td>
+                <td>Urgency / Action</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div style="border-top: 1px solid rgba(255,255,255,0.08); margin-top: 40px; padding: 40px 0; text-align: center;">
+        <div class="gradient-text" style="font-family:'Poppins',sans-serif; font-weight:800; font-size:1.5rem; margin-bottom:10px;">MySock</div>
+        <p style="font-size:0.85rem; color:#4b5563; margin:0;">This document is confidential and prepared exclusively for internal production use.</p>
+        <p style="font-size:0.85rem; color:#4b5563; margin:5px 0 0;">© 2025 MySock AI &nbsp;|&nbsp; <a href="https://www.mysock.in" style="color:var(--neon-pink); text-decoration:none;">www.mysock.in</a></p>
+      </div>
+    </div>
+  
+
+</body></html>
