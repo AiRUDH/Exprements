@@ -1,0 +1,26 @@
+{
+  "kind": "critique-panel",
+  "score": 4.2,
+  "axes": {
+    "clarity": {
+      "score": 4,
+      "notes": "Six-scene accretion arc is explicit; metaphor labels + evidence bullets keep academic voice readable."
+    },
+    "hierarchy": {
+      "score": 4,
+      "notes": "HUD glass panel left, WebGL full-bleed, progressive CTA only on finale; brand mark stays quiet."
+    },
+    "typography": {
+      "score": 4,
+      "notes": "Space Grotesk display + IBM Plex body/mono; caps tracking on labels; display negative tracking."
+    },
+    "motion": {
+      "score": 4,
+      "notes": "GSAP scrub 1.35 + scene-specific camera paths; calculated panel crossfade; no scrollIntoView."
+    },
+    "brand": {
+      "score": 5,
+      "notes": "Interstellar void + single cyan accent; bloom in WebGL not UI gradients; academic CTA copy locked."
+    }
+  }
+}
