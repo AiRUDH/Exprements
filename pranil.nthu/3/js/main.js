@@ -128,6 +128,11 @@ const ctaCv = document.getElementById('cta-cv');
 const hudStatusEl = document.getElementById('hud-status');
 const hudMetricEl = document.getElementById('hud-metric');
 
+const telemetryTerminal = document.getElementById('telemetry-terminal');
+const telemetryStream = document.getElementById('telemetry-stream');
+const telemetryCta = document.getElementById('telemetry-cta');
+const uiLayer = document.getElementById('ui-layer');
+
 const renderer = new THREE.WebGLRenderer({
   canvas,
   antialias: false,
@@ -213,6 +218,45 @@ function clearTypewriters() {
   typewriterTimeouts = [];
 }
 
+const telemetryLines = [
+  '> INITIATING TELEMETRY LINK...',
+  '> TARGET: NTHU HIGH-ENERGY ASTROPHYSICS LAB',
+  '> ACQUIRING: FORMOSAT-8B GTM ORBITAL DATA... [LOCKED]',
+  '> ACQUIRING: NASA COSI CALIBRATION MATRICES... [LOCKED]',
+  '> OPTICS & QUANTUM PROTOCOLS MATCH: 99.8%'
+];
+
+let telemetryTimeouts = [];
+
+function clearTelemetry() {
+  telemetryTimeouts.forEach(clearTimeout);
+  telemetryTimeouts = [];
+  if (telemetryStream) telemetryStream.innerHTML = '';
+  if (telemetryCta) telemetryCta.setAttribute('hidden', '');
+  if (uiLayer) uiLayer.classList.remove('telemetry-active');
+}
+
+function runTelemetryStream() {
+  clearTelemetry();
+  uiLayer.classList.add('telemetry-active');
+  
+  let lineIdx = 0;
+  function printLine() {
+    if (lineIdx < telemetryLines.length) {
+      const lineDiv = document.createElement('div');
+      telemetryStream.appendChild(lineDiv);
+      typeText(lineDiv, telemetryLines[lineIdx], 10);
+      lineIdx++;
+      telemetryTimeouts.push(setTimeout(printLine, 750));
+    } else {
+      telemetryTimeouts.push(setTimeout(() => {
+        telemetryCta.removeAttribute('hidden');
+      }, 500));
+    }
+  }
+  printLine();
+}
+
 function applyPanel(idx) {
   const data = SCENES[idx];
   counterEl.textContent = data.counter;
@@ -266,6 +310,12 @@ function switchScene(idx) {
     onComplete: () => {
       // 3D Objects animation and text reset syncs here
       applyPanel(idx);
+      
+      if (idx === 5) {
+        runTelemetryStream();
+      } else {
+        clearTelemetry();
+      }
     }
   }).to(textCard, {
     opacity: 1,
@@ -329,6 +379,12 @@ function tick() {
   mouseY += (targetMouseY - mouseY) * 0.05;
 
   if (active) {
+    if (active === allScenes[5] && active.setFocus) {
+      const dist = Math.sqrt(mouseX * mouseX + mouseY * mouseY);
+      const focusLevel = Math.max(0, 1 - dist);
+      active.setFocus(focusLevel);
+    }
+
     if (active.onTick) {
       active.onTick(dt, elapsed);
     }
