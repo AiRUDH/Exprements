@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accretion — Pranil Patil × Chang Lab / NTHU</title>
+  <meta name="description" content="Pranil Patil — IIT-trained engineer pivoting optics, photonics, and computational systems into high-energy astrophysics for Prof. Hsiang-Kuang Chang at NTHU.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/accretion.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="webgl-canvas" data-od-id="webgl-canvas" aria-hidden="true"></canvas>
+  <div id="final-vignette" data-od-id="final-vignette" aria-hidden="true"></div>
+
+  <div id="scroll-container" data-od-id="scroll-container">
+    <section class="scroll-section" id="sec-1" data-od-id="scene-sec-1" aria-label="Scene 1: IIT Patna — Protostar"></section>
+    <section class="scroll-section" id="sec-2" data-od-id="scene-sec-2" aria-label="Scene 2: IIT Bombay — Star Cluster"></section>
+    <section class="scroll-section" id="sec-3" data-od-id="scene-sec-3" aria-label="Scene 3: IIT Dharwad — Neutron Star"></section>
+    <section class="scroll-section" id="sec-4" data-od-id="scene-sec-4" aria-label="Scene 4: IIT Jodhpur — Orbital Rings"></section>
+    <section class="scroll-section" id="sec-5" data-od-id="scene-sec-5" aria-label="Scene 5: IIT Dharwad Return — Station Assembly"></section>
+    <section class="scroll-section" id="sec-6" data-od-id="scene-sec-6" aria-label="Scene 6: NTHU Chang Lab — Pulsar Beam"></section>
+  </div>
+
+  <div id="ui-layer" data-od-id="ui-layer" role="main">
+    <div id="sys-ping-ticker" class="sys-ping-ticker">
+      <span class="ping-status"></span> <span id="ping-text">SYSTEM: ONLINE</span>
+    </div>
+    <header class="top-bar" data-od-id="top-bar">
+      <div class="brand-mark" data-od-id="brand-mark">
+        <span class="brand-name">ACCRETION</span>
+        <span class="brand-sub">Pranil Patil · High-Energy Astrophysics</span>
+      </div>
+      <div class="progress-pill" id="progress-pill" data-od-id="progress-pill" aria-live="polite">
+        <span class="pill-dot"></span>
+        <span id="current-scene-tag">01 / 06 · Protostar</span>
+      </div>
+    </header>
+
+    <nav class="nav-dots" data-od-id="nav-dots" aria-label="Scene navigation">
+      <button type="button" class="dot active" data-target="0" data-od-id="nav-dot-1" aria-label="Scene 1: Academic Genesis"></button>
+      <button type="button" class="dot" data-target="1" data-od-id="nav-dot-2" aria-label="Scene 2: Collaborative Dynamics"></button>
+      <button type="button" class="dot" data-target="2" data-od-id="nav-dot-3" aria-label="Scene 3: Applied Engineering"></button>
+      <button type="button" class="dot" data-target="3" data-od-id="nav-dot-4" aria-label="Scene 4: Strategic Scope"></button>
+      <button type="button" class="dot" data-target="4" data-od-id="nav-dot-5" aria-label="Scene 5: Systems Execution"></button>
+      <button type="button" class="dot" data-target="5" data-od-id="nav-dot-6" aria-label="Scene 6: Targeted Trajectory"></button>
+    </nav>
+
+    <div class="text-panel-wrapper" id="text-panel-wrapper" data-od-id="text-panel-wrapper">
+      <article class="glass-card" id="text-panel" data-od-id="text-panel">
+        <div class="scene-meta">
+          <span class="scene-counter" id="scene-counter" data-od-id="scene-counter">01 — 06</span>
+          <span class="scene-metaphor" id="scene-metaphor" data-od-id="scene-metaphor">The Protostar</span>
+        </div>
+        <h1 id="panel-title" data-od-id="panel-title">Academic Genesis</h1>
+        <h2 id="panel-subtitle" data-od-id="panel-subtitle">IIT Patna · 2024–2028</h2>
+        <p id="panel-body" data-od-id="panel-body">Building a rigorous foundation in physics, mathematics, and computational modeling—the theoretical mass required for extreme-environment research.</p>
+        <ul class="evidence-list" id="panel-evidence" data-od-id="panel-evidence">
+          <li>B.Tech CS · Business Development with AI</li>
+          <li>Optics · Photonics · Quantum foundations</li>
+        </ul>
+        <div id="panel-cta" class="cta-group" data-od-id="panel-cta" hidden>
+          <a href="mailto:pranilpatil@email.com" class="cta-button" id="cta-email" data-od-id="cta-email">
+            I am Pranil Patil, and I am here to build.
+          </a>
+          <a href="#research-cv" class="cv-link" id="cta-cv" data-od-id="cta-cv">
+            View Detailed Research CV
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <div id="hud-overlay" class="hud-overlay">
+      <div class="hud-line">
+        <span class="hud-bracket">[</span><span id="hud-status" class="hud-status">INITIATING BASE FRAMEWORK</span><span class="hud-bracket">]</span>
+      </div>
+      <div class="hud-line">
+        <span id="hud-metric" class="hud-metric">Data Vol: 0%</span>
+      </div>
+    </div>
+
+    <div class="scroll-hint" id="hint-arrow" data-od-id="scroll-hint" aria-hidden="true">
+      <p>Scroll to accrete</p>
+      <div class="arrow-wrap"><span class="arrow-line"></span></div>
+    </div>
+  </div>
+
+  <aside id="research-cv" class="cv-sheet" data-od-id="research-cv" aria-label="Research CV summary">
+    <div class="cv-inner">
+      <button type="button" class="cv-close" id="cv-close" data-od-id="cv-close" aria-label="Close CV">×</button>
+      <p class="cv-kicker">Research profile</p>
+      <h2 data-od-id="cv-title">Pranil Patil</h2>
+      <p class="cv-role">B.Tech Computer Science · Business Development with AI · IIT pathway</p>
+      <dl class="cv-grid">
+        <div><dt>Trajectory</dt><dd>Optics, photonics, quantum mechanics → high-energy astrophysics instrumentation</dd></div>
+        <div><dt>Target lab</dt><dd>Prof. Hsiang-Kuang Chang · NTHU · GTM (Formosat-8B) · NASA COSI</dd></div>
+        <div><dt>Engineering mass</dt><dd>IIT Patna · Bombay · Dharwad · Jodhpur · startup systems architecture</dd></div>
+        <div><dt>Pitch</dt><dd>I have the engineering mass; I am ready to build for your orbital missions.</dd></div>
+      </dl>
+      <a href="mailto:pranilpatil@email.com" class="cta-button" data-od-id="cv-email">I am Pranil Patil, and I am here to build.</a>
+    </div>
+  </aside>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
