@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResumeAI — Next-Gen AI Resume Infrastructure</title>
+  <meta name="description" content="Architect a precision-engineered, ATS-optimized resume powered by AI. Real-time editing, versioning, and one-click PDF export.">
+  <meta name="keywords" content="AI resume builder, ATS optimization, resume generator, job application, OpenRouter AI">
+  <meta property="og:title" content="ResumeAI — Next-Gen AI Resume Infrastructure">
+  <meta property="og:description" content="Build an ATS-beating resume with AI precision. No hallucinations. No generic fluff. Just results.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/app.css">
+
+  <!-- html2pdf CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+</head>
+<body>
+
+<!-- ================================================================
+     SCREEN 1: LANDING
+     ================================================================ -->
+<section id="screen-landing" class="screen active" aria-label="Landing page">
+
+  <!-- Floating background orbs -->
+  <div style="position:absolute;top:10%;left:5%;width:300px;height:300px;background:radial-gradient(circle,rgba(108,99,255,0.12) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:pulse 4s ease-in-out infinite;"></div>
+  <div style="position:absolute;bottom:15%;right:8%;width:250px;height:250px;background:radial-gradient(circle,rgba(0,212,255,0.1) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:pulse 5s ease-in-out 1s infinite;"></div>
+
+  <div class="landing-inner">
+
+    <!-- Badge -->
+    <div class="logo-badge">
+      <span class="dot"></span>
+      <span>AI-Powered · ATS-Optimized · Zero Hallucinations</span>
+    </div>
+
+    <!-- Hero -->
+    <h1 class="hero-title">
+      Your Career's<br>
+      <span class="grad-text">Unfair Advantage</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      Not just a resume builder — a precision AI engine that reverse-engineers job descriptions,
+      eliminates ATS failures, and crafts a resume that makes recruiters stop scrolling.
+    </p>
+
+    <!-- API Config Card -->
+    <div class="api-card">
+      <h3>⚡ Connect Your AI</h3>
+
+      <div style="text-align:left;">
+        <div class="model-tag">openrouter.ai</div>
+
+        <div class="input-group">
+          <label for="api-key-input">OpenRouter API Key</label>
+          <input
+            type="password"
+            id="api-key-input"
+            placeholder="sk-or-v1-••••••••••••••••••••••••••••••••"
+            autocomplete="off"
+            spellcheck="false"
+          >
+        </div>
+
+        <div class="privacy-note" style="margin-bottom:16px;">
+          <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Your key stays in your browser only — never sent to our servers. Stored in sessionStorage (cleared on tab close).
+        </div>
+
+        <div class="input-group">
+          <label for="model-select">AI Model</label>
+          <select id="model-select">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:20px;">
+          <button class="btn btn-secondary" id="test-key-btn" style="flex-shrink:0;">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Test Key
+          </button>
+          <button class="btn btn-primary btn-lg" id="start-btn" style="flex:1;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Build My Resume
+          </button>
+        </div>
+
+        <p style="text-align:center;margin-top:14px;font-size:0.75rem;color:var(--text-muted);">
+          No account needed · Free models available ·
+          <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" style="color:var(--accent-secondary);text-decoration:none;">Get API key →</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-item"><span class="val">100%</span><span class="lbl">ATS Compliant</span></div>
+      <div class="stat-item"><span class="val">0</span><span class="lbl">Hallucinations</span></div>
+      <div class="stat-item"><span class="val">∞</span><span class="lbl">Versions</span></div>
+      <div class="stat-item"><span class="val">Free</span><span class="lbl">Core Models</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================================================================
+     SCREEN 2: INTAKE FORM
+     ================================================================ -->
+<section id="screen-form" class="screen" aria-label="Resume intake form">
+
+  <!-- Sticky header -->
+  <header class="form-header">
+    <div class="form-logo">ResumeAI</div>
+
+    <!-- Progress steps -->
+    <nav class="progress-track" aria-label="Form progress">
+      <div class="progress-step active" data-step="0">
+        <span class="step-dot">1</span>
+        <span>Info</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="1">
+        <span class="step-dot">2</span>
+        <span>Experience</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="2">
+        <span class="step-dot">3</span>
+        <span>Education</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="3">
+        <span class="step-dot">4</span>
+        <span>Skills</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="4">
+        <span class="step-dot">5</span>
+        <span>Target</span>
+      </div>
+    </nav>
+
+    <button class="btn btn-ghost btn-sm" onclick="App.showScreen('screen-landing')">← Back</button>
+  </header>
+
+  <!-- Form body -->
+  <main class="form-body">
+
+    <!-- STEP 0: Personal Info -->
+    <div class="form-section active" id="form-step-0" aria-label="Personal information">
+      <h2 class="section-title">Personal Information</h2>
+      <p class="section-subtitle">Your contact details — shown at the top of every ATS parser.</p>
+
+      <div class="form-grid">
+        <div class="input-group full-width">
+          <label for="f-name">Full Name *</label>
+          <input type="text" id="f-name" placeholder="John Smith" autocomplete="name">
+        </div>
+        <div class="input-group">
+          <label for="f-title">Professional Title</label>
+          <input type="text" id="f-title" placeholder="Senior Software Engineer">
+        </div>
+        <div class="input-group">
+          <label for="f-email">Email Address</label>
+          <input type="email" id="f-email" placeholder="john@example.com" autocomplete="email">
+        </div>
+        <div class="input-group">
+          <label for="f-phone">Phone Number</label>
+          <input type="tel" id="f-phone" placeholder="+1 (555) 000-0000" autocomplete="tel">
+        </div>
+        <div class="input-group">
+          <label for="f-location">Location</label>
+          <input type="text" id="f-location" placeholder="New York, NY">
+        </div>
+        <div class="input-group">
+          <label for="f-linkedin">LinkedIn URL</label>
+          <input type="url" id="f-linkedin" placeholder="linkedin.com/in/johnsmith">
+        </div>
+        <div class="input-group">
+          <label for="f-portfolio">Portfolio / GitHub</label>
+          <input type="url" id="f-portfolio" placeholder="github.com/johnsmith">
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <div></div>
+        <button class="btn btn-primary btn-lg" onclick="formNext(0)">
+          Next: Experience
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 1: Experience -->
+    <div class="form-section" id="form-step-1" aria-label="Work experience">
+      <h2 class="section-title">Work Experience</h2>
+      <p class="section-subtitle">List your roles. The AI will rewrite your bullets with power verbs and ATS keywords — <em>never inventing facts</em>.</p>
+
+      <div id="form-experiences">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="formBack(1)">← Back</button>
+        <button class="btn btn-primary btn-lg" onclick="formNext(1)">
+          Next: Education
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Education -->
+    <div class="form-section" id="form-step-2" aria-label="Education">
+      <h2 class="section-title">Education</h2>
+      <p class="section-subtitle">Add your degrees, certifications, and academic achievements.</p>
+
+      <div id="form-education">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="formBack(2)">← Back</button>
+        <button class="btn btn-primary btn-lg" onclick="formNext(2)">
+          Next: Skills
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Skills -->
+    <div class="form-section" id="form-step-3" aria-label="Skills">
+      <h2 class="section-title">Skills & Technologies</h2>
+      <p class="section-subtitle">Add your skills. Press <kbd style="background:var(--bg-card);border:1px solid var(--border-default);border-radius:4px;padding:1px 6px;font-size:0.8rem;">Enter</kbd> or comma after each skill.</p>
+
+      <div class="entry-card">
+        <div class="skill-input-row">
+          <input type="text" id="fs-skill-input" placeholder="e.g. Python, React, AWS, Product Management...">
+          <button class="btn btn-secondary" id="fs-add-skill-btn">Add</button>
+        </div>
+        <div class="skills-grid" id="fs-skills-display"></div>
+
+        <!-- Quick add popular skills -->
+        <div style="margin-top:20px;">
+          <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Quick Add</div>
+          <div class="chip-select">
+            <span class="chip-option" onclick="quickAddSkill(this,'Python')">Python</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'JavaScript')">JavaScript</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'React')">React</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'Node.js')">Node.js</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'SQL')">SQL</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'AWS')">AWS</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'Docker')">Docker</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'TypeScript')">TypeScript</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'Git')">Git</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'Agile')">Agile</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'Leadership')">Leadership</span>
+            <span class="chip-option" onclick="quickAddSkill(this,'Communication')">Communication</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="formBack(3)">← Back</button>
+        <button class="btn btn-primary btn-lg" onclick="formNext(3)">
+          Next: Target Role
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Target Role -->
+    <div class="form-section" id="form-step-4" aria-label="Target role">
+      <h2 class="section-title">Target Role</h2>
+      <p class="section-subtitle">This is the secret weapon. The AI uses the job description to reverse-engineer keyword injection — maximizing your ATS match rate.</p>
+
+      <div class="entry-card">
+        <div class="form-grid">
+          <div class="input-group">
+            <label for="f-targetRole">Target Job Title</label>
+            <input type="text" id="f-targetRole" placeholder="Senior Product Manager">
+          </div>
+          <div class="input-group">
+            <label for="f-industry">Industry</label>
+            <select id="f-industry">
+              <option value="">Select Industry</option>
+              <option>Technology / Software</option>
+              <option>Finance / Banking</option>
+              <option>Healthcare / Biotech</option>
+              <option>Marketing / Media</option>
+              <option>Consulting / Strategy</option>
+              <option>Engineering / Manufacturing</option>
+              <option>Education / Research</option>
+              <option>Retail / E-commerce</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="input-group full-width">
+            <label for="f-jobDescription">
+              Paste Job Description
+              <span style="color:var(--accent-success);font-size:0.75rem;margin-left:6px;font-weight:400;">↑ This unlocks maximum ATS optimization</span>
+            </label>
+            <textarea id="f-jobDescription" rows="8" placeholder="Paste the full job description here. The AI will extract keywords, required skills, and role-specific language to weave into your resume — without fabricating any information..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generate CTA -->
+      <div style="background:linear-gradient(135deg,rgba(108,99,255,0.1),rgba(0,212,255,0.08));border:1px solid var(--border-accent);border-radius:var(--radius-xl);padding:32px;text-align:center;margin-top:24px;">
+        <div style="font-size:1.8rem;margin-bottom:12px;">🚀</div>
+        <h3 style="font-size:1.3rem;margin-bottom:8px;">Ready to Generate</h3>
+        <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:24px;max-width:440px;margin-left:auto;margin-right:auto;">
+          The AI will craft your professional summary and enhance every bullet point — keeping 100% of your facts, adding 100% more impact.
+        </p>
+        <button class="btn btn-primary btn-lg" onclick="formGenerate()" style="min-width:260px;">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Generate with AI
+        </button>
+        <p style="margin-top:12px;font-size:0.75rem;color:var(--text-muted);">Takes ~10-20 seconds · You can edit everything afterwards</p>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn btn-secondary" onclick="formBack(4)">← Back</button>
+        <div></div>
+      </div>
+    </div>
+
+  </main>
+</section>
+
+<!-- ================================================================
+     SCREEN 3: EDITOR (SPLIT VIEW)
+     ================================================================ -->
+<section id="screen-editor" class="screen" aria-label="Resume editor">
+
+  <!-- Top bar -->
+  <header class="editor-topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">⚡ ResumeAI</div>
+
+      <div class="version-selector">
+        <span class="version-label">Version:</span>
+        <select id="version-select" aria-label="Version selector">
+          <option value="">Current Draft</option>
+        </select>
+      </div>
+
+      <div class="ai-status" id="ai-status-badge">
+        <span class="status-dot"></span>
+        AI Ready
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <div id="ats-badge-container" style="margin-right:8px;"></div>
+
+      <button class="btn btn-ghost btn-sm" id="back-to-form-btn" title="Back to form">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Edit Form
+      </button>
+
+      <button class="btn btn-secondary btn-sm" id="regenerate-btn" title="Regenerate with AI">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        Regenerate
+      </button>
+
+      <button class="btn btn-secondary btn-sm" id="save-version-btn" title="Save version (Ctrl+S)">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+        Save Version
+      </button>
+
+      <button class="btn btn-primary btn-sm" id="export-btn">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Export
+      </button>
+    </div>
+  </header>
+
+  <!-- Generating overlay -->
+  <div id="editor-overlay" class="generating-overlay" style="position:fixed;border-radius:0;">
+    <div class="gen-spinner"></div>
+    <div class="gen-label" id="gen-label">Generating your resume...</div>
+    <div class="gen-sublabel">Precision AI · Zero hallucinations · ATS-optimized</div>
+  </div>
+
+  <!-- Split panels -->
+  <div class="editor-split">
+
+    <!-- LEFT: Edit Panel -->
+    <div class="panel panel-left">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+          Inline Editor
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-ghost btn-sm" id="ats-analyze-btn">
+            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            Analyze ATS
+          </button>
+        </div>
+      </div>
+
+      <div class="panel-body">
+
+        <!-- Header Section -->
+        <div class="edit-section">
+          <div class="edit-section-header">
+            <div class="edit-section-label">
+              <div class="section-icon">👤</div>
+              Contact & Header
+            </div>
+          </div>
+          <div class="edit-section-body" id="editor-header-section">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="edit-section">
+          <div class="edit-section-header">
+            <div class="edit-section-label">
+              <div class="section-icon">✦</div>
+              Professional Summary
+            </div>
+            <div class="section-ai-btns">
+              <button class="ai-btn" id="summary-ats-btn" title="Make more ATS-friendly">
+                <svg width="9" height="9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/></svg>
+                ATS Optimize
+              </button>
+              <button class="ai-btn" id="summary-rewrite-btn" title="Rewrite for target role">
+                <svg width="9" height="9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                Rewrite for Role
+              </button>
+            </div>
+          </div>
+          <div class="edit-section-body" id="editor-summary-section">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="edit-section">
+          <div class="edit-section-header">
+            <div class="edit-section-label">
+              <div class="section-icon">💼</div>
+              Experience
+            </div>
+          </div>
+          <div class="edit-section-body" id="editor-exp-section">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="edit-section">
+          <div class="edit-section-header">
+            <div class="edit-section-label">
+              <div class="section-icon">🎓</div>
+              Education
+            </div>
+          </div>
+          <div class="edit-section-body" id="editor-edu-section">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="edit-section">
+          <div class="edit-section-header">
+            <div class="edit-section-label">
+              <div class="section-icon">⚡</div>
+              Skills
+            </div>
+          </div>
+          <div class="edit-section-body" id="editor-skills-section">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Spacer -->
+        <div style="height:40px;"></div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: Live Preview Panel -->
+    <div class="panel panel-right">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          Live Preview — ATS Layout
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-ghost btn-sm" id="export-pdf-btn" title="Download PDF (Ctrl+P)">
+            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PDF
+          </button>
+          <button class="btn btn-ghost btn-sm" id="export-text-btn" title="Copy plain text">
+            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+            Copy Text
+          </button>
+        </div>
+      </div>
+
+      <div class="preview-scale-wrapper">
+        <div id="resume-preview" role="document" aria-label="Resume preview">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================================================================
+     MODAL
+     ================================================================ -->
+<div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal" id="modal-content">
+    <!-- Rendered by JS -->
+  </div>
+</div>
+
+<!-- ================================================================
+     TOAST CONTAINER
+     ================================================================ -->
+<div id="toast-container" role="status" aria-live="polite"></div>
+
+<!-- ================================================================
+     SCRIPTS (order matters)
+     ================================================================ -->
+<script src="js/state.js"></script>
+<script src="js/ai-engine.js"></script>
+<script src="js/pdf-export.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  // Quick-add skill helper (for chip buttons on form step 3)
+  function quickAddSkill(el, skill) {
+    AppState.addSkill(skill);
+    el.classList.add('selected');
+    el.onclick = null;
+    renderFormSkillsGlobal();
+  }
+</script>
+
+</body>
+</html>
